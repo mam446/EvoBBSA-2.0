@@ -1,0 +1,63 @@
+import genNode
+import copy
+
+
+class union(genNode.node):
+    def __init__(self,parent,settings):
+        super(union,self).__init__(parent,settings,funcs.union,"union",2,{})
+
+    def toDict(self):
+        return {"Union":[self.down[0].toDict()]}
+
+class makeSet(genNode.node):
+    def __init__(self,parent,settings):
+        p = copy.deepcopy(settings.nodeSettings['makeSet'])
+        super(makeSet,self).__init__(parent,settings,funcs.mutate,"makeSet",1,p)
+
+    def evaluate(self):
+        if self.state.curOp>=self.state.maxOp:
+            return []
+        if self.state.curEval >= self.state.maxEval:
+            return []
+        
+        rDown = self.down[0].evaluate()
+
+        self.state.pers[self.params['name']['value']] = rDown
+
+        self.state.curOp+=len(rDown)*self.opWeight
+
+        return rDown
+
+    def update(self,depth,state):
+        d = self.down[0].update(depth+1,state)
+        self.depth = depth
+        self.height = d+1
+        if self.params['name']['value'] not in self.state.pers:
+            self.state.pers[self.params['name']['value']] = []
+        self.state = state
+        return self.height
+
+    def randomize(self,state):
+        self.state = state
+        opts = self.state.pers.keys()
+        opts.append(chr(ord(opts[-1])+1))
+        self.params['name']['value'] = random.choice(opts)
+        self.state.pers[self.params['name']['value']] = []
+        return
+
+    def toDict(self):
+        return {"makeSet {"+self.params['name']['value']+"}":[self.down[0].toDict()]}
+
+    def makeProg(self,numTab,var):
+    tab = "    "
+    indent = ""
+    for i in xrange(numTab):
+        indent+=tab
+    prog = ""
+    prog = self.down[0].makeProg(numTab,var+" ")
+    prog+= self.name+" = x"+var+"0\n"+indent
+    prog+="x"+var+"=x"+var+"0\n"+indent
+    return prog
+
+nodes = [union,makeSet]
+
