@@ -20,7 +20,7 @@ def uniRecomb(rDown,params,solSettings):
     ret = []
 
     for i in xrange(params['count']['value']):
-        y = solution.solution(solSettings):
+        y = solution.solution(solSettings)
         for j in xrange(len(y.bits)):
             y.bits[j] = random.choice(pop).bits[j]
         ret.append(y)
@@ -46,7 +46,7 @@ def diagonal(rDown,params,solSettings):
                 last = nex
                 nex = pnts[i]
             else:
-                c.bits[last: = pop[i%len(pop)].bits[last:]
+                c.bits[last:] = pop[i%len(pop)].bits[last:]
         d = pop[0]
         pop = pop[1:]
         pop.append(d)

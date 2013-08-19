@@ -74,7 +74,7 @@ class bbsa:
         self.count()
         return
 
-    def count(self)
+    def count(self):
         self.size = self.root.count()
         return
 
