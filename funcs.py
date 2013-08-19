@@ -53,7 +53,9 @@ def diagonal(rDown,params,solSettings):
     return childs
 
 
-
+def evaluate(rDown,params,solSettings):
+    for ind in rDown[0]:
+        ind.evaluate()
 
 def kTourn(rDown, params,solSettings):
     sel = []
