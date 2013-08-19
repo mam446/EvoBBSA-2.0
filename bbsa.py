@@ -1,4 +1,5 @@
 import random
+import evalNodes
 import variationNodes
 import selectNodes
 import setNodes
@@ -9,7 +10,7 @@ nodes = []
 
 nodes.extend(variationNodes.nodes)
 nodes.extend(selectNodes.nodes)
-
+nodes.extend(evalNodes.nodes)
 nodes.extend(setNodes.nodes)
 
 
