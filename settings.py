@@ -14,7 +14,8 @@ class runSettings:
         
         self.solSettings = {}
         
-        probConf = []
+        self.probConf = []
+
 
         if not filename:
             
@@ -25,6 +26,8 @@ class runSettings:
             self.bbsaSettings['mutateMax'] = 5
             self.bbsaSettings['runs'] = 5
             self.bbsaSettings['converge'] = 25
+            self.bbsaSettings['initPopMax'] = 50
+
             #variation node
             self.nodeSettings['mutate'] = {'rate':{'value': 0.0,'range':(0.0,1.0),'type':'float'}}
             self.nodeSettings['mutate']['weight'] = 2
@@ -39,11 +42,13 @@ class runSettings:
             self.nodeSettings['trunc'] = {'count':{'value':1,'range':(1,25),'type':'int'}}
             self.nodeSettings['trunc']['weight'] = 2
 
+            self.nodeSettings['makeSet'] = {'name':{'value':"",'type':'str'}}
+
 
             self.probConf.append({'prob':'allOnes','length':100,'trapSize':5})
             self.probConf.append({'prob':'allOnes','length':210,'trapSize':7})
         
-        self.solSettings = probConf[0]
+        self.solSettings = self.probConf[0]
 
     def nextProbConf(self):
         x = self.probConf[0]

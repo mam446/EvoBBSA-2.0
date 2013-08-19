@@ -1,7 +1,6 @@
 import random
 
 
-
 class node(object):
 
     def __init__(self,parent,settings,func,name,children=1,params= {}):
@@ -52,6 +51,8 @@ class node(object):
 
     def randomize(self,state):
         for p in self.params:
+            if p == 'weight':
+                continue
             if self.params[p]['type'] == 'int':
                 self.params[p]['value'] =  random.randint(self.params[p]['range'][0],self.params[p]['range'][1])
             elif self.params[p]['type'] == 'float':
@@ -84,10 +85,10 @@ class node(object):
     def fillTerms(self,state):
         for i in xrange(len(self.down)):
             if self.down[i]:
-                self.down.fillTerms(state)
+                self.down[i].fillTerms(state)
             else:
-                self.down[i] = random.choice(termNodes.nodes)
-                self.down[i].randomize()
+                self.down[i] = random.choice(state.terms)(self,self.settings)
+                self.down[i].randomize(state)
 
     def count(self):
         t = 1 

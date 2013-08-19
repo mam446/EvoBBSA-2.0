@@ -14,7 +14,7 @@ class mutate(genNode.node):
 class uniRecomb(genNode.node):
     def __init__(self,parent,settings):
         p = copy.deepcopy(settings.nodeSettings['uniRecomb'])
-        super(mutate,self).__init__(parent,settings,funcs.uniRecomb,"uniRecomb",1,p)
+        super(uniRecomb,self).__init__(parent,settings,funcs.uniRecomb,"uniRecomb",1,p)
 
     def toDict(self):
         return {"uniRecomb(count="+str(self.params['num']['value'])+")":[self.down[0].toDict()]}
@@ -22,7 +22,7 @@ class uniRecomb(genNode.node):
 class diagonal(genNode.node):
     def __init__(self,parent,settings):
         p = copy.deepcopy(settings.nodeSettings['diagonal'])
-        super(mutate,self).__init__(parent,settings,funcs.diagonal,"diagonal",1,p)
+        super(diagonal,self).__init__(parent,settings,funcs.diagonal,"diagonal",1,p)
 
     def toDict(self):
         return {"diagonal(n ="+str(self.params['n']['value'])+")":[self.down[0].toDict()]}

@@ -1,4 +1,4 @@
-
+import termNodes
 
 
 class state:
@@ -10,6 +10,7 @@ class state:
         self.maxOp = settings.bbsaSettings['maxOps']
         self.maxEval = settings.bbsaSettings['maxEvals']
 
+        self.terms = termNodes.nodes
 
     def reset(self):
         self.curOp = 0
@@ -18,7 +19,7 @@ class state:
             self.pers[d] = []
         self.last = []
 
-    def done(self)
+    def done(self):
         if self.curOp>=self.maxOp or self.curEval>=self.maxEval:
             return True
         return False

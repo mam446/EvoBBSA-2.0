@@ -1,13 +1,14 @@
+import funcs
 import genNode
 import copy
-
+import random
 
 class union(genNode.node):
     def __init__(self,parent,settings):
         super(union,self).__init__(parent,settings,funcs.union,"union",2,{})
 
     def toDict(self):
-        return {"Union":[self.down[0].toDict()]}
+        return {"Union":[self.down[0].toDict(),self.down[1].toDict()]}
 
 class makeSet(genNode.node):
     def __init__(self,parent,settings):
@@ -40,7 +41,10 @@ class makeSet(genNode.node):
     def randomize(self,state):
         self.state = state
         opts = self.state.pers.keys()
-        opts.append(chr(ord(opts[-1])+1))
+        if opts:
+            opts.append(chr(ord(opts[-1])+1))
+        else:
+            opts.append('A')
         self.params['name']['value'] = random.choice(opts)
         self.state.pers[self.params['name']['value']] = []
         return
@@ -49,15 +53,15 @@ class makeSet(genNode.node):
         return {"makeSet {"+self.params['name']['value']+"}":[self.down[0].toDict()]}
 
     def makeProg(self,numTab,var):
-    tab = "    "
-    indent = ""
-    for i in xrange(numTab):
-        indent+=tab
-    prog = ""
-    prog = self.down[0].makeProg(numTab,var+" ")
-    prog+= self.name+" = x"+var+"0\n"+indent
-    prog+="x"+var+"=x"+var+"0\n"+indent
-    return prog
+        tab = "    "
+        indent = ""
+        for i in xrange(numTab):
+            indent+=tab
+        prog = ""
+        prog = self.down[0].makeProg(numTab,var+" ")
+        prog+= self.name+" = x"+var+"0\n"+indent
+        prog+="x"+var+"=x"+var+"0\n"+indent
+        return prog
 
 nodes = [union,makeSet]
 

@@ -1,10 +1,10 @@
 import random
-import genNodes
+import genNode
 
 
-class termNode(genNodes.node):
-    def __init__(parent,settings):
-        super(termNode,self).__init__(parent,None,None,0)
+class termNode(genNode.node):
+    def __init__(self,parent,settings):
+        super(termNode,self).__init__(parent,settings,None,None,0)
       
 
     def evaluate(self):
@@ -26,20 +26,23 @@ class termNode(genNodes.node):
         indent = ""
         for i in xrange(numTab):
             indent+=tab
-        prog = "x"+var+"= "+self.name"\n"+indent
+        prog = "x"+var+"= "+self.name+"\n"+indent
         return prog
 
     def randomize(self,state):
         if not state.pers.keys():
-            sets['pers']['A'] = []
+            state.pers['A'] = []
         opts = state.pers.keys()
         self.name = random.choice(opts)
         self.state = state
         return 
 
+    def toDict(self):
+        return self.name
+
 class lastNode(termNode):
-    def __init__(parent,settings):
-        super(lastNode,self).__init__(parent)
+    def __init__(self,parent,settings):
+        super(lastNode,self).__init__(parent,settings)
         self.name = 'Last'
 
 
@@ -57,11 +60,14 @@ class lastNode(termNode):
         indent = ""
         for i in xrange(numTab):
             indent+=tab
-        prog = "x"+var+"= "+self.name"\n"+indent
+        prog = "x"+var+"= "+self.name+"\n"+indent
         return prog
 
     def randomize(self,state):
         self.state = state
         return
+
+    def toDict(self):
+        return 'last'
 
 nodes =[lastNode,termNode]

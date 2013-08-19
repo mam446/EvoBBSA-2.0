@@ -74,5 +74,9 @@ def trunc(rDown, params, solSettings):
     pop.sort(reverse = True)
     return pop[:params['count']['value']]
 
-
+def union(rDown, params, solSettings):
+   right = set(rDown[0])
+   left = set(rDown[1])
+   return right.union(left)
+    
 

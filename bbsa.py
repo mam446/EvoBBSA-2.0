@@ -1,14 +1,14 @@
 import random
 import variationNodes
-import selectionNodes
+import selectNodes
 import setNodes
 import state
 import logger
 
 nodes = []
 
-nodes.extend(varationNodes.nodes)
-nodes.extend(selectionNodes.nodes)
+nodes.extend(variationNodes.nodes)
+nodes.extend(selectNodes.nodes)
 
 nodes.extend(setNodes.nodes)
 
@@ -34,7 +34,7 @@ class bbsa:
 
         self.state = state.state(settings)
 
-        self.initPop = random.randint(1,settings.initPopMax)
+        self.initPop = random.randint(1,settings.bbsaSettings['initPopMax'])
         
         self.logger = logger.logger(self.name,settings.bbsaSettings['converge'])
 
@@ -49,6 +49,8 @@ class bbsa:
             start  = self.root
         else:
             size = random.randint(1,self.settings.bbsaSettings['mutateMax'])
+            for s in xrange(len(start.down)):
+                start.down[s] = None
         for i in xrange(size):
             node = random.choice(nodes)
             if not start:
@@ -68,10 +70,10 @@ class bbsa:
             n = random.randint(0,len(cur.down)-1)
             cur.down[n] = node(cur,self.settings)
             cur.down[n].randomize(self.state)
-        start.fillTerms()
-        self.update()
+        start.fillTerms(self.state)
         if self.root == None:
             self.root = start
+        self.update()
         self.count()
         return
 
@@ -110,7 +112,8 @@ class bbsa:
         self.depth = self.root.update(0,self.state)
 
 
-
+    def toDict(self):
+        return self.root.toDict()
 
 
 
