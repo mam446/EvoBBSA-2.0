@@ -116,10 +116,28 @@ class bbsa:
     def toDict(self):
         return self.root.toDict()
 
+    def duplicate(self):
+        x = copy.deepcopy(self)
+        
+        x.aveOps = 0.0
+        x.aveBest = 0.0
+        x.aveEval = 0.0
 
+        x.state.reset()
+        x.fitness = 0
+        x.update()
+        return x
 
+    def mutate(self):
+        x = self.duplicate()
+        n = x.randomNode()
+        self.createRandom(n)
+        x.update()
+        x.count()
+        return x
 
-
+    def mate(self, other):
+        
 
 
 
