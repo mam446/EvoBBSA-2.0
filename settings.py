@@ -4,6 +4,7 @@
 
 
 
+
 class runSettings:
     def __init__(self,filename = None):
 
@@ -45,8 +46,8 @@ class runSettings:
             self.nodeSettings['makeSet'] = {'name':{'value':"",'type':'str'}}
 
 
-            self.probConf.append({'prob':'allOnes','length':100,'trapSize':5})
-            self.probConf.append({'prob':'allOnes','length':210,'trapSize':7})
+            self.probConf.append({'weight':None,'repr':'bitstring','prob':'dTrap','length':100,'trapSize':5})
+            self.probConf.append({'weight':None,'repr':'bitstring','prob':'allOnes','length':210})
         
         self.solSettings = self.probConf[0]
 

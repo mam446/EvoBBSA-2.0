@@ -24,4 +24,12 @@ class state:
             return True
         return False
 
+    def lastEval(self):
+        for d in self.pers:
+            for ind in self.pers[d]:
+                ind.evaluate(False)
+        for ind in self.last:
+            ind.evaluate(False)
+
+
 

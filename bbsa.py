@@ -13,7 +13,10 @@ nodes.extend(selectNodes.nodes)
 nodes.extend(evalNodes.nodes)
 nodes.extend(setNodes.nodes)
 
-
+def popNodes(node,a):
+    a.append(node)
+    for x in node.down:
+        popNodes(x,a)
 
 
 class bbsa:
@@ -101,12 +104,23 @@ class bbsa:
         self.fitness = self.aveBest
 
     def run(self):
+        #initialize last population
+        #TODO:
+        ##############################
+
         for it in xrange(self.settings.bbsaSettings['maxIterations']):
             self.root.evaluate()
+            self.state.lastEval()
             logger.nextIter(self.state)
             if state.done():
                 break
         logger.nextIter(self.state)
+    
+    def randomNode(self):
+        z = []
+        popNodes(self.root,z)
+        n = random.choice(z)
+        return n
 
 
     def update(self):
@@ -137,7 +151,38 @@ class bbsa:
         return x
 
     def mate(self, other):
+        x = self.duplicate()
+        y = other.duplicate()
+       
+        xn = x.randomNode()
+        yn = y.randomNode()
+
+        xp = xn.parent
+        yp = yn.parent
+        if yp is not None:
+            if yn==yndown[0]:
+                yp.down[0] = xn
+            else:
+                yp.down[1] = xn
+        else:
+            y.root = xn
+
+        if xp is not None:
+            if xn==xp.down[0]:
+                xp.down[0] = yn
+            else:
+                xp.down[1] = yn
+        else:
+            x.root = yn
+
+        xn.parent = yp
+        yn.parent = xp
+        x.update()
+        y.update()
+        x.count()
+        y.count()
         
+        return x,y        
 
 
 
