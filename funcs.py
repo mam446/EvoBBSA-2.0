@@ -8,9 +8,9 @@ def mutate(rDown,params,solSettings):
 
     for p in pop:
         y = p.duplicate()
-        for i in xrange(len(y.bits)):
+        for i in xrange(len(y.gene)):
             if random.random<params['rate']['value']:
-                y.bits[i] = not y.bits[i]
+                y.gene[i] = not y.gene[i]
         ret.append(y)
 
     return ret
@@ -21,8 +21,8 @@ def uniRecomb(rDown,params,solSettings):
 
     for i in xrange(params['count']['value']):
         y = solution.solution(solSettings)
-        for j in xrange(len(y.bits)):
-            y.bits[j] = random.choice(pop).bits[j]
+        for j in xrange(len(y.gene)):
+            y.gene[j] = random.choice(pop).gene[j]
         ret.append(y)
     
     return ret 
@@ -42,11 +42,11 @@ def diagonal(rDown,params,solSettings):
         nex = pnts[0]
         for i in xrange(1,len(pnts)+1):
             if i!=len(pnts):
-                c.bits[last:nex] = pop[i%len(pop)].bits[last:nex]
+                c.gene[last:nex] = pop[i%len(pop)].gene[last:nex]
                 last = nex
                 nex = pnts[i]
             else:
-                c.bits[last:] = pop[i%len(pop)].bits[last:]
+                c.gene[last:] = pop[i%len(pop)].gene[last:]
         d = pop[0]
         pop = pop[1:]
         pop.append(d)

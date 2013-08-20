@@ -46,8 +46,8 @@ class runSettings:
             self.nodeSettings['makeSet'] = {'name':{'value':"",'type':'str'}}
 
 
-            self.probConf.append({'weight':None,'repr':'bitstring','prob':'dTrap','length':100,'trapSize':5})
-            self.probConf.append({'weight':None,'repr':'bitstring','prob':'allOnes','length':210})
+            self.probConf.append({'weight':1,'repr':'bitstring','prob':'dTrap','settings':{'length':100,'trapSize':5}})
+            self.probConf.append({'weight':1,'repr':'bitstring','prob':'allOnes','settings':{'length':210}})
         
         self.solSettings = self.probConf[0]
 
