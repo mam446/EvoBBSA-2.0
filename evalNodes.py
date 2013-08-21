@@ -10,4 +10,10 @@ class evaluate(genNode.node):
     def toDict(self):
         return {"Evaluate":[self.down[0].toDict()]}
 
+
+    def evaluate(self):
+        self.state.curEval+=1
+        return super(evaluate,self).evaluate()
+
+
 nodes = [evaluate]
