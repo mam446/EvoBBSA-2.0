@@ -11,6 +11,7 @@ class logger:
         self.probConf = []
         self.runs = []
         self.curRun = []
+        self.probOps = []
         self.ops = []
         self.name = name
         
@@ -61,17 +62,26 @@ class logger:
                 gMax = ind
             Sum+=ind.fitness
             num+=1
-        ave = Sum/num
-        if gMax.fitness == self.conVal:
-            self.curCon+=1 
-        self.curRun.append({'evals':state.curEval,'max':gMax.fitness,'ave':ave})
+        if num:
+            ave = Sum/num
+        else:
+            ave = 0
+        if gMax and gMax.fitness == self.conVal:
+            self.curCon+=1
+        else:
+            self.conVal = gMax
+        if gMax:
+            self.curRun.append({'evals':state.curEval,'max':gMax.fitness,'ave':ave})
+        else:
+            self.curRun.append({'evals':state.curEval,'max':0,'ave':ave})
+        print gMax.fitness
         self.ops.append(state.curOp)
 
-    def hasConverged():
+    def hasConverged(self):
         return self.curCon>=self.converge
 
 
-    def getAveOps():
+    def getAveOps(self):
         Sum = 0.0
         num = 0
         for p in self.probOps:

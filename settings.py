@@ -55,9 +55,9 @@ class runSettings:
             self.probConf = d['problems']
         else:
 
-            self.probConf.append({'weight':1,'repr':'bitstring','prob':'dTrap','settings':{'length':100,'k':5}})
-            self.probConf.append({'weight':1,'repr':'bitstring','prob':'allOnes','settings':{'length':210}})
-            self.probConf.append({'weight':1,'repr':'bitstring','prob':'nk','settings':{'length':100,'dimensions':30,'k':5,'problemSeed':0,'maximumFitness':1.0,'nkProblemFolder':'','run':0}})
+            self.probConf.append({'weight':1,'repr':'bitString','prob':'allOnes','settings':{'length':210}})
+            self.probConf.append({'weight':1,'repr':'bitString','prob':'dTrap','settings':{'length':100,'k':5}})
+            self.probConf.append({'weight':1,'repr':'bitString','prob':'nk','settings':{'length':100,'dimensions':30,'k':5,'problemSeed':0,'maximumFitness':1.0,'nkProblemFolder':'','run':0}})
 
         self.solSettings = self.probConf[0]
 

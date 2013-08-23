@@ -3,7 +3,7 @@ import random
 
 class node(object):
 
-    def __init__(self,parent,settings,func,name,children=1,params= {}):
+    def __init__(self,parent,settings,func,name,children,params):
         self.depth = 0
         self.height = 0
 
@@ -39,7 +39,7 @@ class node(object):
         for d in self.down:
             rDown.append(d.evaluate())
             self.state.curOp+=len(rDown[-1])*self.opWeight
-        return self.func(rDown,self.param,settings.solSettings)
+        return self.function(rDown,self.params,self.settings.solSettings)
     
     def update(self,depth,state):
         d = [i.update(depth+1,state) for i in self.down]

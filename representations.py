@@ -1,3 +1,4 @@
+import random
 #goldman's implementations
 import FitnessFunction
 
@@ -6,7 +7,7 @@ import fitness
 
 
 def createBitstring(settings):
-    return [random.choice(0,1) for i in xrange(settings['length'])]
+    return [random.choice([0,1]) for i in xrange(settings['length'])]
 
 def allOnesFitnessFunction(settings):
     return fitness.allOnes(settings)
@@ -22,14 +23,14 @@ def nkFitnessFunction(settings):
     return FitnessFunction.NearestNeighborNK(settings,settings['run'])
 
 def allOnes(settings):
-    
+    return fitness.allOnes(settings)    
 
 reps = {}
 reps['bitString'] = {'gene':createBitstring}
 reps['bitString']['dTrap'] = dTrapFitnessFunction
 reps['bitString']['dSTrap'] = dStepTrapFitnessFunction
 reps['bitString']['nk'] = nkFitnessFunction
-reps['bitString']['allOnes'] allOnesFitnessFunction
+reps['bitString']['allOnes'] = allOnesFitnessFunction
 
 
 

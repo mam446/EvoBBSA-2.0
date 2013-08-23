@@ -4,7 +4,7 @@ import genNode
 
 class termNode(genNode.node):
     def __init__(self,parent,settings):
-        super(termNode,self).__init__(parent,settings,None,None,0)
+        super(termNode,self).__init__(parent,settings,None,None,0,{})
       
 
     def evaluate(self):

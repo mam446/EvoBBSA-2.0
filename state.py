@@ -9,7 +9,7 @@ class state:
         self.last = []        
         self.maxOp = settings.bbsaSettings['maxOps']
         self.maxEval = settings.bbsaSettings['maxEvals']
-        run = 0
+        self.run = 0
         self.terms = termNodes.nodes
 
     def reset(self):
@@ -18,7 +18,7 @@ class state:
         for d in self.pers:
             self.pers[d] = []
         self.last = []
-        run = 0
+        self.run = 0
 
     def done(self):
         if self.curOp>=self.maxOp or self.curEval>=self.maxEval:
@@ -28,9 +28,9 @@ class state:
     def lastEval(self):
         for d in self.pers:
             for ind in self.pers[d]:
-                ind.evaluate(False)
+                ind.evaluate()
         for ind in self.last:
-            ind.evaluate(False)
-        run+=1
+            ind.evaluate()
+        self.run+=1
 
 

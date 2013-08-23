@@ -1,4 +1,7 @@
 import representations
+import copy
+
+
 
 class solution:
 
@@ -17,6 +20,8 @@ class solution:
         self.fitness = self.fitFunc.evaluate(self.gene)
         return self.fitness
 
+    def duplicate(self):
+        return copy.deepcopy(self)
 
     def __lt__(self,other):
         return self.fitness<other.fitness

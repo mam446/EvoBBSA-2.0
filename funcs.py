@@ -18,8 +18,9 @@ def mutate(rDown,params,solSettings):
 def uniRecomb(rDown,params,solSettings):
     pop = rDown[0]
     ret = []
-
-    for i in xrange(params['count']['value']):
+    if not pop:
+        return ret
+    for i in xrange(params['num']['value']):
         y = solution.solution(solSettings)
         for j in xrange(len(y.gene)):
             y.gene[j] = random.choice(pop).gene[j]
@@ -32,10 +33,10 @@ def diagonal(rDown,params,solSettings):
     if not pop:
         return []
     childs = [solution.solution(solSettings) for p in pop]
-    pnts = [random.randint(1,solSettings['length']-1) for i in xrange(params['n'])]
+    pnts = [random.randint(1,solSettings['settings']['length']-1) for i in xrange(params['n']['value'])]
     pnts.sort()
 
-    pnts.append(solSettings['length'])
+    pnts.append(solSettings['settings']['length'])
 
     for c in childs:
         last = 0
@@ -56,18 +57,20 @@ def diagonal(rDown,params,solSettings):
 def evaluate(rDown,params,solSettings):
     for ind in rDown[0]:
         ind.evaluate()
+    return rDown[0]
 
 def kTourn(rDown, params,solSettings):
     sel = []
     pop = rDown[0]
-    for n in xrange(params['count']):
+    if not pop:
+        return []
+    for n in xrange(params['count']['value']):
         best = None
-        for i in xrange(params['k']):
+        for i in xrange(params['k']['value']):
             obj = random.choice(pop)
             if not best or obj>best:
                 best = obj
         sel.append(best)
-
     return sel
 
 
@@ -79,6 +82,6 @@ def trunc(rDown, params, solSettings):
 def union(rDown, params, solSettings):
    right = set(rDown[0])
    left = set(rDown[1])
-   return right.union(left)
+   return list(right.union(left))
     
 

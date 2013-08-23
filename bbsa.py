@@ -5,6 +5,7 @@ import selectNodes
 import setNodes
 import state
 import logger
+import solution
 
 nodes = []
 
@@ -90,7 +91,7 @@ class bbsa:
 
 
     def evaluate(self):
-      
+        
         for prob in self.settings.probConf:
             for run in xrange(self.settings.bbsaSettings['runs']):
                 self.run()
@@ -107,14 +108,15 @@ class bbsa:
         #initialize last population
         #TODO:
         ##############################
+        self.state.last = [solution.solution(self.settings.solSettings) for i in xrange(self.initPop)]
 
         for it in xrange(self.settings.bbsaSettings['maxIterations']):
             self.root.evaluate()
-            self.state.lastEval()
-            logger.nextIter(self.state)
-            if state.done():
+            self.logger.nextIter(self.state)
+            if self.state.done() or self.logger.hasConverged():
                 break
-        logger.nextIter(self.state)
+        self.state.lastEval()
+        self.logger.nextIter(self.state)
     
     def randomNode(self):
         z = []
