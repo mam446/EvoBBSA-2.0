@@ -28,7 +28,7 @@
                 'value':0.0,
                 'range':(0.0,1.0),
                 'type':'float'
-            }
+            },
             'weight':2
         },
         'uniRecomb':
@@ -38,7 +38,7 @@
                 'value':1,
                 'range':(1,25),
                 'type':'int'
-            }
+            },
             'weight':2
         },
         'diagonal':
@@ -48,28 +48,87 @@
                 'value':1,
                 'range':(1,25),
                 'type':'int'
-            }
+            },
             'weight':2
         },
         'kTourn':
         {
-
+            'k':
+            {
+                'value':1,
+                'range':(1,25),
+                'type':'int'
+            },
+            'count':
+            {
+                'value':1,
+                'range':(1,25),
+                'type':'int'
+            },
+            'weight':2
         },
         'trunc':
         {
-
+            'count':
+            {
+                'value':1,
+                'range':(1,25),
+                'type':'int'
+            },
+            'weight':2
         },
         'makeSet':
         {
-
+            'name':
+            {
+                'value':"",
+                'type':'str'
+            },
+            'weight':2
         }
 
     },
      
     'problems':
     [
+        {
+            'weight':1,
+            'repr':'bitstring',
+            'prob':'dTrap',
+            'settings':
+            {
+                'length':100,
+                'k':5
+            }
+        },
 
-    [
+        {
+            'weight':1,
+            'repr':'bitstring',
+            'prob':'allOnes',
+            'settings':
+            {
+                'length':210
+            }
+        },
+
+        {
+            'weight':1,
+            'repr':'bitstring',
+            'prob':'allOnes',
+            'settings':
+            {
+                'length':100,
+                'dimensions':30,
+                'k':5,
+                'problemSeed':0,
+                'maximumFitness':1.0,
+                'nkProblemFolder':'',
+                'run':0
+            }
+        }
+
+    ]
 
 }
 
