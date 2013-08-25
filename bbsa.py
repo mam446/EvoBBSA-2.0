@@ -1,3 +1,4 @@
+import copy
 import random
 import evalNodes
 import variationNodes
@@ -113,10 +114,6 @@ class bbsa:
             self.state.last = self.root.evaluate()
             self.logger.nextIter(self.state)
             if self.state.done() or self.logger.hasConverged():
-                if self.logger.hasConverged():
-                    print "conv"
-                else:
-                    print "state done"
                 break
         self.state.lastEval()
         self.logger.nextIter(self.state)

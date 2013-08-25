@@ -31,7 +31,7 @@ while i<mu:
     x = bbsa.bbsa(copy.deepcopy(s))
     print x.toDict()
     x.evaluate()
-    if x.valid():
+    if x.fitness>0.1:
         pop.append(x)
         print "------------------------------------------------------",x.aveBest
         i+=1
