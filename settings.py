@@ -10,6 +10,7 @@ class runSettings:
 
         self.bbsaSettings = {}
 
+        self.seed = None
 
         self.nodeSettings = {}
         
@@ -18,9 +19,9 @@ class runSettings:
         self.probConf = []
 
 
-            
+        self.bbsaSettings['maxStartNodes'] = 15            
         self.bbsaSettings['maxEvals'] = 50000
-        self.bbsaSettings['maxOps'] = 5000000
+        self.bbsaSettings['maxOps'] = 500000
         self.bbsaSettings['maxIterations'] = 10000
         self.bbsaSettings['maxDepth'] = 5
         self.bbsaSettings['mutateMax'] = 5
@@ -56,8 +57,9 @@ class runSettings:
         else:
 
             self.probConf.append({'weight':1,'repr':'bitString','prob':'allOnes','settings':{'length':210}})
-            self.probConf.append({'weight':1,'repr':'bitString','prob':'dTrap','settings':{'length':100,'k':5}})
-            self.probConf.append({'weight':1,'repr':'bitString','prob':'nk','settings':{'length':100,'dimensions':30,'k':5,'problemSeed':0,'maximumFitness':1.0,'nkProblemFolder':'','run':0}})
+            self.probConf.append({'weight':1,'repr':'bitString','prob':'allOnes','settings':{'length':100}})
+            #self.probConf.append({'weight':1,'repr':'bitString','prob':'dTrap','settings':{'length':100,'k':5}})
+            #self.probConf.append({'weight':1,'repr':'bitString','prob':'nk','settings':{'length':100,'dimensions':30,'k':5,'problemSeed':0,'maximumFitness':1.0,'nkProblemFolder':'','run':0}})
 
         self.solSettings = self.probConf[0]
 
@@ -65,4 +67,5 @@ class runSettings:
         x = self.probConf[0]
         self.probConf = self.probConf[1:]
         self.probConf.append(x)
+        self.solSettings = self.probConf[0]
         

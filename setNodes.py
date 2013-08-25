@@ -58,8 +58,8 @@ class makeSet(genNode.node):
         for i in xrange(numTab):
             indent+=tab
         prog = ""
-        prog = self.down[0].makeProg(numTab,var+" ")
-        prog+= self.name+" = x"+var+"0\n"+indent
+        prog = self.down[0].makeProg(numTab,var+"0")
+        prog+= self.params['name']['value']+" = x"+var+"0\n"+indent
         prog+="x"+var+"=x"+var+"0\n"+indent
         return prog
 

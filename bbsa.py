@@ -35,6 +35,8 @@ class bbsa:
         self.aveBest = 0.0
         self.aveEval = 0.0
 
+        self.fitness = 0.0
+
         self.settings = settings
 
         self.state = state.state(settings)
@@ -49,7 +51,7 @@ class bbsa:
 
     def createRandom(self,start = None):
         
-        size = random.randint(1,2**(self.settings.bbsaSettings['maxDepth']))
+        size = random.randint(1,(self.settings.bbsaSettings['maxStartNodes']))
         if start ==None:
             start  = self.root
         else:
@@ -105,15 +107,16 @@ class bbsa:
         self.fitness = self.aveBest
 
     def run(self):
-        #initialize last population
-        #TODO:
-        ##############################
         self.state.last = [solution.solution(self.settings.solSettings) for i in xrange(self.initPop)]
 
         for it in xrange(self.settings.bbsaSettings['maxIterations']):
-            self.root.evaluate()
+            self.state.last = self.root.evaluate()
             self.logger.nextIter(self.state)
             if self.state.done() or self.logger.hasConverged():
+                if self.logger.hasConverged():
+                    print "conv"
+                else:
+                    print "state done"
                 break
         self.state.lastEval()
         self.logger.nextIter(self.state)
@@ -124,6 +127,8 @@ class bbsa:
         n = random.choice(z)
         return n
 
+    def count(self):
+        self.size = self.root.count()
 
     def update(self):
         self.depth = self.root.update(0,self.state)
@@ -131,6 +136,39 @@ class bbsa:
 
     def toDict(self):
         return self.root.toDict()
+
+    def makeProg(self):
+        prog = "import random\nfrom funcs import *\n"
+        prog += "\n\ndef run():\n"
+        prog += "\n\nseed = "+str(self.settings.seed)
+        prog += "\n\nbbsaSettings = "+str(self.settings.bbsaSettings)
+        prog += "\n\nnodeSettings = "+str(self.settings.nodeSettings)
+        prog += "\n\nsolSettings = "+str(self.settings.solSettings)
+        prog += "\n\ndef run():\n\t"
+       
+        for s in self.state.pers:
+            prog+=s+" = []\n\t"
+
+        prog += "\n\n\tlast = [solution.solution(solSettings) for i in xrange("+str(self.initPop)+")]\n"
+
+
+        prog+="\n\tfor i in xrange(bbsaSettings[\'maxEvals\']:\n\t\t" 
+        prog+=self.root.makeProg(2,"0")
+        prog+="last = x0\n\n\t"
+        for s in self.state.pers:
+            prog+="last.extend("+s+")\n\t"
+        prog+="for ind in last:\n\t\t"
+        prog+="ind.evaluate()\n\t"
+        prog+="return last\n\n"
+        
+        return prog
+
+    def valid(self):
+        return self.logger.valid() and self.evalExist()
+
+    def evalExist(self):
+        return True
+
 
     def duplicate(self):
         x = copy.deepcopy(self)

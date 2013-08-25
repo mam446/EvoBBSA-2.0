@@ -43,7 +43,7 @@ class termNode(genNode.node):
 class lastNode(termNode):
     def __init__(self,parent,settings):
         super(lastNode,self).__init__(parent,settings)
-        self.name = 'Last'
+        self.name = 'last'
 
 
     def evaluate(self):

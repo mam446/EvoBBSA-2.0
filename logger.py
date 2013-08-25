@@ -16,7 +16,7 @@ class logger:
         self.name = name
         
         self.converge = converge
-        
+        self.allMax = None        
         self.curCon = 0
         self.conVal = 0.0
 
@@ -28,6 +28,8 @@ class logger:
         self.ops = []
         self.name = name
         
+        self.allMax = None
+
         self.converge = converge
         self.curCon = 0
         self.conVal = 0.0
@@ -66,15 +68,16 @@ class logger:
             ave = Sum/num
         else:
             ave = 0
-        if gMax and gMax.fitness == self.conVal:
+        if gMax and self.allMax!=None and gMax<=self.allMax:
             self.curCon+=1
         else:
-            self.conVal = gMax
+            self.curCon = 0
+            if gMax:
+                self.allMax = gMax
         if gMax:
             self.curRun.append({'evals':state.curEval,'max':gMax.fitness,'ave':ave})
         else:
             self.curRun.append({'evals':state.curEval,'max':0,'ave':ave})
-        print gMax.fitness
         self.ops.append(state.curOp)
 
     def hasConverged(self):
@@ -89,6 +92,20 @@ class logger:
                 Sum+=r
                 num+=1
         return Sum/num
+
+
+    def valid(self):
+        
+        Sum = 0.0
+        num=0
+        for p in self.probConf:
+            for r in p:
+                Sum+=r[-2]['max']
+                num+=1
+        
+        if Sum/num<.1:
+            return False
+        return True
 
     def getAveBest(self):
         Sum = 0.0

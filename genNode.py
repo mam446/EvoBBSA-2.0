@@ -70,17 +70,20 @@ class node(object):
         dList = "["
         for d in xrange(len(self.down)):
             prog+=self.down[d].makeProg(numTab,var+str(d))
-            dlist+=var+str(d)+","
-        dList[-1] = "]"
+            dList+="x"+var+str(d)+","
+        dList = dList[:-1]+"]"
 
         pList = "{"
         for p in self.params:
+            if p=='weight':
+                continue
             pList+="\'"+p+"\':"+str(self.params[p]['value'])+","
-        pList[-1] = "}"
-
-        prog+="x"+var+" = "+self.name+"("+dList+","+pList+")\n"+indent
-
-
+        if pList!="{":
+            pList = pList[:-1]+"}"
+            prog+="x"+var+" = "+self.name+"("+dList+","+pList+")\n"+indent
+        else:
+            prog+="x"+var+" = "+self.name+"("+dList+")\n"+indent
+        return prog
 
     def fillTerms(self,state):
         for i in xrange(len(self.down)):

@@ -7,7 +7,10 @@ x = bbsa.bbsa(s)
 
 print x.toDict() 
 
-x.evaluate()
+#x.evaluate()
 
 print len(x.logger.probConf)
-
+print x.fitness
+f = open(str(x.name)+"allones.py","w")
+f.write(x.makeProg())
+f.close()

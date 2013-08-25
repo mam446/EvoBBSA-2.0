@@ -21,7 +21,10 @@ class solution:
         return self.fitness
 
     def duplicate(self):
-        return copy.deepcopy(self)
+        x = solution(self.settings)
+        x.gene = copy.deepcopy(self.gene)
+        
+        return x
 
     def __lt__(self,other):
         return self.fitness<other.fitness

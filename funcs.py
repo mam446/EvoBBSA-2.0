@@ -9,7 +9,11 @@ def mutate(rDown,params,solSettings):
     for p in pop:
         y = p.duplicate()
         for i in xrange(len(y.gene)):
-            if random.random<params['rate']['value']:
+            if random.random()<params['rate']['value']:
+                if y.gene[i]==1:
+                    y.gene[i]=0
+                else:
+                    y.gene[i] = 1
                 y.gene[i] = not y.gene[i]
         ret.append(y)
 
@@ -24,6 +28,7 @@ def uniRecomb(rDown,params,solSettings):
         y = solution.solution(solSettings)
         for j in xrange(len(y.gene)):
             y.gene[j] = random.choice(pop).gene[j]
+        y.fitness = 0.0
         ret.append(y)
     
     return ret 
@@ -54,7 +59,7 @@ def diagonal(rDown,params,solSettings):
     return childs
 
 
-def evaluate(rDown,params,solSettings):
+def evaluate(rDown,params,solSettings = {}):
     for ind in rDown[0]:
         ind.evaluate()
     return rDown[0]
@@ -79,7 +84,7 @@ def trunc(rDown, params, solSettings):
     pop.sort(reverse = True)
     return pop[:params['count']['value']]
 
-def union(rDown, params, solSettings):
+def union(rDown, params, solSettings={}):
    right = set(rDown[0])
    left = set(rDown[1])
    return list(right.union(left))
