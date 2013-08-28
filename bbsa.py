@@ -234,7 +234,9 @@ class bbsa:
         
         return x,y        
 
+    def __gt__(self,other):
 
+        return self.fitness>other.fitness
 
 
 
