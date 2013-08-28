@@ -77,7 +77,7 @@ while cur<maxEvals:
                x.evaluate()
             childs.append(x)
             c+=1
-
+        print c
     pop.extend(childs)
     pop.sort()
     pop.reverse()
