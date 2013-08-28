@@ -104,7 +104,7 @@ class bbsa:
             #self.update()
             self.logger.nextProbConf()
         self.aveBest = self.logger.getAveBest()
-        self.aveEvals = self.logger.getAveEvals()
+        self.aveEval = self.logger.getAveEvals()
         self.aveOps = self.logger.getAveOps()
         self.fitness = self.aveBest
 
@@ -173,7 +173,15 @@ class bbsa:
         return x
 
     def evalExist(self):
-        return True
+        ns =[]
+        popNodes(self.root,ns)
+        found = False
+
+        for n in ns:
+            if n.name =="Evaluate":
+                found = True
+                break
+        return found
 
 
     def duplicate(self):

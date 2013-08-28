@@ -102,9 +102,10 @@ class logger:
         num=0
         for p in self.probConf:
             for r in p:
-                Sum+=r[-2]['max']
+                Sum+=r[-1]['max']
                 num+=1
-        
+        if num==0:
+            return False 
         if Sum/num<.1:
             return False
         return True

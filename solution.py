@@ -24,7 +24,7 @@ class solution:
     def duplicate(self):
         x = solution(self.settings)
         x.gene = copy.deepcopy(self.gene)
-        
+        x.fitness = 0        
         return x
 
     def __lt__(self,other):

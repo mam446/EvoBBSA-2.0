@@ -30,8 +30,10 @@ i = 0
 while i<mu:
     x = bbsa.bbsa(copy.deepcopy(s))
     print x.toDict()
+    if not x.evalExist():
+        continue
     x.evaluate()
-    if x.fitness>0.1:
+    if x.valid():
         pop.append(x)
         print "------------------------------------------------------",x.aveBest
         print "--------------------------------------------",x.aveOps
@@ -56,19 +58,23 @@ while cur<maxEvals:
             mom = ktourn(pop,k)
             dad = ktourn(pop,k)
             x,y = mom.mate(dad)
-            x.evaluate()
-            y.evaluate()
+            if x.evalExist():
+                x.evaluate()
+            if y.evalExist():
+                y.evaluate()
             childs.append(x)
             childs.append(y)
             c+=2
         elif choice==2:
             x=ktourn(pop,k).mutate()
-            x.evaluate()
+            if x.evalExist():
+                x.evaluate()
             childs.append(x)
             c+=1
         else:
             x = ktourn(pop,k).altMutate()
-            x.evaluate()
+            if x.evalExist():
+               x.evaluate()
             childs.append(x)
             c+=1
 
