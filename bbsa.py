@@ -136,6 +136,8 @@ class bbsa:
 
     def makeProg(self):
         prog = "import random\nfrom funcs import *\n"
+
+        prog+="\n\n"+str(self.toDict())+"\n"
         prog += "\n\ndef run():\n"
         prog += "\n\nseed = "+str(self.settings.seed)
         prog += "\n\nbbsaSettings = "+str(self.settings.bbsaSettings)
@@ -162,6 +164,12 @@ class bbsa:
 
     def valid(self):
         return self.logger.valid() and self.evalExist()
+
+    def altMutate(self):
+        x = self.duplicate()
+        n =x.randomNode()
+        n.randomize(x.state)
+        return x
 
     def evalExist(self):
         return True
