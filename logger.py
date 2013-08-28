@@ -40,6 +40,7 @@ class logger:
         self.curRun = []
         self.curCon = 0
         self.conVal = 0.0
+        self.allMax = None
 
     def nextProbConf(self):
         self.probConf.append(self.runs)
@@ -48,6 +49,7 @@ class logger:
         self.ops = []
         self.curCon = 0
         self.conVal = 0.0
+        self.allMax = None
 
     def nextIter(self,state):
         gMax = None

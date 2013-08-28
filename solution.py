@@ -18,6 +18,7 @@ class solution:
 
     def evaluate(self):
         self.fitness = self.fitFunc.evaluate(self.gene)
+        #print self.fitness
         return self.fitness
 
     def duplicate(self):

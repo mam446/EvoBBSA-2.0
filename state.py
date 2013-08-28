@@ -11,6 +11,7 @@ class state:
         self.maxEval = settings.bbsaSettings['maxEvals']
         self.run = 0
         self.terms = termNodes.nodes
+        self.settings = settings
 
     def reset(self):
         self.curOp = 0

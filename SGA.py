@@ -34,10 +34,13 @@ while i<mu:
     if x.fitness>0.1:
         pop.append(x)
         print "------------------------------------------------------",x.aveBest
+        print "--------------------------------------------",x.aveOps
         i+=1
     else:
         print "################################################################"
 pop.sort()
+for p in pop:
+    print p.aveBest
 
 maxEvals = 2000
 cur = mu
@@ -86,9 +89,6 @@ while cur<maxEvals:
     f = open(str(pop[0].name)+"allones.py","w")
     f.write(pop[0].makeProg())
     f.close()
-    l.newIter(pop,cur)
-l.newRun()
-l.log()
 print
 print pop[0].aveBest,pop[0].aveEval
 print pop[0].toDict()

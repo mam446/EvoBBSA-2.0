@@ -21,7 +21,7 @@ class runSettings:
 
         self.bbsaSettings['maxStartNodes'] = 15            
         self.bbsaSettings['maxEvals'] = 50000
-        self.bbsaSettings['maxOps'] = 500000
+        self.bbsaSettings['maxOps'] = 5000000
         self.bbsaSettings['maxIterations'] = 10000
         self.bbsaSettings['maxDepth'] = 5
         self.bbsaSettings['mutateMax'] = 5

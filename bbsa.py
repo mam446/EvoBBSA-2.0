@@ -105,6 +105,7 @@ class bbsa:
             self.logger.nextProbConf()
         self.aveBest = self.logger.getAveBest()
         self.aveEvals = self.logger.getAveEvals()
+        self.aveOps = self.logger.getAveOps()
         self.fitness = self.aveBest
 
     def run(self):
@@ -182,7 +183,11 @@ class bbsa:
         x.aveBest = 0.0
         x.aveEval = 0.0
 
+        
+        x.logger = logger.logger(self.name,self.settings.bbsaSettings['converge'])
+
         x.state.reset()
+        x.state.settings = x.settings
         x.fitness = 0
         x.update()
         return x
@@ -205,7 +210,7 @@ class bbsa:
         xp = xn.parent
         yp = yn.parent
         if yp is not None:
-            if yn==yndown[0]:
+            if yn==yp.down[0]:
                 yp.down[0] = xn
             else:
                 yp.down[1] = xn

@@ -12,8 +12,9 @@ class evaluate(genNode.node):
 
 
     def evaluate(self):
-        self.state.curEval+=1
-        return super(evaluate,self).evaluate()
+        ret =  super(evaluate,self).evaluate()
+        self.state.curEval+=len(ret)
 
+        return ret
 
 nodes = [evaluate]

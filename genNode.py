@@ -39,7 +39,7 @@ class node(object):
         for d in self.down:
             rDown.append(d.evaluate())
             self.state.curOp+=len(rDown[-1])*self.opWeight
-        return self.function(rDown,self.params,self.settings.solSettings)
+        return self.function(rDown,self.params,self.state.settings.solSettings)
     
     def update(self,depth,state):
         d = [i.update(depth+1,state) for i in self.down]

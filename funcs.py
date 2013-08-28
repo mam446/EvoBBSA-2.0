@@ -14,7 +14,6 @@ def mutate(rDown,params,solSettings):
                     y.gene[i]=0
                 else:
                     y.gene[i] = 1
-                y.gene[i] = not y.gene[i]
         ret.append(y)
 
     return ret
@@ -38,10 +37,10 @@ def diagonal(rDown,params,solSettings):
     if not pop:
         return []
     childs = [solution.solution(solSettings) for p in pop]
-    pnts = [random.randint(1,solSettings['settings']['length']-1) for i in xrange(params['n']['value'])]
+    pnts = [random.randint(1,len(pop[0].gene)-1) for i in xrange(params['n']['value'])]
     pnts.sort()
 
-    pnts.append(solSettings['settings']['length'])
+    pnts.append(len(pop[0].gene))
 
     for c in childs:
         last = 0
