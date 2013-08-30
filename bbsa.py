@@ -1,73 +1,250 @@
+import copy
 import random
-from funcs import *
+import evalNodes
+import variationNodes
+import selectNodes
+import setNodes
+import state
+import logger
+import solution
+
+nodes = []
+
+nodes.extend(variationNodes.nodes)
+nodes.extend(selectNodes.nodes)
+nodes.extend(evalNodes.nodes)
+nodes.extend(setNodes.nodes)
+
+def popNodes(node,a):
+    a.append(node)
+    for x in node.down:
+        popNodes(x,a)
 
 
-{'Union': [{'kTourn(k=21,count=22': [{'kTourn(k=21,count=22': [{'uniRecomb(count=2)': [{'diagonal(n =24)': [{'kTourn(k=7,count=21': [{'Evaluate': [{'makeSet {A}': [{'uniRecomb(count=23)': [{'Union': ['last', {'makeSet {A}': [{'trunc(count=21': [{'kTourn(k=7,count=23': [{'kTourn(k=21,count=22': [{'kTourn(k=21,count=22': [{'uniRecomb(count=2)': [{'diagonal(n =24)': [{'kTourn(k=7,count=21': [{'Evaluate': [{'makeSet {A}': [{'uniRecomb(count=23)': [{'Union': ['last', {'Evaluate': ['last']}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}]}, {'Evaluate': [{'Union': [{'diagonal(n =21)': [{'kTourn(k=19,count=6': [{'mutate(0.134211158317)': ['last']}]}]}, {'diagonal(n =8)': [{'trunc(count=23': [{'Evaluate': ['last']}]}]}]}]}]}
+class bbsa:
+    def __init__(self,settings):
+
+        self.root = None
+
+        self.depth = 0
+        self.size = 0
+
+        self.name = "bbsa"
 
 
-def run():
+        self.aveOps = 0.0
+        self.aveBest = 0.0
+        self.aveEval = 0.0
+
+        self.fitness = 0.0
+
+        self.settings = settings
+
+        self.state = state.state(settings)
+
+        self.initPop = random.randint(1,settings.bbsaSettings['initPopMax'])
+        
+        self.logger = logger.logger(self.name,settings.bbsaSettings['converge'])
+
+        self.createRandom()
 
 
-seed = 1377717513.5
 
-bbsaSettings = {'runs': 5, 'maxIterations': 10000, 'maxStartNodes': 15, 'mutateMax': 5, 'maxEvals': 50000, 'initPopMax': 50, 'converge': 25, 'maxDepth': 5, 'maxOps': 5000000}
+    def createRandom(self,start = None):
+        
+        size = random.randint(1,(self.settings.bbsaSettings['maxStartNodes']))
+        if start ==None:
+            start  = self.root
+        else:
+            size = random.randint(1,self.settings.bbsaSettings['mutateMax'])
+            for s in xrange(len(start.down)):
+                start.down[s] = None
+        for i in xrange(size):
+            node = random.choice(nodes)
+            if not start:
+                start = node(None,self.settings)
+                start.randomize(self.state)
+                continue
+            last = None
+            cur = start
+            while cur:
+                last = cur
+                if not cur.down:
+                    break
+                cur = random.choice(cur.down)
+            if cur==last:
+                continue
+            cur = last
+            n = random.randint(0,len(cur.down)-1)
+            cur.down[n] = node(cur,self.settings)
+            cur.down[n].randomize(self.state)
+        start.fillTerms(self.state)
+        if self.root == None:
+            self.root = start
+        self.update()
+        self.count()
+        return
 
-nodeSettings = {'mutate': {'rate': {'range': (0.0, 1.0), 'type': 'float', 'value': 0.0}, 'weight': 2}, 'diagonal': {'weight': 2, 'n': {'range': (1, 25), 'type': 'int', 'value': 1}}, 'makeSet': {'name': {'type': 'str', 'value': ''}, 'weight': 2}, 'uniRecomb': {'num': {'range': (1, 25), 'type': 'int', 'value': 1}, 'weight': 2}, 'kTourn': {'count': {'range': (1, 25), 'type': 'int', 'value': 1}, 'k': {'range': (1, 25), 'type': 'int', 'value': 1}, 'weight': 2}, 'trunc': {'count': {'range': (1, 25), 'type': 'int', 'value': 1}, 'weight': 2}}
+    def count(self):
+        self.size = self.root.count()
+        return
 
-solSettings = {'settings': {'length': 210}, 'prob': 'allOnes', 'weight': 1, 'repr': 'bitString'}
+    def fillTerms(self):
+        self.root.fillTerms(self.state)
 
-def run():
-	A = []
-	B = []
-	
 
-	last = [solution.solution(solSettings) for i in xrange(33)]
+    def evaluate(self):
+        
+        for prob in self.settings.probConf:
+            for run in xrange(self.settings.bbsaSettings['runs']):
+                self.run()
+                self.logger.nextRun()
+                self.state.reset()
+            self.settings.nextProbConf()
+            #self.update()
+            self.logger.nextProbConf()
+        self.aveBest = self.logger.getAveBest()
+        self.aveEval = self.logger.getAveEvals()
+        self.aveOps = self.logger.getAveOps()
+        self.fitness = self.aveBest
 
-	for i in xrange(bbsaSettings['maxEvals']:
-		x00000000000= last
-        x00000000001000000000000= last
-        x000000000010000000000010= last
-        x00000000001000000000001 = Evaluate([x000000000010000000000010])
-        x0000000000100000000000 = union([x00000000001000000000000,x00000000001000000000001])
-        x000000000010000000000 = uniRecomb([x0000000000100000000000],{'num':23})
-        A = x000000000010000000000
-        x00000000001000000000=x000000000010000000000
-        x0000000000100000000 = Evaluate([x00000000001000000000])
-        x000000000010000000 = kTourn([x0000000000100000000],{'count':21,'k':7})
-        x00000000001000000 = diagonal([x000000000010000000],{'n':24})
-        x0000000000100000 = uniRecomb([x00000000001000000],{'num':2})
-        x000000000010000 = kTourn([x0000000000100000],{'count':22,'k':21})
-        x00000000001000 = kTourn([x000000000010000],{'count':22,'k':21})
-        x0000000000100 = kTourn([x00000000001000],{'count':23,'k':7})
-        x000000000010 = trunc([x0000000000100],{'count':21})
-        A = x000000000010
-        x00000000001=x000000000010
-        x0000000000 = union([x00000000000,x00000000001])
-        x000000000 = uniRecomb([x0000000000],{'num':23})
-        A = x000000000
-        x00000000=x000000000
-        x0000000 = Evaluate([x00000000])
-        x000000 = kTourn([x0000000],{'count':21,'k':7})
-        x00000 = diagonal([x000000],{'n':24})
-        x0000 = uniRecomb([x00000],{'num':2})
-        x000 = kTourn([x0000],{'count':22,'k':21})
-        x00 = kTourn([x000],{'count':22,'k':21})
-        x0100000= last
-        x010000 = mutate([x0100000],{'rate':0.134211158317})
-        x01000 = kTourn([x010000],{'count':6,'k':19})
-        x0100 = diagonal([x01000],{'n':21})
-        x0101000= last
-        x010100 = Evaluate([x0101000])
-        x01010 = trunc([x010100],{'count':23})
-        x0101 = diagonal([x01010],{'n':8})
-        x010 = union([x0100,x0101])
-        x01 = Evaluate([x010])
-        x0 = union([x00,x01])
-        last = x0
+    def run(self):
+        self.state.last = [solution.solution(self.settings.solSettings) for i in xrange(self.initPop)]
 
-	last.extend(A)
-	last.extend(B)
-	for ind in last:
-		ind.evaluate()
-	return last
+        for it in xrange(self.settings.bbsaSettings['maxIterations']):
+            self.state.last = self.root.evaluate()
+            self.logger.nextIter(self.state)
+            if self.state.done() or self.logger.hasConverged():
+                break
+        self.state.lastEval()
+        self.logger.nextIter(self.state)
+    
+    def randomNode(self):
+        z = []
+        popNodes(self.root,z)
+        n = random.choice(z)
+        return n
+
+    def count(self):
+        self.size = self.root.count()
+
+    def update(self):
+        self.depth = self.root.update(0,self.state)
+
+
+    def toDict(self):
+        return self.root.toDict()
+
+    def makeProg(self):
+        prog = "import random\nfrom funcs import *\n"
+
+        prog+="\n\n"+str(self.toDict())+"\n"
+        prog += "\n\ndef run():\n"
+        prog += "\n\nseed = "+str(self.settings.seed)
+        prog += "\n\nbbsaSettings = "+str(self.settings.bbsaSettings)
+        prog += "\n\nnodeSettings = "+str(self.settings.nodeSettings)
+        prog += "\n\nsolSettings = "+str(self.settings.solSettings)
+        prog += "\n\ndef run():\n\t"
+       
+        for s in self.state.pers:
+            prog+=s+" = []\n\t"
+
+        prog += "\n\n\tlast = [solution.solution(solSettings) for i in xrange("+str(self.initPop)+")]\n"
+
+
+        prog+="\n\tfor i in xrange(bbsaSettings[\'maxEvals\']:\n\t\t" 
+        prog+=self.root.makeProg(2,"0")
+        prog+="last = x0\n\n\t"
+        for s in self.state.pers:
+            prog+="last.extend("+s+")\n\t"
+        prog+="for ind in last:\n\t\t"
+        prog+="ind.evaluate()\n\t"
+        prog+="return last\n\n"
+        
+        return prog
+
+    def valid(self):
+        return self.logger.valid() and self.evalExist()
+
+    def altMutate(self):
+        x = self.duplicate()
+        n =x.randomNode()
+        n.randomize(x.state)
+        return x
+
+    def evalExist(self):
+        ns =[]
+        popNodes(self.root,ns)
+        found = False
+
+        for n in ns:
+            if n.name =="Evaluate":
+                found = True
+                break
+        return found
+
+
+    def duplicate(self):
+        x = copy.deepcopy(self)
+        
+        x.aveOps = 0.0
+        x.aveBest = 0.0
+        x.aveEval = 0.0
+
+        
+        x.logger = logger.logger(self.name,self.settings.bbsaSettings['converge'])
+
+        x.state.reset()
+        x.state.settings = x.settings
+        x.fitness = 0
+        x.update()
+        return x
+
+    def mutate(self):
+        x = self.duplicate()
+        n = x.randomNode()
+        self.createRandom(n)
+        x.update()
+        x.count()
+        return x
+
+    def mate(self, other):
+        x = self.duplicate()
+        y = other.duplicate()
+       
+        xn = x.randomNode()
+        yn = y.randomNode()
+
+        xp = xn.parent
+        yp = yn.parent
+        if yp is not None:
+            if yn==yp.down[0]:
+                yp.down[0] = xn
+            else:
+                yp.down[1] = xn
+        else:
+            y.root = xn
+
+        if xp is not None:
+            if xn==xp.down[0]:
+                xp.down[0] = yn
+            else:
+                xp.down[1] = yn
+        else:
+            x.root = yn
+
+        xn.parent = yp
+        yn.parent = xp
+        x.update()
+        y.update()
+        x.count()
+        y.count()
+        
+        return x,y        
+
+    def __gt__(self,other):
+
+        return self.fitness>other.fitness
+
+
 
