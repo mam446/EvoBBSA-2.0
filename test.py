@@ -6,11 +6,12 @@ s = settings.runSettings()
 x = bbsa.bbsa(s)
 
 print x.toDict() 
-
+y = x.altMutate()
+print y.toDict()
 #x.evaluate()
 
 print len(x.logger.probConf)
-print x.fitness
-f = open(str(x.name)+"allones.py","w")
-f.write(x.makeProg())
-f.close()
+#print x.fitness
+#f = open(str(x.name)+"allones.py","w")
+#f.write(x.makeProg())
+#f.close()

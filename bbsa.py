@@ -29,7 +29,7 @@ class bbsa:
         self.depth = 0
         self.size = 0
 
-        self.name = "bbsa"
+        self.name = "Default"
 
 
         self.aveOps = 0.0
@@ -139,7 +139,9 @@ class bbsa:
         prog = "import random\nfrom funcs import *\n"
 
         prog+="\n\n"+str(self.toDict())+"\n"
-        prog += "\n\ndef run():\n"
+        prog += "\n\nevals = "+str(self.aveEval)
+        prog += "\n\nops = "+str(self.aveOps)
+        prog += "\n\nfit = "+str(self.fitness)
         prog += "\n\nseed = "+str(self.settings.seed)
         prog += "\n\nbbsaSettings = "+str(self.settings.bbsaSettings)
         prog += "\n\nnodeSettings = "+str(self.settings.nodeSettings)

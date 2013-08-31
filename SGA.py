@@ -18,7 +18,7 @@ def ktourn(pop,k):
 
 
 
-s = settings.runSettings()
+s = settings.runSettings(sys.argv[1])
 
 s.seed =time.time()
 random.seed(s.seed)
@@ -98,7 +98,7 @@ while cur<maxEvals:
 print
 print pop[0].aveBest,pop[0].aveEval
 print pop[0].toDict()
-f = open(str(pop[0].name)+".py","w")
+f = open(str(pop[0].name)+"-Dumb.py","w")
 f.write(pop[0].makeProg())
 f.close()
 

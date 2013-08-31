@@ -50,7 +50,7 @@ class runSettings:
 
         if filename:
             f = open(filename)
-            d = eval(f)
+            d = eval(f.read())
             self.nodeSettings = d['nodeSettings']
             self.bbsaSettings = d['bbsaSettings']
             self.probConf = d['problems']

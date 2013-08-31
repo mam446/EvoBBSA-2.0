@@ -8,6 +8,7 @@
 
     'bbsaSettings':
     {
+        'maxStartNodes':15,
         'maxEvals':50000,
         'maxOps':5000000,
         'maxIterations':10000,
@@ -93,7 +94,7 @@
     [
         {
             'weight':1,
-            'repr':'bitstring',
+            'repr':'bitString',
             'prob':'dTrap',
             'settings':
             {
@@ -104,29 +105,15 @@
 
         {
             'weight':1,
-            'repr':'bitstring',
-            'prob':'allOnes',
+            'repr':'bitString',
+            'prob':'dTrap',
             'settings':
             {
-                'length':210
+                'length':210,
+                'k':7
             }
         },
 
-        {
-            'weight':1,
-            'repr':'bitstring',
-            'prob':'allOnes',
-            'settings':
-            {
-                'length':100,
-                'dimensions':30,
-                'k':5,
-                'problemSeed':0,
-                'maximumFitness':1.0,
-                'nkProblemFolder':'',
-                'run':0
-            }
-        }
 
     ]
 
