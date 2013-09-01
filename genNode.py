@@ -35,9 +35,9 @@ class node(object):
         if self.state.curEval>=self.state.maxEval:
             return []
         rDown = []
-    
+        f  = rDown.append  
         for d in self.down:
-            rDown.append(d.evaluate())
+            f(d.evaluate())
             self.state.curOp+=len(rDown[-1])*self.opWeight
         return self.function(rDown,self.params,self.state.settings.solSettings)
     
