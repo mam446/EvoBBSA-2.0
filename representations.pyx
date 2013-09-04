@@ -8,6 +8,7 @@ import fitness
 
 
 def createBitstring(settings):
+    cdef int i
     return [random.choice([0,1]) for i in xrange(settings['length'])]
 
 def allOnesFitnessFunction(settings):

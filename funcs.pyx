@@ -37,7 +37,7 @@ def uniRecomb(rDown,params,solSettings):
     return ret 
 
 def diagonal(rDown,params,solSettings):
-    cdef int i
+    cdef int i,j
     pop = rDown[0]
     if not pop:
         return []
@@ -46,17 +46,16 @@ def diagonal(rDown,params,solSettings):
     pnts.sort()
 
     pnts.append(len(pop[0].gene))
-
-    for c in childs:
+    for j in xrange(len(childs)):
         last = 0
         nex = pnts[0]
         for i in xrange(1,len(pnts)+1):
             if i!=len(pnts):
-                c.gene[last:nex] = pop[i%len(pop)].gene[last:nex]
+                childs[j].gene[last:nex] = pop[i%len(pop)].gene[last:nex]
                 last = nex
                 nex = pnts[i]
             else:
-                c.gene[last:] = pop[i%len(pop)].gene[last:]
+                childs[j].gene[last:] = pop[i%len(pop)].gene[last:]
         d = pop[0]
         pop = pop[1:]
         pop.append(d)
@@ -64,11 +63,13 @@ def diagonal(rDown,params,solSettings):
 
 
 def evaluate(rDown,params,solSettings = {}):
-    for ind in rDown[0]:
-        ind.evaluate()
+    cdef int i
+    for i in xrange(len(rDown[0])):
+        rDown[0][i].evaluate()
     return rDown[0]
 
 def kTourn(rDown, params,solSettings):
+    cdef int n,i
     sel = []
     pop = rDown[0]
     if not pop:
