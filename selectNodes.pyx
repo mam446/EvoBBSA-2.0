@@ -1,3 +1,4 @@
+# cython: profile=True
 import copy
 import genNode
 import random

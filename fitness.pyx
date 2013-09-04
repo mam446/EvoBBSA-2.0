@@ -1,5 +1,6 @@
 
 
+#cython: profile=True
 
 
 class allOnes:

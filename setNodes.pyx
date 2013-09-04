@@ -1,3 +1,4 @@
+# cython: profile=True
 import funcs
 import genNode
 import copy

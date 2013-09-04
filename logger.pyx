@@ -1,4 +1,4 @@
-
+# cython: profile=True
 
 
 
@@ -26,11 +26,9 @@ class logger:
         self.curRun = []
         self.probOps = [] 
         self.ops = []
-        self.name = name
         
         self.allMax = None
 
-        self.converge = converge
         self.curCon = 0
         self.conVal = 0.0
         
@@ -130,7 +128,7 @@ class logger:
    
     def getAveAve(self):
         Sum = 0.0
-        num
+        num = 0.0
         for p in self.probConf:
             for r in p:
                 Sum+=r[-1]['ave']

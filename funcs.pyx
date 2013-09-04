@@ -1,7 +1,9 @@
+# cython: profile=True
 import random
 import solution
 
 def mutate(rDown,params,solSettings):
+    cdef int i
     pop = rDown[0]
 
     ret = []
@@ -19,6 +21,8 @@ def mutate(rDown,params,solSettings):
     return ret
 
 def uniRecomb(rDown,params,solSettings):
+    cdef int i
+    cdef int j
     pop = rDown[0]
     ret = []
     if not pop:
@@ -33,6 +37,7 @@ def uniRecomb(rDown,params,solSettings):
     return ret 
 
 def diagonal(rDown,params,solSettings):
+    cdef int i
     pop = rDown[0]
     if not pop:
         return []

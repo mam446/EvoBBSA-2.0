@@ -1,3 +1,4 @@
+# cython: profile=True
 import copy
 import random
 import evalNodes
