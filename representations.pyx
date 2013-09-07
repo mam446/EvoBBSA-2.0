@@ -6,10 +6,11 @@ import FitnessFunction
 #my implementations
 import fitness
 
+from itertools import repeat
 
 def createBitstring(settings):
     cdef int i
-    return [random.choice([0,1]) for i in xrange(settings['length'])]
+    return [int(random.random()*2) for i in xrange(settings['length'])]
 
 def allOnesFitnessFunction(settings):
     return fitness.allOnes(settings)
