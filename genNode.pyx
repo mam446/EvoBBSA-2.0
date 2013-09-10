@@ -8,6 +8,7 @@ class node(object):
         self.depth = 0
         self.height = 0
 
+
         self.settings = settings
     
         self.function = func
@@ -28,7 +29,17 @@ class node(object):
         if parent:
             self.state = self.parent.state
 
+        self.canTake = []
+        self.canReturn = []
+        
+        self.take = []
+        self.ret = None
 
+    def setTake(self,numerocity):
+        cdef int i 
+        for i in xrange(len(self.down)):
+            self.take.append(numerocity)
+        self.ret = numerocity
 
     def evaluate(self):
         if self.state.curOp>=self.state.maxOp:

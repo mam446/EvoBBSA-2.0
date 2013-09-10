@@ -7,7 +7,13 @@ import random
 class union(genNode.node):
     def __init__(self,parent,settings):
         super(union,self).__init__(parent,settings,funcs.union,"union",2,{})
+        self.canTake = [1,2]
+        self.canReturn =[2]
 
+    def setTake(self,numerocity):
+        super(union,self).setTake(numerocity)
+        self.ret = 2
+    
     def toDict(self):
         return {"Union":[self.down[0].toDict(),self.down[1].toDict()]}
 
@@ -15,6 +21,8 @@ class makeSet(genNode.node):
     def __init__(self,parent,settings):
         p = copy.deepcopy(settings.nodeSettings['makeSet'])
         super(makeSet,self).__init__(parent,settings,funcs.mutate,"makeSet",1,p)
+        self.canTake = [1,2]
+        self.canReturn =[1,2]
 
     def evaluate(self):
         if self.state.curOp>=self.state.maxOp:
@@ -65,4 +73,5 @@ class makeSet(genNode.node):
         return prog
 
 nodes = [union,makeSet]
-
+single = [makeSet]
+multi = [makeSet,union]

@@ -10,11 +10,24 @@ import logger
 import solution
 
 nodes = []
+single = []
+multi = []
 
 nodes.extend(variationNodes.nodes)
 nodes.extend(selectNodes.nodes)
 nodes.extend(evalNodes.nodes)
 nodes.extend(setNodes.nodes)
+
+single.extend(variationNodes.single)
+single.extend(selectNodes.single)
+single.extend(evalNodes.single)
+single.extend(setNodes.single)
+
+multi.extend(variationNodes.multi)
+multi.extend(selectNodes.multi)
+multi.extend(evalNodes.multi)
+multi.extend(setNodes.multi)
+
 
 def popNodes(node,a):
     a.append(node)
@@ -63,8 +76,10 @@ class bbsa:
         for i in xrange(size):
             node = random.choice(nodes)
             if not start:
+                node = random.choice(nodes)
                 start = node(None,self.settings)
                 start.randomize(self.state)
+                start.setTake(2)
                 continue
             last = None
             cur = start
@@ -77,8 +92,17 @@ class bbsa:
                 continue
             cur = last
             n = random.randint(0,len(cur.down)-1)
-            cur.down[n] = node(cur,self.settings)
-            cur.down[n].randomize(self.state)
+            if cur.take[n]==2:
+                node = random.choice(multi)
+                cur.down[n] = node(cur,self.settings)
+                cur.down[n].randomize(self.state)
+                cur.down[n].setTake(2)
+            else:
+                print "This shouldn't happpen"
+                node = random.choice(multi)
+                cur.down[n] = node(cur,self.settings)
+                cur.down[n].randomize(self.state)
+                cur.down[n].setTake(1)
         start.fillTerms(self.state)
         if self.root == None:
             self.root = start

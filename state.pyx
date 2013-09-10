@@ -1,5 +1,5 @@
 import termNodes
-
+import selectNodes
 
 class state:
     def __init__(self,settings):
@@ -12,6 +12,7 @@ class state:
         self.run = 0
         self.terms = termNodes.nodes
         self.settings = settings
+        self.reducers = selectNodes.nodes
 
     def reset(self):
         self.curOp = 0

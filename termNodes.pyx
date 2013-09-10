@@ -6,6 +6,8 @@ import genNode
 class termNode(genNode.node):
     def __init__(self,parent,settings):
         super(termNode,self).__init__(parent,settings,None,None,0,{})
+        self.canTake = [0]
+        self.canReturn =[2]
       
 
     def evaluate(self):
@@ -45,6 +47,8 @@ class lastNode(termNode):
     def __init__(self,parent,settings):
         super(lastNode,self).__init__(parent,settings)
         self.name = 'last'
+        self.canTake = [0]
+        self.canReturn= [2]
 
 
     def evaluate(self):
@@ -72,3 +76,5 @@ class lastNode(termNode):
         return 'last'
 
 nodes =[lastNode,termNode]
+single = []
+multi = [lastNode,termNode]

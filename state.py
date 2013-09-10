@@ -12,7 +12,7 @@ class state:
         self.run = 0
         self.terms = termNodes.nodes
         self.settings = settings
-
+    
     def reset(self):
         self.curOp = 0
         self.curEval = 0
@@ -20,7 +20,7 @@ class state:
             self.pers[d] = []
         self.last = []
         self.run = 0
-
+    
     def done(self):
         if self.curOp>=self.maxOp or self.curEval>=self.maxEval:
             return True
@@ -33,5 +33,4 @@ class state:
         for ind in self.last:
             ind.evaluate()
         self.run+=1
-
 
