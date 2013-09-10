@@ -1,5 +1,5 @@
 # cython: profile=True
-import random
+from random import random
 #goldman's implementations
 import FitnessFunction
 
@@ -10,7 +10,7 @@ from itertools import repeat
 
 def createBitstring(settings):
     cdef int i
-    return [int(random.random()*2) for i in xrange(settings['length'])]
+    return [int(random()*2) for i in xrange(settings['length'])]
 
 def allOnesFitnessFunction(settings):
     return fitness.allOnes(settings)

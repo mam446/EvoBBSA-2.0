@@ -62,23 +62,24 @@ while cur<maxEvals:
             x,y = mom.mate(dad)
             if x.evalExist():
                 x.evaluate()
+                childs.append(x)
+                c+=1
             if y.evalExist():
                 y.evaluate()
-            childs.append(x)
-            childs.append(y)
-            c+=2
+                childs.append(y)
+                c+=1
         elif choice==2:
             x=ktourn(pop,k).mutate()
             if x.evalExist():
                 x.evaluate()
-            childs.append(x)
-            c+=1
+                childs.append(x)
+                c+=1
         else:
             x = ktourn(pop,k).altMutate()
             if x.evalExist():
-               x.evaluate()
-            childs.append(x)
-            c+=1
+                x.evaluate()
+                childs.append(x)
+                c+=1
 
     pop.extend(childs)
     pop.sort()

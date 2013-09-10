@@ -246,8 +246,10 @@ class bbsa:
         return x,y        
 
     def __gt__(self,other):
+        s = self.fitness - .001*self.size
+        o = other.fitness - .001*other.size
 
-        return self.fitness>other.fitness
+        return s>o
 
 
 

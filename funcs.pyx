@@ -1,5 +1,5 @@
 # cython: profile=True
-import random
+from random import random,randrange
 import solution
 
 def mutate(rDown,params,solSettings):
@@ -11,7 +11,7 @@ def mutate(rDown,params,solSettings):
     for p in pop:
         y = p.duplicate()
         for i in xrange(len(y.gene)):
-            if random.random()<params['rate']['value']:
+            if random()<params['rate']['value']:
                 if y.gene[i]==1:
                     y.gene[i]=0
                 else:
@@ -27,35 +27,41 @@ def uniRecomb(rDown,params,solSettings):
     ret = []
     if not pop:
         return ret
+    l= len(pop[0].gene)
+    s = len(pop)
     for i in xrange(params['num']['value']):
         y = solution.solution(solSettings)
-        for j in xrange(len(y.gene)):
-            y.gene[j] = random.choice(pop).gene[j]
+        for j in xrange(l):
+            y.gene[j] = pop[randrange(0,s)].gene[j]
         y.fitness = 0.0
         ret.append(y)
     
     return ret 
 
 def diagonal(rDown,params,solSettings):
-    cdef int i,j
+    cdef int i,j,last,nex,p,po,l 
     pop = rDown[0]
     if not pop:
         return []
-    childs = [solution.solution(solSettings) for p in pop]
-    pnts = [random.randint(1,len(pop[0].gene)-1) for i in xrange(params['n']['value'])]
+    childs = [solution.solution(solSettings) for d in pop]
+    l = len(pop[0].gene)
+    pnts = [randrange(1,l) for i in xrange(params['n']['value'])]
     pnts.sort()
 
+
     pnts.append(len(pop[0].gene))
+    p = len(pnts)
+    po = len(pop)
     for j in xrange(len(childs)):
         last = 0
         nex = pnts[0]
-        for i in xrange(1,len(pnts)+1):
-            if i!=len(pnts):
-                childs[j].gene[last:nex] = pop[i%len(pop)].gene[last:nex]
-                last = nex
-                nex = pnts[i]
-            else:
-                childs[j].gene[last:] = pop[i%len(pop)].gene[last:]
+        g = childs[j].gene
+        for i in xrange(1,p-1):
+            g[last:nex] = pop[i%po].gene[last:nex]
+            last = nex
+            nex = pnts[i]
+            
+        g[last:] = pop[p%po].gene[last:]
         d = pop[0]
         pop = pop[1:]
         pop.append(d)
@@ -72,12 +78,13 @@ def kTourn(rDown, params,solSettings):
     cdef int n,i
     sel = []
     pop = rDown[0]
+    p = len(pop)
     if not pop:
         return []
     for n in xrange(params['count']['value']):
         best = None
         for i in xrange(params['k']['value']):
-            obj = random.choice(pop)
+            obj = pop[randrange(0,p)]
             if not best or obj>best:
                 best = obj
         sel.append(best)
