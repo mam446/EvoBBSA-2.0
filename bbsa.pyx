@@ -238,9 +238,13 @@ class bbsa:
     def mate(self, other):
         x = self.duplicate()
         y = other.duplicate()
-       
+      
         xn = x.randomNode()
         yn = y.randomNode()
+        while xn.ret!=yn.ret:
+
+            xn = x.randomNode()
+            yn = y.randomNode()
 
         xp = xn.parent
         yp = yn.parent

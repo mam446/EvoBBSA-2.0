@@ -11,7 +11,11 @@ class kTourn(genNode.node):
         super(kTourn,self).__init__(parent,settings,funcs.kTourn,"kTourn",1,p)
         self.canTake = [1,2]
         self.canReturn =[1,2]
-        
+
+    def randomize(self,state):
+        super(kTourn,self).randomize(state)
+        if self.ret==1:
+            self.params['count']['value'] = 1
 
     def toDict(self):
         return {"kTourn(k="+str(self.params['k']['value'])+",count="+str(self.params['count']['value']):[self.down[0].toDict()]}
@@ -22,7 +26,11 @@ class trunc(genNode.node):
         super(trunc,self).__init__(parent,settings,funcs.trunc,"trunc",1,p) 
         self.canTake = [1,2]
         self.canReturn =[1,2]
-    
+   
+    def randomize(self,state):
+        super(trunc,self).randomize(state)
+        if self.ret==1:
+            self.params['count']['value'] = 1
 
     def toDict(self):
         return {"trunc(count="+str(self.params['count']['value']):[self.down[0].toDict()]}

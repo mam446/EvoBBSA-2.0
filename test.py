@@ -4,10 +4,14 @@ import settings
 s = settings.runSettings()
 
 x = bbsa.bbsa(s)
+y = bbsa.bbsa(s)
 
-print x.toDict() 
-y = x.altMutate()
+(z1,z2) = x.mate(y)
+print x.toDict()
+print
 print y.toDict()
+print 
+print z1.toDict()
 #x.evaluate()
 
 print len(x.logger.probConf)

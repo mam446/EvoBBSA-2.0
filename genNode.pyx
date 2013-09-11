@@ -102,8 +102,14 @@ class node(object):
             if self.down[i]:
                 self.down[i].fillTerms(state)
             else:
-                self.down[i] = random.choice(state.terms)(self,self.settings)
-                self.down[i].randomize(state)
+                if self.take[i]==1:
+                    self.down[i] = random.choice(state.reducers)(self,self.settings)
+                    self.down[i].randomize(state)
+                    self.down[i].setTake(2)
+                    self.down[i].down[0] = random.choice(state.terms)(self,self.settings)
+                else:
+                    self.down[i] = random.choice(state.terms)(self,self.settings)
+                    self.down[i].randomize(state)
 
     def count(self):
         t = 1 

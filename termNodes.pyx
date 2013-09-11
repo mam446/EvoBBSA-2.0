@@ -8,7 +8,6 @@ class termNode(genNode.node):
         super(termNode,self).__init__(parent,settings,None,None,0,{})
         self.canTake = [0]
         self.canReturn =[2]
-      
 
     def evaluate(self):
         if self.name not in self.state.pers:
