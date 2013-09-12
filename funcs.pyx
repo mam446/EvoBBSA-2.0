@@ -38,6 +38,23 @@ def uniRecomb(rDown,params,solSettings):
     
     return ret 
 
+def onePoint(rDown,params,solSettings):
+    if not rDown[0]:
+        return rDown[1]
+    if not rDown[1]:
+        return rDown[0]
+
+    right = rDown[0][0].duplicate()
+    left = rDown[1][0].duplicate()
+
+    
+    p = randrange(0,len(right.gene))
+
+    rTemp = left.gene[p:]
+    left.gene[p:] = right.gene[p:]
+    right.gene[p:] = rTemp
+    return [right,left]
+
 def diagonal(rDown,params,solSettings):
     cdef int i,j,last,nex,p,po,l 
     pop = rDown[0]

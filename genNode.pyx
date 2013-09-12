@@ -37,10 +37,11 @@ class node(object):
 
     def setTake(self,numerocity):
         cdef int i 
+        self.take = []
         for i in xrange(len(self.down)):
             self.take.append(numerocity)
         self.ret = numerocity
-
+    
     def evaluate(self):
         if self.state.curOp>=self.state.maxOp:
             return []
@@ -104,11 +105,12 @@ class node(object):
             else:
                 if self.take[i]==1:
                     self.down[i] = random.choice(state.reducers)(self,self.settings)
+                    self.down[i].setTake(1)
                     self.down[i].randomize(state)
-                    self.down[i].setTake(2)
                     self.down[i].down[0] = random.choice(state.terms)(self,self.settings)
                 else:
                     self.down[i] = random.choice(state.terms)(self,self.settings)
+                    self.down[i].setTake(2)
                     self.down[i].randomize(state)
 
     def count(self):

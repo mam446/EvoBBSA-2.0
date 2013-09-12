@@ -52,6 +52,10 @@
             },
             'weight':2
         },
+        'onePoint':
+        {
+            'weight':2
+        },
         'kTourn':
         {
             'k':

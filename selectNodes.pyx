@@ -12,6 +12,10 @@ class kTourn(genNode.node):
         self.canTake = [1,2]
         self.canReturn =[1,2]
 
+    def setTake(self,numerocity):
+        super(kTourn,self).setTake(numerocity)
+        self.take = [2]
+
     def randomize(self,state):
         super(kTourn,self).randomize(state)
         if self.ret==1:
@@ -27,6 +31,10 @@ class trunc(genNode.node):
         self.canTake = [1,2]
         self.canReturn =[1,2]
    
+    def setTake(self,numerocity):
+        super(trunc,self).setTake(numerocity)
+        self.take = [2]
+    
     def randomize(self,state):
         super(trunc,self).randomize(state)
         if self.ret==1:

@@ -36,7 +36,9 @@ class runSettings:
         self.nodeSettings['uniRecomb']['weight'] = 2
         self.nodeSettings['diagonal'] = {'n':{'value':1,'range':(1,25),'type':'int'}}
         self.nodeSettings['diagonal']['weight'] = 2
-
+        
+        self.nodeSettings['onePoint'] = {}
+        self.nodeSettings['onePoint']['weight'] = 2
     #selection nodes
         self.nodeSettings['kTourn'] = {'count':{'value':1,'range':(1,25),'type':'int'},'k':{'value':1,'range':(1,25),'type':'int'}}
         self.nodeSettings['kTourn']['weight'] = 2

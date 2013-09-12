@@ -78,8 +78,8 @@ class bbsa:
             if not start:
                 node = random.choice(nodes)
                 start = node(None,self.settings)
+                start.setTake(max(start.canTake))
                 start.randomize(self.state)
-                start.setTake(2)
                 continue
             last = None
             cur = start
@@ -95,14 +95,14 @@ class bbsa:
             if cur.take[n]==2:
                 node = random.choice(multi)
                 cur.down[n] = node(cur,self.settings)
+                
+                cur.down[n].setTake(max(cur.down[n].canTake))
                 cur.down[n].randomize(self.state)
-                cur.down[n].setTake(2)
             else:
-                print "This shouldn't happpen"
-                node = random.choice(multi)
+                node = random.choice(single)
                 cur.down[n] = node(cur,self.settings)
-                cur.down[n].randomize(self.state)
                 cur.down[n].setTake(1)
+                cur.down[n].randomize(self.state)
         start.fillTerms(self.state)
         if self.root == None:
             self.root = start
