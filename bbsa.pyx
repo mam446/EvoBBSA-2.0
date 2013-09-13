@@ -252,7 +252,11 @@ class bbsa:
             if yn==yp.down[0]:
                 yp.down[0] = xn
             else:
-                yp.down[1] = xn
+                
+                try:
+                    yp.down[1] = xn
+                except IndexError:
+                    print yp.down
         else:
             y.root = xn
 
