@@ -98,11 +98,13 @@ class bbsa:
                 
                 cur.down[n].setTake(max(cur.down[n].canTake))
                 cur.down[n].randomize(self.state)
+                cur.down[n].parent = cur
             else:
                 node = random.choice(single)
                 cur.down[n] = node(cur,self.settings)
                 cur.down[n].setTake(1)
                 cur.down[n].randomize(self.state)
+                cur.down[n].parent = cur
         start.fillTerms(self.state)
         if self.root == None:
             self.root = start
@@ -252,7 +254,6 @@ class bbsa:
             if yn==yp.down[0]:
                 yp.down[0] = xn
             else:
-                
                 try:
                     yp.down[1] = xn
                 except IndexError:
