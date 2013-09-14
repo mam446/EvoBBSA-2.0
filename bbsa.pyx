@@ -284,5 +284,12 @@ class bbsa:
 
         return s>o
 
-
+    def dominate(self,other):
+        if self.fitness>=other.fitness and self.size<=other.size and self.aveEval<other.aveEval:
+            return True
+        if self.fitness>=other.fitness and self.size<other.size and self.aveEval<=other.aveEval:
+            return True
+        if self.fitness>=other.fitness and self.size<=other.size and self.aveEval<other.aveEval:
+            return True
+        return False
 

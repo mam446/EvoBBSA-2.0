@@ -50,6 +50,8 @@ class makeSet(genNode.node):
     def randomize(self,state):
         self.state = state
         opts = self.state.pers.keys()
+        if opts and opts[-1]==None:
+            opts = opts[:-1]
         if opts:
             opts.append(chr(ord(opts[-1])+1))
         else:
