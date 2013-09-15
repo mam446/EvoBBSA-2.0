@@ -48,7 +48,7 @@ while i<mu:
         i+=1
     else:
         print "################################################################"
-    top = [(x.fitness,x.size) for x in multi.top]
+    top = [(x.fitness,x.size,x.aveEval) for x in multi.top]
     print top
 pop.sort()
 for p in pop:
@@ -58,7 +58,7 @@ maxEvals = 2000
 cur = mu
 children = 20
 
-top = [(x.fitness,x.size) for x in multi.top]
+top = [(x.fitness,x.size,x.aveEval) for x in multi.top]
 print top
 while cur<maxEvals:
     
@@ -98,7 +98,7 @@ while cur<maxEvals:
     pop = pop[:mu]
     cur+=children
 
-    top = [(x.fitness,x.size) for x in multi.top]
+    top = [(x.fitness,x.size,x.aveEval) for x in multi.top]
     print top
     su = 0.0
     ave = 0.0
