@@ -90,7 +90,7 @@ class node(object):
         for p in self.params:
             if p=='weight':
                 continue
-            pList+="\'"+p+"\':"+str(self.params[p]['value'])+","
+            pList+="\'"+p+"\':{'value':"+str(self.params[p]['value'])+"},"
         if pList!="{":
             pList = pList[:-1]+"}"
             prog+="x"+var+" = "+self.name+"("+dList+","+pList+")\n"+indent

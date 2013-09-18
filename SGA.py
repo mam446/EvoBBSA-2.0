@@ -33,6 +33,7 @@ while i<mu:
     x = bbsa.bbsa(copy.deepcopy(s))
     print x.toDict()
     if not x.evalExist():
+        print "What"
         continue
     x.evaluate()
     if x.valid():

@@ -25,7 +25,7 @@ else:
     s = settings.runSettings()
 s.seed =time.time()
 random.seed(s.seed)
-mu = 50 
+mu = 80 
 k = 8
 
 multi = topFront.topFront()
@@ -65,10 +65,12 @@ while cur<maxEvals:
     c = 0
     childs = []
     while c<children:    
+        this = pop
+        this.extend(multi.top)
         choice = random.choice([0,1,2])
         if c+1!=children and 1==choice:
-            mom = ktourn(pop,k)
-            dad = ktourn(pop,k)
+            mom = ktourn(this,k)
+            dad = ktourn(this,k)
             x,y = mom.mate(dad)
             if x.evalExist():
                 x.evaluate()
@@ -79,13 +81,13 @@ while cur<maxEvals:
                 childs.append(y)
                 c+=1
         elif choice==2:
-            x=ktourn(pop,k).mutate()
+            x=ktourn(this,k).mutate()
             if x.evalExist():
                 x.evaluate()
                 childs.append(x)
                 c+=1
         else:
-            x = ktourn(pop,k).altMutate()
+            x = ktourn(this,k).altMutate()
             if x.evalExist():
                 x.evaluate()
                 childs.append(x)
@@ -110,6 +112,10 @@ while cur<maxEvals:
     
     f = open(str(pop[0].name)+"allones.py","w")
     f.write(pop[0].makeProg())
+    f.close()
+for g in xrange(len(multi.top)):
+    f = open(str(g)+"-t.py",'w')
+    f.write(multi.top[g].makeProg())
     f.close()
 print
 print pop[0].aveBest,pop[0].aveEval

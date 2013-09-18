@@ -1,21 +1,14 @@
+import logger
 import sys
 
 
 plug = __import__(sys.argv[1]) 
+log = logger.logger(sys.argv[3],0)
+ 
 
-x = plug.run(numRuns=int(sys.argv[2]))
-i=0
-print x['settings'].curEvals
 
-for y in x['sets']:
-    y.sort(reverse=True)
-    
-    print "set",i 
-    if y:
-        print y[0].bits
-    for z in  y:
-        print z.fitness
-    i+=1
+
+log = plug.run(int(sys.argv[2]),log)
 
 
 

@@ -2,13 +2,14 @@ import termNodes
 import selectNodes
 
 class state:
-    def __init__(self,settings):
+    def __init__(self,settings=None):
         self.pers = {}
         self.curOp = 0
         self.curEval = 0
         self.last = []        
-        self.maxOp = settings.bbsaSettings['maxOps']
-        self.maxEval = settings.bbsaSettings['maxEvals']
+        if settings:
+            self.maxOp = settings.bbsaSettings['maxOps']
+            self.maxEval = settings.bbsaSettings['maxEvals']
         self.run = 0
         self.terms = termNodes.nodes
         self.settings = settings

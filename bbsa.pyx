@@ -74,37 +74,34 @@ class bbsa:
             for s in xrange(len(start.down)):
                 start.down[s] = None
         for i in xrange(size):
-            node = random.choice(nodes)
             if not start:
                 node = random.choice(nodes)
                 start = node(None,self.settings)
                 start.setTake(max(start.canTake))
                 start.randomize(self.state)
                 continue
-            last = None
+            nex = None
             cur = start
             while cur:
-                last = cur
-                if not cur.down:
+                nex = random.choice(cur.down)
+                if not nex:
                     break
-                cur = random.choice(cur.down)
-            if cur==last:
-                continue
-            cur = last
+                cur = nex
+            
             n = random.randint(0,len(cur.down)-1)
+            while cur.down[n]!=nex:
+                n = random.randrange(0,len(cur.down))
             if cur.take[n]==2:
                 node = random.choice(multi)
                 cur.down[n] = node(cur,self.settings)
                 
                 cur.down[n].setTake(max(cur.down[n].canTake))
                 cur.down[n].randomize(self.state)
-                cur.down[n].parent = cur
             else:
                 node = random.choice(single)
                 cur.down[n] = node(cur,self.settings)
                 cur.down[n].setTake(1)
                 cur.down[n].randomize(self.state)
-                cur.down[n].parent = cur
         start.fillTerms(self.state)
         if self.root == None:
             self.root = start
@@ -163,7 +160,8 @@ class bbsa:
         return self.root.toDict()
 
     def makeProg(self):
-        prog = "import random\nfrom funcs import *\n"
+        tab = "    "
+        prog = "import random\nfrom funcs import *\nimport state\n"
 
         prog+="\n\n"+str(self.toDict())+"\n"
         prog += "\n\nevals = "+str(self.aveEval)
@@ -173,23 +171,35 @@ class bbsa:
         prog += "\n\nbbsaSettings = "+str(self.settings.bbsaSettings)
         prog += "\n\nnodeSettings = "+str(self.settings.nodeSettings)
         prog += "\n\nsolSettings = "+str(self.settings.solSettings)
-        prog += "\n\ndef run():\n\t"
-       
+        prog += "\n\ndef run(numRuns,log,sol=solSettings):\n"+tab
+        prog += "for i in xrange(numRuns):\n"+tab*2
         for s in self.state.pers:
-            prog+=s+" = []\n\t"
+            prog+=str(s)+" = []\n"+tab*2
+        prog += "evals = 0\n"+tab*2
+        prog += "last = [solution.solution(sol) for j in xrange("+str(self.initPop)+")]\n"+tab*2
 
-        prog += "\n\n\tlast = [solution.solution(solSettings) for i in xrange("+str(self.initPop)+")]\n"
 
-
-        prog+="\n\tfor i in xrange(bbsaSettings[\'maxEvals\']:\n\t\t" 
-        prog+=self.root.makeProg(2,"0")
-        prog+="last = x0\n\n\t"
+        prog+="while evals< bbsaSettings[\'maxEvals\']:\n"+tab*3 
+        prog+=self.root.makeProg(3,"0")
+        prog+="last = x0\n\n"+tab*3
+        prog+="st = state.state()\n"+tab*3
+        prog+="st.last = last\n"+tab*3
         for s in self.state.pers:
-            prog+="last.extend("+s+")\n\t"
-        prog+="for ind in last:\n\t\t"
-        prog+="ind.evaluate()\n\t"
-        prog+="return last\n\n"
-        
+            prog+="st.pers[\'"+s+"\'] = "+s+"\n"+tab*3
+        prog+="log.nextIter(st)\n"+tab*2
+        for s in self.state.pers:
+            prog+="last.extend("+s+")\n"+tab*2
+        prog+="for ind in last:\n"+tab*3
+        prog+="ind.evaluate()\n"+tab*2
+        prog+="st = state.state()\n"+tab*2
+        prog+="st.last = last\n"+tab*2
+        for s in self.state.pers:
+            prog+="st.pers[\'"+s+"\'] = "+s+"\n"+tab*2
+        prog+="log.nextIter(st)\n"+tab*2
+        prog+="print i\n"+tab*2
+        prog+="log.nextRun()\n"+tab
+        prog+="log.nextProbConf()\n"+tab
+        prog+="return log" 
         return prog
 
     def valid(self):
@@ -207,7 +217,7 @@ class bbsa:
         found = False
 
         for n in ns:
-            if n.name =="Evaluate":
+            if n.name =="evaluate":
                 found = True
                 break
         return found
@@ -232,7 +242,9 @@ class bbsa:
     def mutate(self):
         x = self.duplicate()
         n = x.randomNode()
-        self.createRandom(n)
+        while not n.down:
+            n = x.randomNode()
+        x.createRandom(n)
         x.update()
         x.count()
         return x
@@ -285,11 +297,18 @@ class bbsa:
         return s>o
 
     def dominate(self,other):
-        if self.fitness>=other.fitness and self.size<=other.size and self.aveEval<other.aveEval:
+        """if self.fitness>=other.fitness and self.size<=other.size and self.aveEval<other.aveEval:
             return True
         if self.fitness>=other.fitness and self.size<other.size and self.aveEval<=other.aveEval:
             return True
         if self.fitness>=other.fitness and self.size<=other.size and self.aveEval<other.aveEval:
+            return True"""
+        if self.fitness>=other.fitness and self.aveEval<other.aveEval:
             return True
+        if self.fitness>other.fitness and self.aveEval<=other.aveEval:
+            return True
+        
+        
+        
         return False
 
