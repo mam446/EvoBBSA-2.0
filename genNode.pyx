@@ -51,7 +51,10 @@ class node(object):
         f  = rDown.append  
         for d in self.down:
             f(d.evaluate())
-            self.state.curOp+=len(rDown[-1])*self.opWeight
+            if isinstance(self.opWeight,int)or isinstance(self.opWeight,float):
+                self.state.curOp+=len(rDown[-1])*self.opWeight
+            else:
+                self.state.curOp+=self.opWeight(len(rDown[-1]))
         return self.function(rDown,self.params,self.state.settings.solSettings)
     
     def update(self,depth,state):
