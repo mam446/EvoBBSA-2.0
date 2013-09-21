@@ -232,7 +232,7 @@ class bbsa:
     def mutate(self):
         x = self.duplicate()
         n = x.randomNode()
-        self.createRandom(n)
+        x.createRandom(n)
         x.update()
         x.count()
         return x
