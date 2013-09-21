@@ -2,7 +2,7 @@
 from random import random,randrange
 import solution
 
-def mutate(rDown,params,solSettings):
+def mutate(rDown,params,solSettings={}):
     cdef int i
     pop = rDown[0]
 
@@ -20,7 +20,7 @@ def mutate(rDown,params,solSettings):
 
     return ret
 
-def uniRecomb(rDown,params,solSettings):
+def uniRecomb(rDown,params,solSettings={}):
     cdef int i
     cdef int j
     pop = rDown[0]
@@ -30,7 +30,7 @@ def uniRecomb(rDown,params,solSettings):
     l= len(pop[0].gene)
     s = len(pop)
     for i in xrange(params['num']['value']):
-        y = solution.solution(solSettings)
+        y = pop[0].duplicate()
         for j in xrange(l):
             y.gene[j] = pop[randrange(0,s)].gene[j]
         y.fitness = 0.0
@@ -38,7 +38,7 @@ def uniRecomb(rDown,params,solSettings):
     
     return ret 
 
-def onePoint(rDown,params,solSettings):
+def onePoint(rDown,params={},solSettings={}):
     if not rDown[0]:
         return rDown[1]
     if not rDown[1]:
@@ -55,12 +55,12 @@ def onePoint(rDown,params,solSettings):
     right.gene[p:] = rTemp
     return [right,left]
 
-def diagonal(rDown,params,solSettings):
+def diagonal(rDown,params,solSettings= {}):
     cdef int i,j,last,nex,p,po,l 
     pop = rDown[0]
     if not pop:
         return []
-    childs = [solution.solution(solSettings) for d in pop]
+    childs = [d.duplicate() for d in pop]
     l = len(pop[0].gene)
     pnts = [randrange(1,l) for i in xrange(params['n']['value'])]
     pnts.sort()
@@ -85,13 +85,13 @@ def diagonal(rDown,params,solSettings):
     return childs
 
 
-def evaluate(rDown,params,solSettings = {}):
+def evaluate(rDown,params={},solSettings = {}):
     cdef int i
     for i in xrange(len(rDown[0])):
         rDown[0][i].evaluate()
     return rDown[0]
 
-def kTourn(rDown, params,solSettings):
+def kTourn(rDown, params,solSettings={}):
     cdef int n,i
     sel = []
     pop = rDown[0]
@@ -108,12 +108,12 @@ def kTourn(rDown, params,solSettings):
     return sel
 
 
-def trunc(rDown, params, solSettings):
+def trunc(rDown, params, solSettings={}):
     pop = rDown[0]
     pop.sort(reverse = True)
     return pop[:params['count']['value']]
 
-def union(rDown, params, solSettings={}):
+def union(rDown, params={}, solSettings={}):
    right = set(rDown[0])
    left = set(rDown[1])
    return list(right.union(left))
