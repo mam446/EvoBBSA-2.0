@@ -270,6 +270,7 @@ class bbsa:
                     yp.down[1] = xn
                 except IndexError:
                     print yp.down
+                    raw_input("hmmm")
         else:
             y.root = xn
 

@@ -17,8 +17,7 @@ class termNode(genNode.node):
     def update(self,depth,state):
         self.depth = depth
         self.height = 0
-        if not state.pers.keys():
-            state.pers['A'] = []
+        if not self.name:
             self.name = 'A'
         self.state = state
         return self.height
