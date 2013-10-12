@@ -138,7 +138,7 @@ class logger:
      
     def log(self):
         for i in xrange(len(self.probConf)):
-            f = open(self.name+"-"+str(i))
+            f = open(self.name+"-"+str(i),'w')
             r = ""
             for x in xrange(len(self.probConf[i])):
                 r+=str(x)+"\t"
@@ -146,6 +146,7 @@ class logger:
             
             fm = ""
             fm+=w
+            print len(self.probConf[i])
             for j in xrange(len(self.probConf[i][0])):
                 line = ""
                 for k in xrange(len(self.probConf[i])):
@@ -155,7 +156,7 @@ class logger:
                         line+=str(self.probConf[i][k][j]['max'])+'\t'
                     else:
                         line+='\t'
-                line=='\n'
+                line+='\n'
                 fm+=line
             f.write(fm)
             f.close()

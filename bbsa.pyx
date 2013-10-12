@@ -36,6 +36,22 @@ def popNodes(node,a):
 
 
 class bbsa:
+    def check(self):
+        A = []
+        popNodes(self.root,A)
+
+        for parent in A:
+            if not parent.down:
+                continue
+            for child in parent.down:
+                if child.parent != parent:
+                    print self.toDict()
+                    print parent
+                    print child
+                    raw_input("this is where I broke")
+                    return False
+        return True
+    
     def __init__(self,settings):
 
         self.root = None
@@ -88,9 +104,11 @@ class bbsa:
                     break
                 cur = nex
             
-            n = random.randint(0,len(cur.down)-1)
+            n = random.randrange(0,len(cur.down))
             while cur.down[n]!=nex:
                 n = random.randrange(0,len(cur.down))
+            if n <0 or n>1:
+                raw_input("fail")
             if cur.take[n]==2:
                 node = random.choice(multi)
                 cur.down[n] = node(cur,self.settings)
@@ -105,8 +123,11 @@ class bbsa:
         start.fillTerms(self.state)
         if self.root == None:
             self.root = start
+        self.check()
         self.update()
+        self.check()
         self.count()
+        self.check()
         return
 
     def count(self):
@@ -186,6 +207,7 @@ class bbsa:
         prog+="st.last = last\n"+tab*3
         for s in self.state.pers:
             prog+="st.pers[\'"+s+"\'] = "+s+"\n"+tab*3
+        prog+="st.curEval = evals\n"+tab*3
         prog+="log.nextIter(st)\n"+tab*2
         for s in self.state.pers:
             prog+="last.extend("+s+")\n"+tab*2
@@ -195,6 +217,7 @@ class bbsa:
         prog+="st.last = last\n"+tab*2
         for s in self.state.pers:
             prog+="st.pers[\'"+s+"\'] = "+s+"\n"+tab*2
+        prog+="st.curEval = evals\n"+tab*2
         prog+="log.nextIter(st)\n"+tab*2
         prog+="print i\n"+tab*2
         prog+="log.nextRun()\n"+tab
@@ -209,6 +232,7 @@ class bbsa:
         x = self.duplicate()
         n =x.randomNode()
         n.randomize(x.state)
+        self.check()
         return x
 
     def evalExist(self):
@@ -237,16 +261,21 @@ class bbsa:
         x.state.settings = x.settings
         x.fitness = 0
         x.update()
+        x.check()
+        self.check()
         return x
 
     def mutate(self):
         x = self.duplicate()
         n = x.randomNode()
+        
         while not n.down:
             n = x.randomNode()
         x.createRandom(n)
         x.update()
         x.count()
+        x.check()
+        self.check()
         return x
 
     def mate(self, other):
@@ -288,7 +317,10 @@ class bbsa:
         y.update()
         x.count()
         y.count()
-        
+        self.check()
+        other.check()
+        x.check()
+        y.check()
         return x,y        
 
     def __gt__(self,other):
