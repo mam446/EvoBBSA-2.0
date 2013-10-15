@@ -9,25 +9,34 @@ import state
 import logger
 import solution
 
-nodes = []
-single = []
-multi = []
+nodes = {'bitString':[],'realValued':[]}
+single = {'bitString':[],'realValued':[]}
+multi = {'bitString':[],'realValued':[]}
 
-nodes.extend(variationNodes.nodes)
-nodes.extend(selectNodes.nodes)
-nodes.extend(evalNodes.nodes)
-nodes.extend(setNodes.nodes)
+#nodes.extend(variationNodes.nodes)
+#nodes.extend(selectNodes.nodes)
+#nodes.extend(evalNodes.nodes)
+#nodes.extend(setNodes.nodes)
 
-single.extend(variationNodes.single)
-single.extend(selectNodes.single)
-single.extend(evalNodes.single)
-single.extend(setNodes.single)
+single['bitString'].extend(variationNodes.single['bitString'])
+single['bitString'].extend(selectNodes.single['bitString'])
+single['bitString'].extend(evalNodes.single['bitString'])
+single['bitString'].extend(setNodes.single['bitString'])
 
-multi.extend(variationNodes.multi)
-multi.extend(selectNodes.multi)
-multi.extend(evalNodes.multi)
-multi.extend(setNodes.multi)
+single['realValued'].extend(variationNodes.single['realValued'])
+single['realValued'].extend(selectNodes.single['realValued'])
+single['realValued'].extend(evalNodes.single['realValued'])
+single['realValued'].extend(setNodes.single['realValued'])
 
+multi['bitString'].extend(variationNodes.multi['bitString'])
+multi['bitString'].extend(selectNodes.multi['bitString'])
+multi['bitString'].extend(evalNodes.multi['bitString'])
+multi['bitString'].extend(setNodes.multi['bitString'])
+
+multi['realValued'].extend(variationNodes.multi['realValued'])
+multi['realValued'].extend(selectNodes.multi['realValued'])
+multi['realValued'].extend(evalNodes.multi['realValued'])
+multi['realValued'].extend(setNodes.multi['realValued'])
 
 def popNodes(node,a):
     a.append(node)
@@ -91,7 +100,7 @@ class bbsa:
                 start.down[s] = None
         for i in xrange(size):
             if not start:
-                node = random.choice(nodes)
+                node = random.choice(single[self.settings.bbsaSettings['probType']]+multi[self.settings.bbsaSettings['probType']])
                 start = node(None,self.settings)
                 start.setTake(max(start.canTake))
                 start.randomize(self.state)
@@ -110,13 +119,13 @@ class bbsa:
             if n <0 or n>1:
                 raw_input("fail")
             if cur.take[n]==2:
-                node = random.choice(multi)
+                node = random.choice(multi[self.settings.bbsaSettings['probType']])
                 cur.down[n] = node(cur,self.settings)
                 
                 cur.down[n].setTake(max(cur.down[n].canTake))
                 cur.down[n].randomize(self.state)
             else:
-                node = random.choice(single)
+                node = random.choice(single[self.settings.bbsaSettings['probType']])
                 cur.down[n] = node(cur,self.settings)
                 cur.down[n].setTake(1)
                 cur.down[n].randomize(self.state)

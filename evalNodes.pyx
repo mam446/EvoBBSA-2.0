@@ -28,7 +28,7 @@ class evaluate(genNode.node):
 
 nodes = [evaluate]
 
-single = [evaluate]
-multi = [evaluate]
+single = {'bitString':[evaluate],'realValued':[evaluate]}
+multi = {'bitString':[evaluate],'realValued':[evaluate]}
 
 

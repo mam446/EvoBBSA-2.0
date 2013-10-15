@@ -19,6 +19,7 @@ setup(
                    Extension("solution",["solution.pyx"]),
                    Extension("termNodes",["termNodes.pyx"]),
                    Extension("variationNodes",["variationNodes.pyx"]),
+                   Extension("bitStringVariation",["bitStringVariation.pyx"]),
                    Extension("funcs", ["funcs.pyx"]),
                    Extension("representations", ["representations.pyx"]),
                    Extension("state",["state.pyx"])]

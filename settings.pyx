@@ -28,7 +28,7 @@ class runSettings:
         self.bbsaSettings['runs'] = 5
         self.bbsaSettings['converge'] = 25
         self.bbsaSettings['initPopMax'] = 50
-
+        self.bbsaSettings['probType'] = 'bitString'
         #variation node
         self.nodeSettings['mutate'] = {'rate':{'value': 0.0,'range':(0.0,1.0),'type':'float'}}
         self.nodeSettings['mutate']['weight'] = 2

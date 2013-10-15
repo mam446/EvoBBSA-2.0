@@ -12,6 +12,13 @@ def createBitstring(settings):
     cdef int i
     return [int(random()*2) for i in xrange(settings['length'])]
 
+def createRealValued(settings):
+    cdef int i
+    return [random()*2-1 for i in xrange(settings['vars'])]
+
+def testFitnessFunction(settings):
+    return fitness.testFit(settings)
+
 def allOnesFitnessFunction(settings):
     return fitness.allOnes(settings)
 
@@ -35,7 +42,8 @@ reps['bitString']['dSTrap'] = dStepTrapFitnessFunction
 reps['bitString']['nk'] = nkFitnessFunction
 reps['bitString']['allOnes'] = allOnesFitnessFunction
 
-
+reps['realValued'] = {'gene':createRealValued}
+reps['realValued']['test'] = testFitnessFunction
 
 
 

@@ -14,6 +14,13 @@ class allOnes:
                 fit+=1.0
         return fit/len(gene)
 
+class testFit:
+    def __init__(self,settings):
+        self.settings = settings
 
-
-
+    def evaluate(self,gene):
+        fit = 0.0
+        for var in gene:
+            fit-=var*var
+            
+        return fit

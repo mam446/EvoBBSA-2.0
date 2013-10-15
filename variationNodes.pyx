@@ -3,51 +3,13 @@ import random
 import genNode
 import funcs
 import copy
+import bitStringVariation
 
-class mutate(genNode.node):
-    def __init__(self,parent,settings):
-        p = copy.deepcopy(settings.nodeSettings['mutate'])
-        super(mutate,self).__init__(parent,settings,funcs.mutate,"mutate",1,p)
-        self.canTake = [1,2]
-        self.canReturn =[1,2]
 
-    def toDict(self):
-        return {"mutate("+str(self.params['rate']['value'])+")":[self.down[0].toDict()]}
-         
-class uniRecomb(genNode.node):
-    def __init__(self,parent,settings):
-        p = copy.deepcopy(settings.nodeSettings['uniRecomb'])
-        super(uniRecomb,self).__init__(parent,settings,funcs.uniRecomb,"uniRecomb",1,p)
-        self.canTake = [2]
-        self.canReturn =[2]
+nodes = {'bitString':bitStringVariation.nodes,'realValued':[]}
+single = {'bitString':bitStringVariation.single,'realValued':[]}
+multi = {'bitString':bitStringVariation.multi,'realValued':[]}
 
-    def toDict(self):
-        return {"uniRecomb(count="+str(self.params['num']['value'])+")":[self.down[0].toDict()]}
 
-class diagonal(genNode.node):
-    def __init__(self,parent,settings):
-        p = copy.deepcopy(settings.nodeSettings['diagonal'])
-        super(diagonal,self).__init__(parent,settings,funcs.diagonal,"diagonal",1,p)
-        self.canTake = [2]
-        self.canReturn =[2]
 
-    def toDict(self):
-        return {"diagonal(n ="+str(self.params['n']['value'])+")":[self.down[0].toDict()]}
 
-class onePoint(genNode.node):
-    def __init__(self,parent,settings):
-        p = copy.deepcopy(settings.nodeSettings['onePoint'])
-        super(onePoint,self).__init__(parent,settings,funcs.onePoint,"onePoint",2,p)
-        self.canTake = [1]
-        self.canReturn = [2]
-
-    def setTake(self,numerocity):
-        super(onePoint,self).setTake(numerocity)
-        self.ret = 2
-
-    def toDict(self):
-        return {"onePoint":[self.down[0].toDict(),self.down[1].toDict()]}
-
-nodes = [mutate,uniRecomb,diagonal,onePoint]
-single = [mutate]
-multi = [mutate,uniRecomb,diagonal,onePoint]

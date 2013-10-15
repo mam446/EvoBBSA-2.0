@@ -16,7 +16,8 @@
         'mutateMax':5,
         'runs':5,
         'converge':25,
-        'initPopMax':50
+        'initPopMax':50,
+        'probType':'bitString'
     },
     
     

@@ -45,8 +45,8 @@ class trunc(genNode.node):
 
 nodes = [kTourn,trunc]
 
-single = [kTourn,trunc]
-multi = [kTourn,trunc]
+single = {'bitString':[kTourn,trunc],'realValued':[kTourn,trunc]}
+multi = {'bitString':[kTourn,trunc],'realValued':[kTourn,trunc]}
 
 
 

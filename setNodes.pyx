@@ -75,5 +75,5 @@ class makeSet(genNode.node):
         return prog
 
 nodes = [union,makeSet]
-single = [makeSet]
-multi = [makeSet,union]
+single = {'bitString':[makeSet],'realValued':[makeSet]}
+multi = {'bitString':[makeSet,union],'realValued':[makeSet,union]}
