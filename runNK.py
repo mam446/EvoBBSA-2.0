@@ -136,22 +136,30 @@
         {
             'weight':1,
             'repr':'bitString',
-            'prob':'dTrap',
+            'prob':'nk',
             'settings':
             {
                 'length':100,
-                'k':5
+                'k':5,
+                'dimensions':30,
+                'problemSeed':0,
+                'nkProblemFolder':'',
+                'run':0
             }
         },
 
         {
             'weight':1,
             'repr':'bitString',
-            'prob':'dTrap',
+            'prob':'nk',
             'settings':
             {
-                'length':210,
-                'k':7
+                'length':100,
+                'k':5,
+                'dimensions':30,
+                'problemSeed':1,
+                'nkProblemFolder':'',
+                'run':1
             }
         },
 

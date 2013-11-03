@@ -39,7 +39,7 @@ while i<mu:
     if x.valid():
         pop.append(x)
         print "------------------------------------------------------",x.aveBest
-        print "--------------------------------------------",x.aveOps
+        print "--------------------------------------------",x.aveEval
         i+=1
     else:
         print "################################################################"
@@ -57,7 +57,9 @@ while cur<maxEvals:
     childs = []
     while c<children:    
         choice = random.choice([0,1,2])
-        if c+1!=children and 1==choice:
+        rate = random.random()
+        
+        if c+1!=children and rate<.3:
             mom = ktourn(pop,k)
             dad = ktourn(pop,k)
             x,y = mom.mate(dad)
@@ -69,7 +71,7 @@ while cur<maxEvals:
                 y.evaluate()
                 childs.append(y)
                 c+=1
-        elif choice==2:
+        elif rate<.6:
             x=ktourn(pop,k).mutate()
             if x.evalExist():
                 x.evaluate()
@@ -95,7 +97,7 @@ while cur<maxEvals:
     ave = su/len(pop)
     
     print cur, ave,pop[0].aveBest,pop[0].aveEval,pop[0].aveOps
-    
+    pop[0].makeGraph()
     f = open(str(pop[0].name)+"allones.py","w")
     f.write(pop[0].makeProg())
     f.close()

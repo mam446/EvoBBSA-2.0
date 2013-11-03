@@ -113,10 +113,12 @@ while cur<maxEvals:
     f = open(str(pop[0].name)+"allones.py","w")
     f.write(pop[0].makeProg())
     f.close()
-for g in xrange(len(multi.top)):
-    f = open(str(g)+"-t.py",'w')
-    f.write(multi.top[g].makeProg())
-    f.close()
+    for g in xrange(len(multi.top)):
+        pop[g].name +=str(g)
+        f = open(str(g)+"-t.py",'w')
+        f.write(multi.top[g].makeProg())
+        f.close()
+        pop[g].makeGraph()
 print
 print pop[0].aveBest,pop[0].aveEval
 print pop[0].toDict()

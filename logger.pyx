@@ -101,12 +101,12 @@ class logger:
         num=0
         for p in self.probConf:
             for r in p:
-                Sum+=r[-1]['max']
+                if len(r)-1:
+                    Sum+=r[-2]['max']
                 num+=1
-        if num==0:
+
+        if (Sum<.001 and Sum>-.001) or num==0:
             return False 
-        if Sum/num<.1:
-            return False
         return True
 
     def getAveBest(self):

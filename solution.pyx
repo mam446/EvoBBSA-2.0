@@ -14,7 +14,7 @@ class solution:
         self.gene = representations.reps[self.rep]['gene'](solSettings['settings'])
         self.fitFunc = representations.reps[self.rep][solSettings['prob']](solSettings['settings'])
 
-        self.fitness = 0.0
+        self.fitness =0.0 
 
 
     def evaluate(self):
@@ -25,7 +25,7 @@ class solution:
     def duplicate(self):
         x = solution(self.settings)
         x.gene = deepcopy(self.gene)
-        x.fitness = 0        
+        x.fitness = 0.0     
         return x
 
     def __lt__(self,other):

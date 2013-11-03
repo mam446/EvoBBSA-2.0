@@ -7,7 +7,7 @@ import funcs
 
 class kTourn(genNode.node):
     def __init__(self,parent,settings):
-        p = copy.deepcopy(settings.nodeSettings['kTourn']) 
+        p = copy.deepcopy(settings.nodeSettings['kTourn'])
         super(kTourn,self).__init__(parent,settings,funcs.kTourn,"kTourn",1,p)
         self.canTake = [1,2]
         self.canReturn =[1,2]
@@ -43,10 +43,30 @@ class trunc(genNode.node):
     def toDict(self):
         return {"trunc(count="+str(self.params['count']['value']):[self.down[0].toDict()]}
 
-nodes = [kTourn,trunc]
 
-single = {'bitString':[kTourn,trunc],'realValued':[kTourn,trunc]}
-multi = {'bitString':[kTourn,trunc],'realValued':[kTourn,trunc]}
+class randSubset(genNode.node):
+    def __init__(self,parent,settings):
+        p = copy.deepcopy(settings.nodeSettings['randSubset'])
+        super(randSubset,self).__init__(parent,settings,funcs.randSubset,"randSubset",1,p) 
+        self.canTake = [1,2]
+        self.canReturn =[1,2]
+   
+    def setTake(self,numerocity):
+        super(randSubset,self).setTake(numerocity)
+        self.take = [2]
+    
+    def randomize(self,state):
+        super(randSubset,self).randomize(state)
+        if self.ret==1:
+            self.params['count']['value'] = 1
+
+    def toDict(self):
+        return {"randSubset(count="+str(self.params['count']['value']):[self.down[0].toDict()]}
+
+nodes = [kTourn,trunc,randSubset]
+
+single = {'bitString':[kTourn,trunc,randSubset],'realValued':[kTourn,trunc,randSubset]}
+multi = {'bitString':[kTourn,trunc,randSubset],'realValued':[kTourn,trunc,randSubset]}
 
 
 

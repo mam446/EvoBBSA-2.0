@@ -55,7 +55,7 @@ class node(object):
                 self.state.curOp+=len(rDown[-1])*self.opWeight
             else:
                 self.state.curOp+=self.opWeight(len(rDown[-1]))
-        return self.function(rDown,self.params,self.state.settings.solSettings)
+        return self.function(rDown,self.params)
     
     def update(self,depth,state):
         d = [i.update(depth+1,state) for i in self.down]
@@ -75,6 +75,15 @@ class node(object):
                 self.params[p]['value'] = random.random()*(self.params[p]['range'][1]-self.params[p]['range'][0])+self.params[p]['range'][0]
             else:
                 raise "Error: No type"
+
+    def toStr(self):
+        s = self.name+"\\n"
+        for p in self.params:
+            if p=='weight':
+                continue
+            s+=p+": "+str(self.params[p]['value'])+"\\n"
+        return s
+
 
 
     def makeProg(self,numTab,var):

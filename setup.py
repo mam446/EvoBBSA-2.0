@@ -15,11 +15,13 @@ setup(
                    Extension("logger",["logger.pyx"]),
                    Extension("selectNodes",["selectNodes.pyx"]),
                    Extension("setNodes",["setNodes.pyx"]),
+                   Extension("auxNodes",["auxNodes.pyx"]),
                    Extension("settings",["settings.pyx"]),
                    Extension("solution",["solution.pyx"]),
                    Extension("termNodes",["termNodes.pyx"]),
                    Extension("variationNodes",["variationNodes.pyx"]),
                    Extension("bitStringVariation",["bitStringVariation.pyx"]),
+                   Extension("realValuedVariation",["realValuedVariation.pyx"]),
                    Extension("funcs", ["funcs.pyx"]),
                    Extension("representations", ["representations.pyx"]),
                    Extension("state",["state.pyx"])]

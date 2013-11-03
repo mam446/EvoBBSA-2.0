@@ -5,9 +5,13 @@ import evalNodes
 import variationNodes
 import selectNodes
 import setNodes
+import auxNodes
 import state
 import logger
 import solution
+import pygraphviz as pg
+import subprocess
+
 
 nodes = {'bitString':[],'realValued':[]}
 single = {'bitString':[],'realValued':[]}
@@ -22,21 +26,25 @@ single['bitString'].extend(variationNodes.single['bitString'])
 single['bitString'].extend(selectNodes.single['bitString'])
 single['bitString'].extend(evalNodes.single['bitString'])
 single['bitString'].extend(setNodes.single['bitString'])
+single['bitString'].extend(auxNodes.single['bitString'])
 
 single['realValued'].extend(variationNodes.single['realValued'])
 single['realValued'].extend(selectNodes.single['realValued'])
 single['realValued'].extend(evalNodes.single['realValued'])
 single['realValued'].extend(setNodes.single['realValued'])
+single['realValued'].extend(auxNodes.single['realValued'])
 
 multi['bitString'].extend(variationNodes.multi['bitString'])
 multi['bitString'].extend(selectNodes.multi['bitString'])
 multi['bitString'].extend(evalNodes.multi['bitString'])
 multi['bitString'].extend(setNodes.multi['bitString'])
+multi['bitString'].extend(auxNodes.multi['bitString'])
 
 multi['realValued'].extend(variationNodes.multi['realValued'])
 multi['realValued'].extend(selectNodes.multi['realValued'])
 multi['realValued'].extend(evalNodes.multi['realValued'])
 multi['realValued'].extend(setNodes.multi['realValued'])
+multi['realValued'].extend(auxNodes.multi['realValued'])
 
 def popNodes(node,a):
     a.append(node)
@@ -100,7 +108,7 @@ class bbsa:
                 start.down[s] = None
         for i in xrange(size):
             if not start:
-                node = random.choice(single[self.settings.bbsaSettings['probType']]+multi[self.settings.bbsaSettings['probType']])
+                node = random.choice(multi[self.settings.bbsaSettings['probType']])
                 start = node(None,self.settings)
                 start.setTake(max(start.canTake))
                 start.randomize(self.state)
@@ -129,14 +137,12 @@ class bbsa:
                 cur.down[n] = node(cur,self.settings)
                 cur.down[n].setTake(1)
                 cur.down[n].randomize(self.state)
+
         start.fillTerms(self.state)
         if self.root == None:
             self.root = start
-        self.check()
         self.update()
-        self.check()
         self.count()
-        self.check()
         return
 
     def count(self):
@@ -201,14 +207,14 @@ class bbsa:
         prog += "\n\nbbsaSettings = "+str(self.settings.bbsaSettings)
         prog += "\n\nnodeSettings = "+str(self.settings.nodeSettings)
         prog += "\n\nsolSettings = "+str(self.settings.solSettings)
-        prog += "\n\ndef run(numRuns,log,sol=solSettings):\n"+tab
+        prog += "\n\ndef run(numRuns,log,sol=solSettings,name='',progConf=None):\n"+tab
         prog += "for i in xrange(numRuns):\n"+tab*2
         for s in self.state.pers:
             prog+=str(s)+" = []\n"+tab*2
         prog += "evals = 0\n"+tab*2
         prog += "last = [solution.solution(sol) for j in xrange("+str(self.initPop)+")]\n"+tab*2
 
-
+        prog += "bestLog = state.state()\n"+tab*2
         prog+="while evals< bbsaSettings[\'maxEvals\']:\n"+tab*3 
         prog+=self.root.makeProg(3,"0")
         prog+="last = x0\n\n"+tab*3
@@ -229,7 +235,9 @@ class bbsa:
         prog+="st.curEval = evals\n"+tab*2
         prog+="log.nextIter(st)\n"+tab*2
         prog+="print i\n"+tab*2
-        prog+="log.nextRun()\n"+tab
+        prog+="log.nextRun()\n"+tab*2
+        prog+="bestLog.logBestSoFar(i,name,progConf)\n"+tab*2
+        prog+="bestLog.reset()\n"+tab
         prog+="log.nextProbConf()\n"+tab
         prog+="return log" 
         return prog
@@ -354,3 +362,29 @@ class bbsa:
         
         return False
 
+
+    def makeGraph(self):
+        val = 'x'
+        s = 'strict digraph {\nordering=out;\n  node[label=\"\\N\"];\n '
+        s += getEdge(self.root,val)
+        s+="\n}"
+        f = open(self.name+'.dot','w')
+        f.write(s)
+        f.close()
+        subprocess.call(['dot','-Tpng',self.name+'.dot','-o',self.name+'.png']) 
+        
+        return
+
+def getEdge(node,val):
+    s = ""
+    if not node.parent:
+        s+= val+" [color=goldenrod2,\n  label =\""+node.toStr()+"\",\n  style=filled];\n"
+        #G.add_node(val,label=node.toStr(),color = 'goldenrod2',style='filled')
+    
+    for i in xrange(len(node.down)): 
+        s+= val+str(i+1)+"   [color=goldenrod2,\n  label =\""+node.down[i].toStr()+"\",\n  style=filled];\n"
+        #G.add_node(val+str(i+1),label=node.down[i].toStr(),color='goldenrod2',style='filled')
+        s+="  "+val+" -> "+val+str(i+1)+';\n'
+        #G.add_edge(val,val+str(i+1))
+        s+= getEdge(node.down[i],val+str(i+1))
+    return s

@@ -14,6 +14,9 @@ class state:
         self.terms = termNodes.nodes
         self.settings = settings
         self.reducers = selectNodes.nodes
+        self.bestInd = None
+        self.log = {}
+
 
     def reset(self):
         self.curOp = 0
@@ -22,6 +25,8 @@ class state:
             self.pers[d] = []
         self.last = []
         self.run = 0
+        self.besetInd = None
+        self.log = {}
 
     def done(self):
         if self.curOp>=self.maxOp or self.curEval>=self.maxEval:
@@ -32,8 +37,21 @@ class state:
         for d in self.pers:
             for ind in self.pers[d]:
                 ind.evaluate()
-        for ind in self.last:
-            ind.evaluate()
+        for q in self.last:
+            q.evaluate()
         self.run+=1
 
+    def bestSoFar(self,ind):
+        if not self.bestInd or self.bestInd.fitness<ind.fitness:
+            self.bestInd = ind
+            self.log[self.curEval] = ind.fitness
 
+    def logBestSoFar(self,i=0,name='',j = 0):
+        f = open("bsf-"+name+'-'+str(j)+"-"+str(i)+".txt",'w')
+        k = self.log.keys()
+        k.sort() 
+        for d in k:
+            f.write(str(d)+"\t"+str(self.log[d])+"\n")
+
+
+        f.close()

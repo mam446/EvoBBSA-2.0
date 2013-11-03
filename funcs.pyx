@@ -1,16 +1,19 @@
 # cython: profile=True
-from random import random,randrange
+from random import random,randrange,gauss
 import solution
-
-def mutate(rDown,params,solSettings={}):
+import math
+def mutate(rDown,params):
     cdef int i
     pop = rDown[0]
 
     ret = []
+    l = 0
+    if pop:
+        l = len(pop[0].gene)
 
     for p in pop:
         y = p.duplicate()
-        for i in xrange(len(y.gene)):
+        for i in xrange(l):
             if random()<params['rate']['value']:
                 if y.gene[i]==1:
                     y.gene[i]=0
@@ -20,7 +23,27 @@ def mutate(rDown,params,solSettings={}):
 
     return ret
 
-def uniRecomb(rDown,params,solSettings={}):
+def gaussian(rDown,params):
+    pop = rDown[0]
+
+    ret = []
+    
+    l = 0
+    if pop:
+        l=len(pop[0].gene)
+
+    for p in pop:
+        y = p.duplicate()
+        for i in xrange(l):
+            if random()<params['rate']['value']:
+                y.gene[i]+=gauss(0,math.sqrt(params['variance']['value']))
+        ret.append(y)
+    return ret
+
+
+
+
+def uniRecomb(rDown,params):
     cdef int i
     cdef int j
     pop = rDown[0]
@@ -38,7 +61,7 @@ def uniRecomb(rDown,params,solSettings={}):
     
     return ret 
 
-def onePoint(rDown,params={},solSettings={}):
+def onePoint(rDown,params={}):
     if not rDown[0]:
         return rDown[1]
     if not rDown[1]:
@@ -55,7 +78,7 @@ def onePoint(rDown,params={},solSettings={}):
     right.gene[p:] = rTemp
     return [right,left]
 
-def diagonal(rDown,params,solSettings= {}):
+def diagonal(rDown,params):
     cdef int i,j,last,nex,p,po,l 
     pop = rDown[0]
     if not pop:
@@ -85,13 +108,16 @@ def diagonal(rDown,params,solSettings= {}):
     return childs
 
 
-def evaluate(rDown,params={},solSettings = {}):
+def evaluate(rDown,params={}):
     cdef int i
     for i in xrange(len(rDown[0])):
         rDown[0][i].evaluate()
+        params['state'].bestSoFar(rDown[0][i])
+        params['state'].curEval+=1
+
     return rDown[0]
 
-def kTourn(rDown, params,solSettings={}):
+def kTourn(rDown, params):
     cdef int n,i
     sel = []
     pop = rDown[0]
@@ -108,14 +134,34 @@ def kTourn(rDown, params,solSettings={}):
     return sel
 
 
-def trunc(rDown, params, solSettings={}):
+def trunc(rDown, params):
     pop = rDown[0]
     pop.sort(reverse = True)
     return pop[:params['count']['value']]
 
-def union(rDown, params={}, solSettings={}):
+def union(rDown, params={}):
    right = set(rDown[0])
    left = set(rDown[1])
    return list(right.union(left))
     
+def randSubset(rDown,params):
+    cdef int i,p
+    down = rDown[0]
+    if not down:
+        return []
+    ret = []
+    p = len(down)
+    for i in xrange(params['count']['value']):
+        ret.append(down[randrange(0,p)])
+    return ret
+    
+
+
+
+
+
+
+
+
+
 

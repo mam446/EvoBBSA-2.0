@@ -17,7 +17,7 @@
         'runs':5,
         'converge':25,
         'initPopMax':50,
-        'probType':'bitString'
+        'probType':'realValued'
     },
     
     
@@ -38,13 +38,13 @@
             'rate':
             {
                 'value':0.0,
-                'range':(0.0,100.0),
+                'range':(0.0,1.0),
                 'type':'float'
             },
             'variance':
             {
                 'value':0.0,
-                'range':(0.0,1.0),
+                'range':(0.0,10.0),
                 'type':'float'
             },
             'weight':2
@@ -135,25 +135,23 @@
     [
         {
             'weight':1,
-            'repr':'bitString',
-            'prob':'dTrap',
+            'repr':'realValued',
+            'prob':'rosenbrock',
             'settings':
             {
-                'length':100,
-                'k':5
+                'vars':5
             }
         },
-
         {
             'weight':1,
-            'repr':'bitString',
-            'prob':'dTrap',
+            'repr':'realValued',
+            'prob':'rosenbrock',
             'settings':
             {
-                'length':210,
-                'k':7
+                'vars':10
             }
-        },
+        }
+        
 
 
     ]

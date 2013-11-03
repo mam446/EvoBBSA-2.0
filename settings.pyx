@@ -36,6 +36,11 @@ class runSettings:
         self.nodeSettings['uniRecomb']['weight'] = 2
         self.nodeSettings['diagonal'] = {'n':{'value':1,'range':(1,25),'type':'int'}}
         self.nodeSettings['diagonal']['weight'] = 2
+
+        self.nodeSettings['gaussian'] = {'variance':{'value':0.0,'range':(0.0,100),'type':'float'},'rate':{'value':0.0,'range':(0.0,1.0),'type':'float'}}
+        self.nodeSettings['gaussian']['weight'] = 2
+
+
         
         self.nodeSettings['onePoint'] = {}
         self.nodeSettings['onePoint']['weight'] = 2
@@ -45,10 +50,17 @@ class runSettings:
         self.nodeSettings['trunc'] = {'count':{'value':1,'range':(1,25),'type':'int'}}
         self.nodeSettings['trunc']['weight'] = 2
 
+        self.nodeSettings['randSubset'] = {'count':{'value':1,'range':(1,25),'type':'int'}}
+        self.nodeSettings['randSubset']['weight'] = 2
         #set Nodes
 
         self.nodeSettings['makeSet'] = {'name':{'value':"",'type':'str'}}
         self.nodeSettings['makeSet']['weight'] = 2
+
+        #aux Nodes
+        self.nodeSettings['forLoop'] = {'count':{'value':1,'range':(1,25),'type':'int'}}
+        self.nodeSettings['forLoop']['weight'] = 2
+
 
         if filename:
             f = open(filename)
@@ -58,10 +70,10 @@ class runSettings:
             self.probConf = d['problems']
         else:
 
-            self.probConf.append({'weight':1,'repr':'bitString','prob':'allOnes','settings':{'length':210}})
-            self.probConf.append({'weight':1,'repr':'bitString','prob':'allOnes','settings':{'length':100}})
+            self.probConf.append({'weight':1,'repr':'bitString','prob':'allOnes','settings':{'length':210,'name':'apple'}})
+            self.probConf.append({'weight':1,'repr':'bitString','prob':'allOnes','settings':{'length':100,'name':'grape'}})
             #self.probConf.append({'weight':1,'repr':'bitString','prob':'dTrap','settings':{'length':100,'k':5}})
-            #self.probConf.append({'weight':1,'repr':'bitString','prob':'nk','settings':{'length':100,'dimensions':30,'k':5,'problemSeed':0,'maximumFitness':1.0,'nkProblemFolder':'','run':0}})
+            self.probConf.append({'weight':1,'repr':'bitString','prob':'nk','settings':{'length':100,'dimensions':30,'k':5,'problemSeed':0,'maximumFitness':1.0,'nkProblemFolder':'','run':0}})
 
         self.solSettings = self.probConf[0]
 

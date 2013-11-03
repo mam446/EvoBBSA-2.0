@@ -35,6 +35,12 @@ def nkFitnessFunction(settings):
 def allOnes(settings):
     return fitness.allOnes(settings)    
 
+def sphereFitnessFunction(settings):
+    return fitness.sphere(settings)
+
+def rosenbrockFitnessFunction(settings):
+    return fitness.rosenbrock(settings)
+
 reps = {}
 reps['bitString'] = {'gene':createBitstring}
 reps['bitString']['dTrap'] = dTrapFitnessFunction
@@ -44,8 +50,8 @@ reps['bitString']['allOnes'] = allOnesFitnessFunction
 
 reps['realValued'] = {'gene':createRealValued}
 reps['realValued']['test'] = testFitnessFunction
-
-
+reps['realValued']['sphere'] = sphereFitnessFunction
+reps['realValued']['rosenbrock'] = rosenbrockFitnessFunction
 
 
 
