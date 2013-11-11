@@ -67,7 +67,7 @@ class node(object):
 
     def randomize(self,state):
         for p in self.params:
-            if p == 'weight':
+            if p == 'weight' or p=='state':
                 continue
             if self.params[p]['type'] == 'int':
                 self.params[p]['value'] =  random.randint(self.params[p]['range'][0],self.params[p]['range'][1])
@@ -79,7 +79,7 @@ class node(object):
     def toStr(self):
         s = self.name+"\\n"
         for p in self.params:
-            if p=='weight':
+            if p=='weight' or p=='state':
                 continue
             s+=p+": "+str(self.params[p]['value'])+"\\n"
         return s

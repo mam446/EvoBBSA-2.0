@@ -48,7 +48,7 @@ while i<mu:
         i+=1
     else:
         print "################################################################"
-    top = [(x.fitness,x.size,x.aveEval) for x in multi.top]
+    top = [(x.fitness,x.aveEval) for x in multi.top]
     print top
 pop.sort()
 for p in pop:
@@ -100,7 +100,7 @@ while cur<maxEvals:
     pop = pop[:mu]
     cur+=children
 
-    top = [(x.fitness,x.size,x.aveEval) for x in multi.top]
+    top = [(x.fitness,x.aveEval) for x in multi.top]
     print top
     su = 0.0
     ave = 0.0
@@ -114,7 +114,7 @@ while cur<maxEvals:
     f.write(pop[0].makeProg())
     f.close()
     for g in xrange(len(multi.top)):
-        pop[g].name +=str(g)
+        pop[g].name =str(g)
         f = open(str(g)+"-t.py",'w')
         f.write(multi.top[g].makeProg())
         f.close()

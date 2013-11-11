@@ -12,6 +12,10 @@ def createBitstring(settings):
     cdef int i
     return [int(random()*2) for i in xrange(settings['length'])]
 
+def createZeroedBitstring(settings):
+    cdef int i
+    return [0 for i in xrange(settings['length'])]
+
 def createRealValued(settings):
     cdef int i
     return [random()*2-1 for i in xrange(settings['vars'])]
@@ -28,6 +32,8 @@ def dTrapFitnessFunction(settings):
 def dStepTrapFitnessFunction(settings):
     return FitnessFunction.DeceptiveStepTrap(settings)
 
+def kMeansFitnessFunction(settings):
+    return fitness.kmeansClassify(settings)
 
 def nkFitnessFunction(settings):
     return FitnessFunction.NearestNeighborNK(settings,settings['run'])
@@ -47,6 +53,10 @@ reps['bitString']['dTrap'] = dTrapFitnessFunction
 reps['bitString']['dSTrap'] = dStepTrapFitnessFunction
 reps['bitString']['nk'] = nkFitnessFunction
 reps['bitString']['allOnes'] = allOnesFitnessFunction
+reps['bitString']['kMeans'] = kMeansFitnessFunction
+
+reps['zeroedBitString'] = {'gene':createZeroedBitstring}
+reps['zeroedBitString']['kMeans'] = kMeansFitnessFunction
 
 reps['realValued'] = {'gene':createRealValued}
 reps['realValued']['test'] = testFitnessFunction

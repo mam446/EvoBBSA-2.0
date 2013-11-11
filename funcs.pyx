@@ -1,5 +1,5 @@
 # cython: profile=True
-from random import random,randrange,gauss
+from random import random,randrange,gauss,choice
 import solution
 import math
 def mutate(rDown,params):
@@ -60,6 +60,42 @@ def uniRecomb(rDown,params):
         ret.append(y)
     
     return ret 
+
+def uniRecomb2(rDown,params):
+    cdef int i
+    cdef int j
+    left = None
+    right = None
+    if rDown[0]:
+        left = rDown[0][0]
+    if  len(rDown[1])>1:
+        right = rDown[1][0]
+    if not right:
+        if not left:
+            return []
+        else:
+            return [left]
+
+
+    l= len(right.gene)
+    
+    y = right.duplicate()
+    x = left.duplicate()
+    for j in xrange(l):
+        if random.choice([0,1]):
+            y.gene[j] = right.gene[j]
+            x.gene[j] = left.gene[j]
+        else:
+            y.gene[j] = left.gene[j]
+            x.gene[j] = right.gene[j]
+    y.fitness = 0.0
+    x.fitness = 0.0
+    
+    ret = [x,y]
+    return ret 
+
+
+
 
 def onePoint(rDown,params={}):
     if not rDown[0]:

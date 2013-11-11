@@ -16,7 +16,7 @@ class evaluate(genNode.node):
         return {"Evaluate":[self.down[0].toDict()]}
 
     def makeProg(self,numTab,var):
-        prog = super(evaluate,self).makeProg(numTab,var)
+        #prog = super(evaluate,self).makeProg(numTab,var)
         tab = "    "
         indent = numTab*tab
         prog = ""

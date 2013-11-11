@@ -75,8 +75,8 @@ class logger:
             self.curCon = 0
             if gMax:
                 self.allMax = gMax
-        if gMax:
-            self.curRun.append({'evals':state.curEval,'max':gMax.fitness,'ave':ave})
+        if state.bestInd:
+            self.curRun.append({'evals':state.curEval,'max':state.bestInd.fitness,'ave':ave})
         else:
             self.curRun.append({'evals':state.curEval,'max':0,'ave':ave})
         self.ops.append(state.curOp)

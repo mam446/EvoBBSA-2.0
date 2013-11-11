@@ -42,7 +42,7 @@ class forLoop(genNode.node):
         tab = "    "
         indent = tab*numTab
         prog = 'x'+var+" = []\n"+indent
-        prog += "for i"+var[1:]+" in xrange("+str(self.params['count']['value'])+"):\n"+indent+tab
+        prog += "for d0"+var[1:]+" in xrange("+str(self.params['count']['value'])+"):\n"+indent+tab
         prog+=self.down[0].makeProg(numTab+1,var+str(0))
         prog+="if x"+var+'0:\n'+indent+tab*2
         prog+='x'+var+".append(x"+var+'0[0])\n'+indent

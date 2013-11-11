@@ -167,6 +167,8 @@ class bbsa:
         self.aveEval = self.logger.getAveEvals()
         self.aveOps = self.logger.getAveOps()
         self.fitness = self.aveBest
+        
+
 
     def run(self):
         self.state.last = [solution.solution(self.settings.solSettings) for i in xrange(self.initPop)]
@@ -178,7 +180,7 @@ class bbsa:
                 break
         self.state.lastEval()
         self.logger.nextIter(self.state)
-    
+ 
     def randomNode(self):
         z = []
         popNodes(self.root,z)
@@ -243,7 +245,7 @@ class bbsa:
         return prog
 
     def valid(self):
-        return self.logger.valid() and self.evalExist()
+        return self.logger.valid() and self.evalExist() and self.lastExist()
 
     def altMutate(self):
         x = self.duplicate()
@@ -263,6 +265,16 @@ class bbsa:
                 break
         return found
 
+    def lastExist(self):
+        ns =[]
+        popNodes(self.root,ns)
+        found = False
+
+        for n in ns:
+            if n.name =="last":
+                found = True
+                break
+        return found
 
     def duplicate(self):
         x = copy.deepcopy(self)

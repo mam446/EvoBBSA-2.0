@@ -9,7 +9,7 @@
     'bbsaSettings':
     {
         'maxStartNodes':15,
-        'maxEvals':50000,
+        'maxEvals':100000,
         'maxOps':5000000,
         'maxIterations':10000,
         'maxDepth':5,
@@ -135,45 +135,13 @@
     [
         {
             'weight':1,
-            'repr':'bitString',
-            'prob':'nk',
+            'repr':'zeroedBitString',
+            'prob':'kMeans',
             'settings':
             {
-                'length':100,
-                'k':5,
-                'dimensions':30,
-                'problemSeed':0,
-                'nkProblemFolder':'',
-                'run':0
-            }
-        },
-
-        {
-            'weight':1,
-            'repr':'bitString',
-            'prob':'nk',
-            'settings':
-            {
-                'length':100,
-                'k':7,
-                'dimensions':30,
-                'problemSeed':1,
-                'nkProblemFolder':'',
-                'run':1
-            }
-        },
-        {
-            'weight':1,
-            'repr':'bitString',
-            'prob':'nk',
-            'settings':
-            {
-                'length':100,
-                'k':5,
-                'dimensions':30,
-                'problemSeed':1,
-                'nkProblemFolder':'',
-                'run':1
+                'length':256,
+                'name':'nonNormal.txt',
+                'k':2
             }
         },
 

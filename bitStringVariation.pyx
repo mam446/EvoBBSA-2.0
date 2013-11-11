@@ -24,6 +24,20 @@ class uniRecomb(genNode.node):
     def toDict(self):
         return {"uniRecomb(count="+str(self.params['num']['value'])+")":[self.down[0].toDict()]}
 
+
+class uniRecomb2(genNode.node):
+    def __init__(self,parent,settings):
+        super(uniRecomb2,self).__init__(parent,settings,funcs.uniRecomb2,"uniRecomb2",2,{})
+        self.canTake = [1]
+        self.canReturn =[2]
+    
+    def setTake(self,numerocity):
+        super(uniRecomb2,self).setTake(numerocity)
+        self.ret = 2
+
+    def toDict(self):
+        return {"uniRecomb2":[self.down[0].toDict()]}
+
 class diagonal(genNode.node):
     def __init__(self,parent,settings):
         p = copy.deepcopy(settings.nodeSettings['diagonal'])
@@ -51,8 +65,8 @@ class onePoint(genNode.node):
 
 
 
-nodes = [mutate,uniRecomb,diagonal,onePoint]
+nodes = [mutate,uniRecomb,diagonal,onePoint,uniRecomb2]
 single = [mutate]        
-multi = [mutate,uniRecomb,diagonal,onePoint]
+multi = [mutate,uniRecomb,diagonal,onePoint,uniRecomb2]
 
 

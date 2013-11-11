@@ -1,5 +1,8 @@
 import math
-
+import FitnessFunction
+import random
+import copy
+from collections import defaultdict 
 #cython: profile=True
 data = {}
 
@@ -15,6 +18,14 @@ class allOnes:
             if bit==1:
                 fit+=1.0
         return fit/len(gene)
+
+
+        
+
+
+
+
+
 
 class testFit:
     def __init__(self,settings):
@@ -56,15 +67,99 @@ class kmeansClassify:
         if settings['name'] not in data:
             f = open(settings['name'])
             data[settings['name']] = eval(f.read())
-    
+            #print data['temp.txt']['t1'] 
     def evaluate(self,gene):
+        objs = {objName:0 for objName in data[self.settings['name']]}
+        
+        #get Midpoints from data
+        midPoints = [copy.deepcopy(data[self.settings['name']][random.choice(data[self.settings['name']].keys())]['data']) for k in xrange(self.settings['k'])]
+        #calculate distances
+        dist = {objName:[calcDist(data[self.settings['name']][objName]['data'],mid,gene) for mid in midPoints] for objName in objs}
 
-        return 0.0
+        #assign labels
+        for objName in objs:
+            objs[objName] = dist[objName].index(min(dist[objName]))
+        last = copy.deepcopy(objs)
+        conv = False
+
+        while not conv:
+            #update midpoints
+            midPoints = updateMids(data[self.settings['name']],objs,midPoints)
+            #calculate distances
+            dist = {objName:[calcDist(data[self.settings['name']][objName]['data'],mid,gene) for mid in midPoints] for objName in objs}
+            #reassign labels
+            for objName in objs:
+                objs[objName] = dist[objName].index(min(dist[objName]))
+            #check for changes
+            conv = True
+            for objName in objs:
+                if last[objName]!=objs[objName]:
+                    conv = False
+                    break
+                    
+            last = copy.deepcopy(objs)           
+        #calculate fitness of final cluster
+        pen = 0
+        for d in gene:
+            if d:
+                pen+=1
+        
+
+        fit = 0.0
+        val = []
+        for i in xrange(len(midPoints)):
+            temp = [0 for d in midPoints]
+            count =0
+            for objName in objs:
+                
+                if objs[objName]==i:
+                    count+=1
+                    temp[data[self.settings['name']][objName]['cluster']]+=1 
+            if count:
+                fit+=(2*max(temp)-sum(temp))#/count
 
 
 
 
+        return fit-pen*.001 
+
+def calcDist(point,mid,gene):
+    s = 0.0
+    
+    for d in xrange(len(gene)):
+        if chr(d) in point:
+            if chr(d) in mid:
+                s+=(point[chr(d)]-mid[chr(d)])**2*gene[d]
+            else:
+                s+=(point[chr(d)]**2)*gene[d]
+        else:
+            if chr(d) in mid:
+                s+=(mid[chr(d)]**2)*gene[d]
+    return math.sqrt(s)
+
+
+def updateMids(data,objs,mids):
+    newMid = [{} for d in mids]
 
 
 
+    for i in xrange(len(mids)):
+        count = 0
+        for objName in objs:
+            if objs[objName]==i:
+                count+=1
+                for j in xrange(256):
+                    if chr(j) not in newMid[i]:
+                        if chr(j) in data[objName]['data']:
+                            newMid[i][chr(j)]=data[objName]['data'][chr(j)]
+                        else:
+                            newMid[i][chr(j)] = 0.0
+                    else:
+                        if chr(j) in data[objName]['data']:
+                            newMid[i][chr(j)]+=data[objName]['data'][chr(j)]
+        if count:
+            for j in xrange(256):
+                newMid[i][chr(j)]/=count
+    #return new mids
+    return newMid
 

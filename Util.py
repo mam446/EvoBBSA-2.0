@@ -49,6 +49,7 @@ def loadConfiguration(filename, fileMethod=open):
     - ``fileMethod``: Handler to use to open the file.  Defaults to regular
       open.
     '''
+    
     with fileMethod(filename, 'r') as f:
         return json.load(f)
 
@@ -84,6 +85,8 @@ def saveConfiguration(filename, data, fileMethod=open):
     - ``fileMethod``: Handler to use to open the file.  Defaults to regular
       open.
     '''
+    d = open(filename,'w')
+    d.close()
     with fileMethod(filename, 'w') as f:
         json.dump(data, f)
 
