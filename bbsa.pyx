@@ -11,7 +11,8 @@ import logger
 import solution
 import pygraphviz as pg
 import subprocess
-
+import numpy as np
+import matplotlib.pyplot as plt
 
 nodes = {'bitString':[],'realValued':[]}
 single = {'bitString':[],'realValued':[]}
@@ -271,7 +272,7 @@ class bbsa:
         found = False
 
         for n in ns:
-            if n.name =="last":
+            if n.name =="last" or n.name =='randInd':
                 found = True
                 break
         return found
@@ -374,6 +375,8 @@ class bbsa:
         
         return False
 
+    def plot(self):
+        self.logger.plot()
 
     def makeGraph(self):
         val = 'x'

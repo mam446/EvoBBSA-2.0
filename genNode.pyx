@@ -116,10 +116,12 @@ class node(object):
                 self.down[i].fillTerms(state)
             else:
                 if self.take[i]==1:
-                    self.down[i] = random.choice(state.reducers)(self,self.settings)
+                    t = random.choice(state.reducers+state.sTerms)
+                    self.down[i] = t(self,self.settings)
                     self.down[i].setTake(1)
                     self.down[i].randomize(state)
-                    self.down[i].down[0] = random.choice(state.terms)(self.down[i],self.settings)
+                    if t in state.reducers:
+                        self.down[i].down[0] = random.choice(state.terms)(self.down[i],self.settings)
                 else:
                     self.down[i] = random.choice(state.terms)(self,self.settings)
                     self.down[i].setTake(2)

@@ -135,7 +135,7 @@
     [
         {
             'weight':1,
-            'repr':'zeroedBitString',
+            'repr':'bitString',
             'prob':'kMeans',
             'settings':
             {

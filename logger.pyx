@@ -1,5 +1,8 @@
 # cython: profile=True
-
+import numpy as np
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 
 
@@ -75,8 +78,8 @@ class logger:
             self.curCon = 0
             if gMax:
                 self.allMax = gMax
-        if state.bestInd:
-            self.curRun.append({'evals':state.curEval,'max':state.bestInd.fitness,'ave':ave})
+        if gMax:
+            self.curRun.append({'evals':state.curEval,'max':gMax.fitness,'ave':ave})
         else:
             self.curRun.append({'evals':state.curEval,'max':0,'ave':ave})
         self.ops.append(state.curOp)
@@ -146,14 +149,17 @@ class logger:
             
             fm = ""
             fm+=w
-            print len(self.probConf[i])
+            #print len(self.probConf[i])
             for j in xrange(len(self.probConf[i][0])):
                 line = ""
                 for k in xrange(len(self.probConf[i])):
                     if k==0:
                         line+=str(self.probConf[i][k][j]['evals'])+'\t'
                     if i<len(self.probConf[i][k]):
-                        line+=str(self.probConf[i][k][j]['max'])+'\t'
+                        try:
+                            line+=str(self.probConf[i][k][j]['max'])+'\t'
+                        except:
+                            line+="NULL"+'\t'
                     else:
                         line+='\t'
                 line+='\n'
@@ -164,6 +170,39 @@ class logger:
         return
 
     def plot(self):
+        #max Plot
+        x = []
+        y = []
+        for prob in self.probConf:
+            xi = []
+            yi = []
+            first = True
+            for run in prob:
+                for it in xrange(len(run)):
+                    if first:
+                        xi.append(run[it]['evals'])
+                    if first:
+                        yi.append(run[it]['max'])
+                    else:
+                        try:
+                            yi[it]+=run[it]['max']
+                        except:
+                            xi.append(run[it]['evals'])
+                            yi.append(run[it]['max'])
+                            #print it,len(yi),len(run)
+                first = False
+            for d in xrange(len(yi)):
+                yi[d]/=len(prob)
+
+            x.append(xi)
+            y.append(yi)
+        
+        for d in xrange(len(x)):
+            #print len(x[d]),len(y[d])
+            plt.plot(x[d],y[d],label = str(d))
+
+        plt.savefig(self.name+'-plot.png')
+        plt.clf()
         return
 
 

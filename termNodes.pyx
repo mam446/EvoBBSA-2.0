@@ -1,7 +1,8 @@
 # cython: profile=True
 import random
 import genNode
-
+import copy
+import solution
 
 class termNode(genNode.node):
     def __init__(self,parent,settings):
@@ -41,9 +42,9 @@ class termNode(genNode.node):
     def toDict(self):
         return self.name
 
-class lastNode(termNode):
+class lastNode(genNode.node):
     def __init__(self,parent,settings):
-        super(lastNode,self).__init__(parent,settings)
+        super(lastNode,self).__init__(parent,settings,None,None,0,{})
         self.name = 'last'
         self.canTake = [0]
         self.canReturn= [2]
@@ -73,6 +74,35 @@ class lastNode(termNode):
     def toDict(self):
         return 'last'
 
-nodes =[lastNode,termNode]
-single = []
-multi = [lastNode,termNode]
+class randomInd(genNode.node):
+    def __init__(self,parent,settings):
+        p = copy.deepcopy(settings.nodeSettings['randInd'])
+        super(randomInd,self).__init__(parent,settings,None,'randInd',0,p)
+        self.name = 'randInd'
+        self.canTake = [0]
+        self.canReturn = [1,2]
+
+    def evaluate(self):
+        return [solution.solution(self.settings.solSettings) for i in xrange(self.params['count']['value'])]
+
+    def setTake(self,numerocity):
+        super(randomInd,self).setTake(numerocity)
+        self.take = [0]
+
+    def randomize(self,state):
+        super(randomInd,self).randomize(state)
+        if self.ret==1:
+            self.params['count']['value'] = 1
+
+    def toDict(self):
+        return 'randInd(count='+str(self.params['count']['value'])
+
+    def update(self,depth,state):
+        self.depth = depth
+        self.height = 0
+        self.state = state
+        self.settings = state.settings
+        return self.height
+
+single = [randomInd]
+multi = [lastNode,termNode,randomInd]

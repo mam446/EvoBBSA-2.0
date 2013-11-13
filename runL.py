@@ -9,7 +9,7 @@
     'bbsaSettings':
     {
         'maxStartNodes':15,
-        'maxEvals':100000,
+        'maxEvals':50000,
         'maxOps':5000000,
         'maxIterations':10000,
         'maxDepth':5,
@@ -136,12 +136,28 @@
         {
             'weight':1,
             'repr':'bitString',
-            'prob':'kMeans',
+            'prob':'lSat',
             'settings':
             {
-                'length':256,
-                'name':'temp.txt',
-                'k':2
+                'name':1,
+                'L':3,
+                'terms':10,
+                'length':10,
+                'clauses':100
+            }
+        },
+
+        {
+            'weight':1,
+            'repr':'bitString',
+            'prob':'lSat',
+            'settings':
+            {
+                'name':2,
+                'L':3,
+                'terms':10,
+                'length':10,
+                'clauses':100
             }
         },
 

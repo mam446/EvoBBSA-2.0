@@ -32,6 +32,9 @@ def dTrapFitnessFunction(settings):
 def dStepTrapFitnessFunction(settings):
     return FitnessFunction.DeceptiveStepTrap(settings)
 
+def lSatFitnessFunction(settings):
+    return fitness.lsat(settings)
+
 def kMeansFitnessFunction(settings):
     return fitness.kmeansClassify(settings)
 
@@ -54,6 +57,8 @@ reps['bitString']['dSTrap'] = dStepTrapFitnessFunction
 reps['bitString']['nk'] = nkFitnessFunction
 reps['bitString']['allOnes'] = allOnesFitnessFunction
 reps['bitString']['kMeans'] = kMeansFitnessFunction
+reps['bitString']['lSat'] = lSatFitnessFunction
+
 
 reps['zeroedBitString'] = {'gene':createZeroedBitstring}
 reps['zeroedBitString']['kMeans'] = kMeansFitnessFunction

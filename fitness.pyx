@@ -19,7 +19,40 @@ class allOnes:
                 fit+=1.0
         return fit/len(gene)
 
+class lsat:
+    def __init__(self,settings):
+        self.settings =settings
 
+        if settings['name'] not in data:
+            data[settings['name']] = self.generateEquation(settings['terms'],settings['clauses'])
+
+    def evaluate(self,gene):
+        return self.evalEquation(data[self.settings['name']],gene)
+    
+    
+    
+    def generateEquation(self,termNum,clauseNum):
+        eq = [[random.choice([-1,1])*random.randint(1,termNum)for j in xrange(self.settings['L'])]for i in xrange(clauseNum)]
+
+
+        return eq
+
+    def evalEquation(self,eq,bits):
+        num = 0
+        
+        for x in eq:
+            check = False
+            for y in x:
+                if y>0:
+                    
+                    if bits[y]==1:
+                        check = True
+                else:
+                    if bits[y]==0:
+                        check = True
+            if check:
+                num+=1
+        return num
         
 
 
@@ -106,7 +139,7 @@ class kmeansClassify:
         
 
         fit = 0.0
-        val = []
+        val = 0
         for i in xrange(len(midPoints)):
             temp = [0 for d in midPoints]
             count =0
@@ -117,11 +150,10 @@ class kmeansClassify:
                     temp[data[self.settings['name']][objName]['cluster']]+=1 
             if count:
                 fit+=(2*max(temp)-sum(temp))#/count
+            val+=sum(temp)
 
 
-
-
-        return fit-pen*.001 
+        return (fit-pen*.001)#/val
 
 def calcDist(point,mid,gene):
     s = 0.0

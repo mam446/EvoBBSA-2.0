@@ -61,11 +61,16 @@ class runSettings:
         self.nodeSettings['forLoop'] = {'count':{'value':1,'range':(1,25),'type':'int'}}
         self.nodeSettings['forLoop']['weight'] = 2
 
+        #termNodes
+        self.nodeSettings['randInd'] = {'count':{'value': 1,'range':(1,25),'type':'int'}}
+        self.nodeSettings['randInd']['weight'] = 2
 
         if filename:
             f = open(filename)
             d = eval(f.read())
-            self.nodeSettings = d['nodeSettings']
+            for key in d['nodeSettings']:
+                self.nodeSettings[key] = d['nodeSettings'][key]
+
             self.bbsaSettings = d['bbsaSettings']
             self.probConf = d['problems']
         else:

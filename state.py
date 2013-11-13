@@ -11,7 +11,8 @@ class state:
             self.maxOp = settings.bbsaSettings['maxOps']
             self.maxEval = settings.bbsaSettings['maxEvals']
         self.run = 0
-        self.terms = termNodes.nodes
+        self.terms = termNodes.multi
+        self.sTerms = termNodes.single
         self.settings = settings
         self.reducers = selectNodes.nodes
         self.bestInd = None

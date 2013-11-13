@@ -72,17 +72,17 @@ while cur<maxEvals:
             mom = ktourn(this,k)
             dad = ktourn(this,k)
             x,y = mom.mate(dad)
-            if x.evalExist():
+            if x.evalExist() and x.lastExist():
                 x.evaluate()
                 childs.append(x)
                 c+=1
-            if y.evalExist():
+            if y.evalExist() and y.lastExist():
                 y.evaluate()
                 childs.append(y)
                 c+=1
         elif choice==2:
             x=ktourn(this,k).mutate()
-            if x.evalExist():
+            if x.evalExist() and x.lastExist():
                 x.evaluate()
                 childs.append(x)
                 c+=1
@@ -114,11 +114,11 @@ while cur<maxEvals:
     f.write(pop[0].makeProg())
     f.close()
     for g in xrange(len(multi.top)):
-        pop[g].name =str(g)
+        multi.top[g].name =str(g)
         f = open(str(g)+"-t.py",'w')
         f.write(multi.top[g].makeProg())
         f.close()
-        pop[g].makeGraph()
+        multi.top[g].makeGraph()
 print
 print pop[0].aveBest,pop[0].aveEval
 print pop[0].toDict()

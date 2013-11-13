@@ -3,18 +3,22 @@ import settings
 import fitness
 
 
-x = fitness.kmeansClassify({'name':'temp.txt','k':2})
+#x = fitness.kmeansClassify({'name':'temp.txt','k':2})
 
-print x.evaluate([1 for i in xrange(256)])
+#print x.evaluate([1 for i in xrange(256)])
 
 
 
-#s = settings.runSettings()
+s = settings.runSettings()
 
-#x = bbsa.bbsa(s)
+x = bbsa.bbsa(s)
 
-#x.makeGraph()
+print x.toDict()
+x.makeGraph()
+
+x.evaluate()
+
+x.plot()
 #f = open('asdfasdf.py','w')
 #f.write(x.makeProg())
 #f.close()
-#print x.toDict()

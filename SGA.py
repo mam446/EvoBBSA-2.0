@@ -63,17 +63,17 @@ while cur<maxEvals:
             mom = ktourn(pop,k)
             dad = ktourn(pop,k)
             x,y = mom.mate(dad)
-            if x.evalExist():
+            if x.evalExist() and x.lastExist():
                 x.evaluate()
                 childs.append(x)
                 c+=1
-            if y.evalExist():
+            if y.evalExist() and y.lastExist():
                 y.evaluate()
                 childs.append(y)
                 c+=1
         elif rate<.6:
             x=ktourn(pop,k).mutate()
-            if x.evalExist():
+            if x.evalExist() and x.lastExist():
                 x.evaluate()
                 childs.append(x)
                 c+=1
@@ -98,6 +98,8 @@ while cur<maxEvals:
     
     print cur, ave,pop[0].aveBest,pop[0].aveEval,pop[0].aveOps
     pop[0].makeGraph()
+    pop[0].plot()
+    pop[0].logger.log()
     f = open(str(pop[0].name)+"allones.py","w")
     f.write(pop[0].makeProg())
     f.close()
