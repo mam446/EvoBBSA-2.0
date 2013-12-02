@@ -49,6 +49,9 @@ class runSettings:
         self.nodeSettings['kTourn']['weight'] = 2
         self.nodeSettings['trunc'] = {'count':{'value':1,'range':(1,25),'type':'int'}}
         self.nodeSettings['trunc']['weight'] = 2
+        
+        self.nodeSettings['fitProp'] = {'count':{'value':1,'range':(1,25),'type':'int'}}
+        self.nodeSettings['fitProp']['weight'] = 2
 
         self.nodeSettings['randSubset'] = {'count':{'value':1,'range':(1,25),'type':'int'}}
         self.nodeSettings['randSubset']['weight'] = 2

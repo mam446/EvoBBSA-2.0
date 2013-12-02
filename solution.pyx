@@ -16,6 +16,7 @@ class solution:
 
         self.fitness =0.0 
 
+        self.aux = {}
 
     def evaluate(self):
         self.fitness = self.fitFunc.evaluate(self.gene)

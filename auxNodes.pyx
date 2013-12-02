@@ -3,7 +3,7 @@
 import genNode
 import random
 import copy
-
+import funcs
 
 
 class forLoop(genNode.node):
@@ -48,8 +48,36 @@ class forLoop(genNode.node):
         prog+='x'+var+".append(x"+var+'0[0])\n'+indent
         return prog
 
-single = {'bitString':[],'realValued':[]}
-multi = {'bitString':[forLoop],'realValued':[forLoop]}
+
+class clearAux(genNode.node):
+    def __init__(self,parent,settings):
+        super(clearAux,self).__init__(parent,settings,funcs.clearAux,'clearAux',1,{})
+        self.canTake = [1,2]
+        self.canReturn = [1,2]
+
+
+    def toDict(self):
+        return {"clearAux":[self.down[0].toDict()]}
+
+class normFitness(genNode.node):
+    def __init__(self,parent,settings):
+        super(normFitness,self).__init__(parent,settings,funcs.normFitness,'normFitness',1,{})
+        self.canTake = [1,2]
+        self.canReturn = [1,2]
+
+
+    def toDict(self):
+        return {"normFitness":[self.down[0].toDict()]}
+
+
+
+
+
+
+
+
+single = {'bitString':[clearAux,normFitness],'realValued':[clearAux,normFitness]}
+multi = {'bitString':[forLoop,clearAux,normFitness],'realValued':[forLoop,clearAux,normFitness]}
 
 
 

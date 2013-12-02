@@ -45,10 +45,10 @@ class lsat:
             for y in x:
                 if y>0:
                     
-                    if bits[y]==1:
+                    if bits[y-1]==1:
                         check = True
                 else:
-                    if bits[y]==0:
+                    if bits[-y-1]==0:
                         check = True
             if check:
                 num+=1

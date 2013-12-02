@@ -1,4 +1,5 @@
 # cython: profile=True
+import time
 import copy
 import random
 import evalNodes
@@ -6,6 +7,7 @@ import variationNodes
 import selectNodes
 import setNodes
 import auxNodes
+import termNodes
 import state
 import logger
 import solution
@@ -17,6 +19,8 @@ import matplotlib.pyplot as plt
 nodes = {'bitString':[],'realValued':[]}
 single = {'bitString':[],'realValued':[]}
 multi = {'bitString':[],'realValued':[]}
+global id
+id = 0
 
 #nodes.extend(variationNodes.nodes)
 #nodes.extend(selectNodes.nodes)
@@ -54,6 +58,36 @@ def popNodes(node,a):
 
 
 class bbsa:
+    def vectorize(self):
+        d = {}
+        v = []
+        for node in multi[self.settings.bbsaSettings['probType']]:
+            name = node(None,self.settings).name
+            d[name] = 0
+        for key in single[self.settings.bbsaSettings['probType']]:
+            name = node(None,self.settings).name
+            d[name] = 0
+
+        for node in termNodes.multi:
+            name = node(None,self.settings).name
+            d[name] = 0
+        for key in termNodes.single:
+            name = node(None,self.settings).name
+            d[name] = 0
+        a = []
+        popNodes(self.root,a)
+        for node in a:
+            if node.name in d:
+                d[node.name]+=1
+            
+        keys = d.keys()
+        keys.sort()
+        for k in keys:
+            v.append(d[k]) 
+
+        return v
+
+
     def check(self):
         A = []
         popNodes(self.root,A)
@@ -77,7 +111,9 @@ class bbsa:
         self.depth = 0
         self.size = 0
 
-        self.name = "Default"
+        global id
+        self.name="bbsa-"+str(id)
+        id+=1
 
 
         self.aveOps = 0.0
@@ -155,11 +191,15 @@ class bbsa:
 
 
     def evaluate(self):
-        
+        start = time.time() 
+        s = 0
         for prob in self.settings.probConf:
             for run in xrange(self.settings.bbsaSettings['runs']):
                 self.run()
                 self.logger.nextRun()
+                s = len(self.state.last)
+                for d in self.state.pers:
+                    s+=len(self.state.pers[d])
                 self.state.reset()
             self.settings.nextProbConf()
             #self.update()
@@ -168,7 +208,17 @@ class bbsa:
         self.aveEval = self.logger.getAveEvals()
         self.aveOps = self.logger.getAveOps()
         self.fitness = self.aveBest
+        end = time.time()
+        st = ""
+        self.time = end-start
+        v = self.vectorize()
+        for item in v:
+            st+=str(item)+", "
         
+        """print str(end-start)+", "+str(s)+", "+st         
+        if end-start>30:
+            self.name +="-long"+str(int(end-start))
+            self.makeGraph()"""
 
 
     def run(self):
@@ -203,6 +253,7 @@ class bbsa:
         prog = "import random\nfrom funcs import *\nimport state\n"
 
         prog+="\n\n"+str(self.toDict())+"\n"
+        prog+="\n\ntime = "+str(self.time)
         prog += "\n\nevals = "+str(self.aveEval)
         prog += "\n\nops = "+str(self.aveOps)
         prog += "\n\nfit = "+str(self.fitness)
@@ -252,7 +303,7 @@ class bbsa:
         x = self.duplicate()
         n =x.randomNode()
         n.randomize(x.state)
-        self.check()
+        
         return x
 
     def evalExist(self):
@@ -284,15 +335,16 @@ class bbsa:
         x.aveBest = 0.0
         x.aveEval = 0.0
 
+        global id
+        x.name="bbsa-"+str(id)
+        id+=1
         
-        x.logger = logger.logger(self.name,self.settings.bbsaSettings['converge'])
+        x.logger = logger.logger(x.name,self.settings.bbsaSettings['converge'])
 
         x.state.reset()
         x.state.settings = x.settings
         x.fitness = 0
         x.update()
-        x.check()
-        self.check()
         return x
 
     def mutate(self):
@@ -304,8 +356,6 @@ class bbsa:
         x.createRandom(n)
         x.update()
         x.count()
-        x.check()
-        self.check()
         return x
 
     def mate(self, other):
@@ -347,10 +397,6 @@ class bbsa:
         y.update()
         x.count()
         y.count()
-        self.check()
-        other.check()
-        x.check()
-        y.check()
         return x,y        
 
     def __gt__(self,other):

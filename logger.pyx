@@ -105,7 +105,7 @@ class logger:
         for p in self.probConf:
             for r in p:
                 if len(r)-1:
-                    Sum+=r[-2]['max']
+                    Sum+=r[-1]['max']
                 num+=1
 
         if (Sum<.001 and Sum>-.001) or num==0:
@@ -176,6 +176,7 @@ class logger:
         for prob in self.probConf:
             xi = []
             yi = []
+            ci = []
             first = True
             for run in prob:
                 for it in xrange(len(run)):
@@ -183,16 +184,19 @@ class logger:
                         xi.append(run[it]['evals'])
                     if first:
                         yi.append(run[it]['max'])
+                        ci.append(1)
                     else:
                         try:
                             yi[it]+=run[it]['max']
+                            ci[it]+=1
                         except:
                             xi.append(run[it]['evals'])
                             yi.append(run[it]['max'])
+                            ci.append(1)
                             #print it,len(yi),len(run)
                 first = False
             for d in xrange(len(yi)):
-                yi[d]/=len(prob)
+                yi[d]/=ci[d]
 
             x.append(xi)
             y.append(yi)

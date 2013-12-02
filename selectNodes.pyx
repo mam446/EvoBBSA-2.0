@@ -63,10 +63,39 @@ class randSubset(genNode.node):
     def toDict(self):
         return {"randSubset(count="+str(self.params['count']['value']):[self.down[0].toDict()]}
 
+
+
+class fitProp(genNode.node):
+    def __init__(self,parent,settings):
+        p = copy.deepcopy(settings.nodeSettings['fitProp'])
+        super(fitProp,self).__init__(parent,settings,funcs.fitProp,"fitProp",1,p) 
+        self.canTake = [1,2]
+        self.canReturn =[1,2]
+   
+    def setTake(self,numerocity):
+        super(fitProp,self).setTake(numerocity)
+        self.take = [2]
+    
+    def randomize(self,state):
+        super(fitProp,self).randomize(state)
+        if self.ret==1:
+            self.params['count']['value'] = 1
+
+    def toDict(self):
+        return {"fitProp":[self.down[0].toDict()]}
+
+
+
+
+
+
+
+
+
 nodes = [kTourn,trunc,randSubset]
 
-single = {'bitString':[kTourn,trunc,randSubset],'realValued':[kTourn,trunc,randSubset]}
-multi = {'bitString':[kTourn,trunc,randSubset],'realValued':[kTourn,trunc,randSubset]}
+single = {'bitString':[kTourn,trunc,randSubset,fitProp],'realValued':[kTourn,trunc,randSubset,fitProp]}
+multi = {'bitString':[kTourn,trunc,randSubset,fitProp],'realValued':[kTourn,trunc,randSubset,fitProp]}
 
 
 

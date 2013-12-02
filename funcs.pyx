@@ -2,6 +2,32 @@
 from random import random,randrange,gauss,choice
 import solution
 import math
+
+def clearAux(rDown,params={}):
+    cdef int i
+    pop = rDown[0]
+    
+    for i in xrange(len(pop)):
+        pop[i].aux = {}
+        pop[i].fitness = 0.0
+    
+    return pop
+
+def normFitness(rDown,params = {}):
+    cdef int i
+    pop = rDown[0]
+    s = 0.0
+    l = len(pop)
+    for i in xrange(len(pop)):
+        s+=pop[i].fitness
+    if s:
+        for i in xrange(l):
+            pop[i].aux['normFitness'] = pop[i].fitness/s
+    else:
+        for i in xrange(l):
+            pop[i].aux['normFitness'] = 1.0/l
+    return pop
+
 def mutate(rDown,params):
     cdef int i
     pop = rDown[0]
@@ -55,7 +81,21 @@ def uniRecomb(rDown,params):
     for i in xrange(params['num']['value']):
         y = pop[0].duplicate()
         for j in xrange(l):
-            y.gene[j] = pop[randrange(0,s)].gene[j]
+            val = random()
+            cur = 0.0
+            k = 0
+            while cur<val and k<s:
+                if 'normFitness' in pop[k].aux:
+                    cur+=pop[k].aux['normFitness']
+                if cur>=val:
+                    break
+                k+=1
+            if cur==0.0:
+                return pop
+            if k==s:
+                k = s-1
+            
+            y.gene[j] = pop[k].gene[j]
         y.fitness = 0.0
         ret.append(y)
     
@@ -75,14 +115,15 @@ def uniRecomb2(rDown,params):
             return []
         else:
             return [left]
-
+    if not left:
+        return [right]
 
     l= len(right.gene)
     
     y = right.duplicate()
     x = left.duplicate()
     for j in xrange(l):
-        if random.choice([0,1]):
+        if choice([0,1]):
             y.gene[j] = right.gene[j]
             x.gene[j] = left.gene[j]
         else:
@@ -153,6 +194,34 @@ def evaluate(rDown,params={}):
 
     return rDown[0]
 
+def fitProp(rDown,params):
+    pop = rDown[0]
+    l =len(pop)
+    ret = []
+    if not l:
+        return ret
+    for k in xrange(params['count']['value']):
+        val = random()
+        cur = 0.0
+        k = 0
+        while cur<val and k<l:
+            if 'normFitness' in pop[k].aux:
+                cur+=pop[k].aux['normFitness']
+            if cur>=val:
+                break
+            k+=1
+        if cur==0.0:
+            if params['count']['value']==1:
+                return [pop[0]]
+            return pop
+        if k>=l:
+            k = l-1
+         
+        ret.append(pop[k])
+    return ret
+
+
+
 def kTourn(rDown, params):
     cdef int n,i
     sel = []
@@ -172,6 +241,10 @@ def kTourn(rDown, params):
 
 def trunc(rDown, params):
     pop = rDown[0]
+    if params['count']['value']==1:
+        if not pop:
+            return []
+        return [max(pop)]
     pop.sort(reverse = True)
     return pop[:params['count']['value']]
 

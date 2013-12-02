@@ -143,7 +143,7 @@
                 'L':3,
                 'terms':10,
                 'length':10,
-                'clauses':100
+                'clauses':1000
             }
         },
 
@@ -157,7 +157,20 @@
                 'L':3,
                 'terms':10,
                 'length':10,
-                'clauses':100
+                'clauses':1000
+            }
+        },
+        {
+            'weight':1,
+            'repr':'bitString',
+            'prob':'lSat',
+            'settings':
+            {
+                'name':3,
+                'L':3,
+                'terms':10,
+                'length':10,
+                'clauses':1000
             }
         },
 

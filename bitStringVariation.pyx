@@ -36,7 +36,7 @@ class uniRecomb2(genNode.node):
         self.ret = 2
 
     def toDict(self):
-        return {"uniRecomb2":[self.down[0].toDict()]}
+        return {"uniRecomb2":[self.down[0].toDict(),self.down[1].toDict()]}
 
 class diagonal(genNode.node):
     def __init__(self,parent,settings):

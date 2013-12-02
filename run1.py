@@ -9,7 +9,7 @@
     'bbsaSettings':
     {
         'maxStartNodes':15,
-        'maxEvals':50000,
+        'maxEvals':100000,
         'maxOps':5000000,
         'maxIterations':10000,
         'maxDepth':5,

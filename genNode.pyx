@@ -122,6 +122,7 @@ class node(object):
                     self.down[i].randomize(state)
                     if t in state.reducers:
                         self.down[i].down[0] = random.choice(state.terms)(self.down[i],self.settings)
+                        self.down[i].down[0].randomize(state)
                 else:
                     self.down[i] = random.choice(state.terms)(self,self.settings)
                     self.down[i].setTake(2)

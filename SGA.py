@@ -31,10 +31,10 @@ pop = []
 i = 0
 while i<mu:
     x = bbsa.bbsa(copy.deepcopy(s))
-    print x.toDict()
-    if not x.evalExist():
-        print "What"
+    if not x.evalExist() or not x.lastExist():
+        print "\nFailed\n"
         continue
+    print x.toDict()
     x.evaluate()
     if x.valid():
         pop.append(x)
