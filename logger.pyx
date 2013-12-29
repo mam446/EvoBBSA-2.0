@@ -171,6 +171,7 @@ class logger:
 
     def plot(self):
         #max Plot
+
         x = []
         y = []
         for prob in self.probConf:
@@ -200,11 +201,11 @@ class logger:
 
             x.append(xi)
             y.append(yi)
-        
+        ax =  plt.subplot(1,1,1)
         for d in xrange(len(x)):
             #print len(x[d]),len(y[d])
-            plt.plot(x[d],y[d],label = str(d))
-
+            ax.plot(x[d],y[d],label = str(d))
+        ax.legend()
         plt.savefig(self.name+'-plot.png')
         plt.clf()
         return

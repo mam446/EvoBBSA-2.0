@@ -24,7 +24,7 @@ else:
     s = settings.runSettings()
 s.seed =time.time()
 random.seed(s.seed)
-mu = 50 
+mu = 100 
 k = 8
 
 pop = []
@@ -47,9 +47,9 @@ pop.sort()
 for p in pop:
     print p.aveBest
 
-maxEvals = 2000
+maxEvals = 5000
 cur = mu
-children = 20
+children = 40
 
 while cur<maxEvals:
     

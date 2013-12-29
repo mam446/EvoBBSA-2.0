@@ -24,11 +24,38 @@ class lsat:
         self.settings =settings
 
         if settings['name'] not in data:
-            data[settings['name']] = self.generateEquation(settings['terms'],settings['clauses'])
+            data[settings['name']] = self.loadEquation(settings['name'])
+        
 
     def evaluate(self,gene):
-        return self.evalEquation(data[self.settings['name']],gene)
-    
+        return self.evalEquation(data[self.settings['name']],gene)/float(len(data[self.settings['name']]))
+
+    def loadEquation(self,filename):
+        f = open(filename)
+        
+        probType =None
+        variables = None
+        clauses = None
+
+        comment = True
+        cur = None
+        while comment:
+            cur = f.readline()
+            if cur[0] != 'c':
+                break
+        if cur[0]=='p':
+            data = cur.split(' ')
+            probType = data[1]
+            variables = int(data[2])
+            clauses = int(data[3])
+
+        eq = []
+
+        for i in xrange(clauses):
+            cur = f.readline()
+            eq.append(map(int,cur.split(' ')[:-1]))
+        
+        return eq 
     
     
     def generateEquation(self,termNum,clauseNum):
@@ -39,17 +66,19 @@ class lsat:
 
     def evalEquation(self,eq,bits):
         num = 0
-        
-        for x in eq:
+        cdef int i,y
+        for i in xrange(len(eq)):
             check = False
-            for y in x:
+            for y in eq[i]:
                 if y>0:
                     
                     if bits[y-1]==1:
                         check = True
+                        break
                 else:
                     if bits[-y-1]==0:
                         check = True
+                        break
             if check:
                 num+=1
         return num

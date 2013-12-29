@@ -65,8 +65,8 @@ class onePoint(genNode.node):
 
 
 
-nodes = [mutate,uniRecomb,diagonal,onePoint,uniRecomb2]
+nodes = [mutate,uniRecomb,diagonal,uniRecomb2]
 single = [mutate]        
-multi = [mutate,uniRecomb,diagonal,onePoint,uniRecomb2]
+multi = [mutate,uniRecomb,diagonal,uniRecomb2]
 
 

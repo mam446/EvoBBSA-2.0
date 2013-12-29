@@ -301,7 +301,10 @@ class bbsa:
 
     def altMutate(self):
         x = self.duplicate()
-        n =x.randomNode()
+        t = None
+        while not t:
+            n =x.randomNode()
+            t = n.params
         n.randomize(x.state)
         
         return x
@@ -400,8 +403,8 @@ class bbsa:
         return x,y        
 
     def __gt__(self,other):
-        s = self.fitness - .001*self.size
-        o = other.fitness - .001*other.size
+        s = self.fitness - self.settings.bbsaSettings['penalty']*self.size
+        o = other.fitness - self.settings.bbsaSettings['penalty']*other.size
 
         return s>o
 
