@@ -236,6 +236,7 @@ class NearestNeighborNK(FitnessFunction):
 
         - ``genes``: The list of genes to be evaluated.
         '''
+        
         fitness = 0
         for g, ep in enumerate(self.epistasis):
             # Convert the genes into a integer used to index the fitness matrix

@@ -143,7 +143,7 @@
                 'k':5,
                 'dimensions':30,
                 'problemSeed':0,
-                'nkProblemFolder':'',
+                'nkProblemFolder':'./',
                 'run':0
             }
         },
@@ -158,7 +158,7 @@
                 'k':7,
                 'dimensions':30,
                 'problemSeed':1,
-                'nkProblemFolder':'',
+                'nkProblemFolder':'./',
                 'run':1
             }
         },
@@ -172,7 +172,7 @@
                 'k':5,
                 'dimensions':30,
                 'problemSeed':1,
-                'nkProblemFolder':'',
+                'nkProblemFolder':'./',
                 'run':1
             }
         },

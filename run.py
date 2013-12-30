@@ -7,8 +7,9 @@ log = logger.logger(sys.argv[3],0)
 solSettings = []
 j = 0
 
-solSettings.append({'settings': {'length': 216, 'name': 'test4.cnf'}, 'prob': 'lSat', 'weight': 1, 'repr': 'bitString'})
-solSettings.append({'settings': {'length': 343, 'name': 'test5.cnf'}, 'prob': 'lSat', 'weight': 1, 'repr': 'bitString'})
+solSettings.append({'settings': {'nkProblemFolder': '', 'run': 0, 'dimensions': 30, 'k': 5, 'length': 100, 'problemSeed': 0}, 'repr': 'bitString', 'weight': 1, 'prob': 'nk'})
+#solSettings.append({'settings': {'length': 216, 'name': 'test4.cnf'}, 'prob': 'lSat', 'weight': 1, 'repr': 'bitString'})
+#solSettings.append({'settings': {'length': 343, 'name': 'test5.cnf'}, 'prob': 'lSat', 'weight': 1, 'repr': 'bitString'})
 
 
 for s in solSettings:

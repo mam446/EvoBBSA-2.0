@@ -39,7 +39,7 @@ def kMeansFitnessFunction(settings):
     return fitness.kmeansClassify(settings)
 
 def nkFitnessFunction(settings):
-    return FitnessFunction.NearestNeighborNK(settings,settings['run'])
+    return FitnessFunction.NearestNeighborNK(settings,0)
 
 def allOnes(settings):
     return fitness.allOnes(settings)    
