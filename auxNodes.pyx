@@ -76,8 +76,8 @@ class normFitness(genNode.node):
 
 
 
-single = {'bitString':[clearAux,normFitness],'realValued':[clearAux,normFitness]}
-multi = {'bitString':[forLoop,clearAux,normFitness],'realValued':[forLoop,clearAux,normFitness]}
+single = {'bitString':[],'realValued':[clearAux,normFitness]}
+multi = {'bitString':[forLoop],'realValued':[forLoop,clearAux,normFitness]}
 
 
 

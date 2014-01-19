@@ -14,7 +14,7 @@ fit = 0.850095238095
 
 seed = 1382501921.05
 
-bbsaSettings = {'runs': 5, 'maxIterations': 10000, 'maxStartNodes': 15, 'mutateMax': 5, 'maxEvals': 50000, 'initPopMax': 50, 'converge': 25, 'maxDepth': 5, 'probType': 'bitString', 'maxOps': 5000000}
+bbsaSettings = {'runs': 5, 'maxIterations': 10000, 'maxStartNodes': 15, 'mutateMax': 5, 'maxEvals': 100000, 'initPopMax': 50, 'converge': 25, 'maxDepth': 5, 'probType': 'bitString', 'maxOps': 5000000}
 
 nodeSettings = {'mutate': {'rate': {'range': (0.0, 1.0), 'type': 'float', 'value': 0.0}, 'weight': 2}, 'randSubset': {'count': {'range': (1, 25), 'type': 'int', 'value': 20}, 'weight': 2}, 'forLoop': {'count': {'range': (1, 25), 'type': 'int', 'value': 1}, 'weight': 2}, 'onePoint': {'weight': 2}, 'diagonal': {'weight': 2, 'n': {'range': (1, 25), 'type': 'int', 'value': 1}}, 'makeSet': {'name': {'type': 'str', 'value': 'A'}, 'weight': 2}, 'uniRecomb': {'num': {'range': (1, 25), 'type': 'int', 'value': 1}, 'weight': 2}, 'kTourn': {'count': {'range': (1, 25), 'type': 'int', 'value': 1}, 'k': {'range': (1, 25), 'type': 'int', 'value': 25}, 'weight': 2}, 'trunc': {'count': {'range': (1, 25), 'type': 'int', 'value': 8}, 'weight': 2}}
 
@@ -35,10 +35,10 @@ def run(numRuns,log,sol=solSettings,name = '',progConf =None):
             children =[]
             for x in xrange(lamb):
                 parents = kTourn([last],{'count':{'value':2},'k':{'value':k}})
-                new = mutate([uniRecomb([parents],{'num':{'value':1}})],{'rate':{'value':.01}})
+                new = mutate([uniRecomb([parents],{'num':{'value':1}})],{'rate':{'value':.05}})
                 children.extend(evaluate([new],{'state':bestLog}))
                 evals+=len(new)
-            last = kTourn([children],{'count':{'value':mu},'k':{'value':survive}})
+            last = trunc([children+last],{'count':{'value':mu},'k':{'value':survive}})
 
             st = state.state()
             st.last = last

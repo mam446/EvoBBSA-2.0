@@ -232,8 +232,10 @@ class bbsa:
         self.state.lastEval()
         self.logger.nextIter(self.state)
  
-    def randomNode(self):
+    def randomNode(self,inc=False):
         z = []
+        if inc:
+            z.append("pop")
         popNodes(self.root,z)
         n = random.choice(z)
         return n
@@ -303,9 +305,12 @@ class bbsa:
         x = self.duplicate()
         t = None
         while not t:
-            n =x.randomNode()
+            n =x.randomNode(True)
             t = n.params
-        n.randomize(x.state)
+        if n=="pop":
+            self.initPop = random.randint(1,self.settings.bbsaSettings['initPopMax'])
+        else:
+            n.randomize(x.state)
         
         return x
 

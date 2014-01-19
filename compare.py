@@ -3,7 +3,9 @@ import sys
 
 
 plug = __import__(sys.argv[1]) 
-log = logger.logger(sys.argv[3],0)
+plug2= __import__(sys.argv[2])
+log = logger.logger(sys.argv[1],0)
+log2 = logger.logger(sys.argv[2],0)
 solSettings = []
 j = 0
 
@@ -34,13 +36,22 @@ labels = []
 for l in solSettings:
     labels.append(str(l['settings']['length'])+","+str(l['settings']['k']))
 
+
 for s in solSettings:
-    log = plug.run(int(sys.argv[2]),log,s,sys.argv[3],j)
+    log = plug.run(int(sys.argv[3]),log,s,sys.argv[1],j)
     j+=1
 
+for s in solSettings:
+    log2 = plug2.run(int(sys.argv[3]),log2,s,sys.argv[2],j)
+    j+=1
 
 log.log()
+log2.log()
 log.plot(labels)
+log2.plot(labels)
+
+log.compare(log2,sys.argv[1],sys.argv[2],labels)
+
 print 
 print "Average",log.getAveBest()
 print "Span:",log.getSpan()

@@ -88,6 +88,7 @@ class randomInd(genNode.node):
     def setTake(self,numerocity):
         super(randomInd,self).setTake(numerocity)
         self.take = [0]
+    
 
     def randomize(self,state):
         super(randomInd,self).randomize(state)

@@ -96,8 +96,10 @@ class node(object):
         for d in xrange(len(self.down)):
             prog+=self.down[d].makeProg(numTab,var+str(d))
             dList+="x"+var+str(d)+","
-        dList = dList[:-1]+"]"
-
+        if self.name!="randInd":
+            dList = dList[:-1]+"]"
+        else:
+            dList = '[],sol'
         pList = "{"
         for p in self.params:
             if p=='weight':

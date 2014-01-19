@@ -3,6 +3,10 @@ from random import random,randrange,gauss,choice
 import solution
 import math
 
+def randInd(rDown,solSet,params={}):
+    return [solution.solution(solSet) for i in xrange(params['count']['value'])]
+
+
 def clearAux(rDown,params={}):
     cdef int i
     pop = rDown[0]
@@ -29,18 +33,19 @@ def normFitness(rDown,params = {}):
     return pop
 
 def mutate(rDown,params):
-    cdef int i
+    cdef int i,l,p
     pop = rDown[0]
-
+    r = params['rate']['value']
     ret = []
+    s = len(pop)
     l = 0
     if pop:
         l = len(pop[0].gene)
 
-    for p in pop:
-        y = p.duplicate()
+    for p in xrange(s):
+        y = pop[p].duplicate()
         for i in xrange(l):
-            if random()<params['rate']['value']:
+            if random()<r:
                 if y.gene[i]==1:
                     y.gene[i]=0
                 else:
@@ -81,7 +86,7 @@ def uniRecomb(rDown,params):
     for i in xrange(params['num']['value']):
         y = pop[0].duplicate()
         for j in xrange(l):
-            val = random()
+            """val = random()
             cur = 0.0
             k = 0
             while cur<val and k<s:
@@ -94,8 +99,8 @@ def uniRecomb(rDown,params):
                 return pop
             if k==s:
                 k = s-1
-            
-            y.gene[j] = pop[k].gene[j]
+            """
+            y.gene[j] = choice(pop).gene[j]
         y.fitness = 0.0
         ret.append(y)
     
@@ -223,15 +228,16 @@ def fitProp(rDown,params):
 
 
 def kTourn(rDown, params):
-    cdef int n,i
+    cdef int n,i,p,k
     sel = []
     pop = rDown[0]
     p = len(pop)
+    k = params['k']['value']
     if not pop:
         return []
     for n in xrange(params['count']['value']):
         best = None
-        for i in xrange(params['k']['value']):
+        for i in xrange(k):
             obj = pop[randrange(0,p)]
             if not best or obj>best:
                 best = obj

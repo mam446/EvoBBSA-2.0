@@ -3,7 +3,6 @@ import sys
 
 
 plug = __import__(sys.argv[1]) 
-log = logger.logger(sys.argv[3],0)
 solSettings = []
 j = 0
 
@@ -30,21 +29,28 @@ solSettings.append({'settings': {'length': 252, 'k': 7}, 'repr': 'bitString', 'w
 #solSettings.append({'settings': {'length': 216, 'name': 'test4.cnf'}, 'prob': 'lSat', 'weight': 1, 'repr': 'bitString'})
 #solSettings.append({'settings': {'length': 343, 'name': 'test5.cnf'}, 'prob': 'lSat', 'weight': 1, 'repr': 'bitString'})
 
-labels = []
-for l in solSettings:
-    labels.append(str(l['settings']['length'])+","+str(l['settings']['k']))
+maxK = 20
+minK = 4
+minN = 75
+maxN = 300
 
-for s in solSettings:
-    log = plug.run(int(sys.argv[2]),log,s,sys.argv[3],j)
-    j+=1
+d = [76,75,78,77,80,81,80,77,72,78,70,75,80,68,72,76,80]
+a = 0
 
-
-log.log()
-log.plot(labels)
-print 
-print "Average",log.getAveBest()
-print "Span:",log.getSpan()
-print "Full Span",log.getFullSpan()
+f = open(sys.argv[1]+"-data.dat",'w')
+for k in xrange(minK,maxK):
+    n = d[a]
+    while n<maxN:
+        solSettings = []
+        solSettings.append({'settings': {'length': n, 'k': k}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
+        
+        log = logger.logger(sys.argv[1],0)
+        log = plug.run(int(sys.argv[2]),log,solSettings[0],sys.argv[1],0)
+        f.write(str(k)+", "+str(n)+", "+str(log.getAveBest())+"\n")
+        print k,n,log.getAveBest()       
+        n+=k
+    a+=1
+f.close()
 
 solSettings.append({'settings': {'length': 100, 'k': 5}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
 
