@@ -74,8 +74,9 @@ class runSettings:
             d = eval(f.read())
             for key in d['nodeSettings']:
                 self.nodeSettings[key] = d['nodeSettings'][key]
-            
-            self.bbsaSettings = d['bbsaSettings']
+            for key in d['bbsaSettings']:            
+                self.bbsaSettings[key] = d['bbsaSettings'][key]
+
             self.probConf = d['problems']
         else:
 
