@@ -35,7 +35,6 @@ class logger:
 
         self.curCon = 0
         self.conVal = 0.0
-        
 
     def nextRun(self):
         self.runs.append(self.curRun)
@@ -232,7 +231,7 @@ class logger:
         ax.set_position([.1,.1,.7,.8])
         color = [cm(1.*i/len(y)) for i in xrange(len(y))]
         ax.set_color_cycle(color)
-        ax.set_ylim([.6,1.0])
+        ax.set_ylim([.2,1.0])
         ax.set_xlim([0,x[0][-1]])
         for d in xrange(len(x)):
             #print len(x[d]),len(y[d])

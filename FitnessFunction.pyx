@@ -1,3 +1,4 @@
+# cython: profile=True
 '''
 This module provides an interface for how fitness functions should interact
 with solvers, as well as the definitions for a few benchmark problems
@@ -88,13 +89,18 @@ class DeceptiveTrap(FitnessFunction):
 
         - ``genes``: The list of genes to be evaluated.
         '''
-        cdef int i
-        fitness = 0
+        cdef int i,s
+        cdef double fitness
         # iterate to find the start of each trap
-        for i in xrange(0, len(genes), self.trapSize):
+        g  = len(genes)
+        fitness = g
+        for i in xrange(0, g, self.trapSize):
             # sum all of the values in that trap together
-            fitness += self.scoreTrap(genes[i:i + self.trapSize])
-        return self.normalize(genes, fitness)
+            trap = sum(genes[i:i+self.trapSize])
+            
+            if trap!=self.trapSize:
+                fitness-=trap+1
+        return fitness/g
 
     def subProblemsSolved(self, genes):
         '''

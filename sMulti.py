@@ -110,7 +110,7 @@ while cur<maxEvals:
     
     print cur, ave,pop[0].aveBest,pop[0].aveEval,pop[0].aveOps
     
-    f = open(str(pop[0].name)+"allones.py","w")
+    f = open(str(pop[0].name)+"-best.py","w")
     f.write(pop[0].makeProg())
     f.close()
     for g in xrange(len(multi.top)):

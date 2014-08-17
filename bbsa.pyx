@@ -306,6 +306,8 @@ class bbsa:
         t = None
         while not t:
             n =x.randomNode(True)
+            if n=="pop":
+                break
             t = n.params
         if n=="pop":
             self.initPop = random.randint(1,self.settings.bbsaSettings['initPopMax'])
@@ -430,7 +432,11 @@ class bbsa:
         return False
 
     def plot(self):
-        self.logger.plot()
+        labels = []
+        for l in self.settings.probConf:
+            
+            labels.append(str(l['settings']['length'])+","+str(l['settings']['k']))
+        self.logger.plot(labels)
 
     def makeGraph(self):
         val = 'x'

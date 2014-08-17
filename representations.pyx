@@ -2,15 +2,15 @@
 from random import random
 #goldman's implementations
 import FitnessFunction
-
+from numpy.random import randint
 #my implementations
 import fitness
 
 from itertools import repeat
 
 def createBitstring(settings):
-    cdef int i
-    return [int(random()*2) for i in xrange(settings['length'])]
+    return randint(0,2,(1,settings['length'])).tolist()[0]
+    #return [int(random()*2) for i in repeat(None,settings['length'])]
 
 def createZeroedBitstring(settings):
     cdef int i

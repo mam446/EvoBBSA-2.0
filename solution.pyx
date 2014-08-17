@@ -7,16 +7,25 @@ from copy import deepcopy
 class solution:
 
     def __init__(self,solSettings):
-        self.settings = solSettings
-        
-        self.rep = solSettings['repr'] 
+        if isinstance(solSettings,dict):
+            self.settings = solSettings
+            
+            self.rep = solSettings['repr'] 
+            self.gene = representations.reps[self.rep]['gene'](solSettings['settings'])
+            self.fitFunc = representations.reps[self.rep][solSettings['prob']](solSettings['settings'])
 
-        self.gene = representations.reps[self.rep]['gene'](solSettings['settings'])
-        self.fitFunc = representations.reps[self.rep][solSettings['prob']](solSettings['settings'])
+            self.fitness =0.0 
 
-        self.fitness =0.0 
-
-        self.aux = {}
+            self.aux = {}
+        else:
+            self.settings = solSettings.settings
+            if isinstance(solSettings.gene,list):
+                self.gene = list(solSettings.gene)
+            else:
+                self.gene = deepcopy(solSettings.gene)
+            self.fitFunc = solSettings.fitFunc
+            self.fitness = 0.0
+            self.aux = dict(solSettings.aux)
 
     def evaluate(self):
         self.fitness = self.fitFunc.evaluate(self.gene)
@@ -24,9 +33,7 @@ class solution:
         return self.fitness
 
     def duplicate(self):
-        x = solution(self.settings)
-        x.gene = deepcopy(self.gene)
-        x.fitness = 0.0     
+        x = solution(self)
         return x
 
     def __lt__(self,other):

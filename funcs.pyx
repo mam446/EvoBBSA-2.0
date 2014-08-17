@@ -1,10 +1,13 @@
 # cython: profile=True
 from random import random,randrange,gauss,choice
-import solution
+from solution import solution
 import math
+from numpy.random import randint
+
+from itertools import repeat
 
 def randInd(rDown,solSet,params={}):
-    return [solution.solution(solSet) for i in xrange(params['count']['value'])]
+    return [solution(solSet) for i in xrange(params['count']['value'])]
 
 
 def clearAux(rDown,params={}):
@@ -34,6 +37,7 @@ def normFitness(rDown,params = {}):
 
 def mutate(rDown,params):
     cdef int i,l,p
+    cdef double r
     pop = rDown[0]
     r = params['rate']['value']
     ret = []
@@ -42,11 +46,11 @@ def mutate(rDown,params):
     if pop:
         l = len(pop[0].gene)
 
-    for p in xrange(s):
-        y = pop[p].duplicate()
+    for sol in pop:
+        y = solution(sol)
         for i in xrange(l):
             if random()<r:
-                if y.gene[i]==1:
+                if y.gene[i]:
                     y.gene[i]=0
                 else:
                     y.gene[i] = 1
@@ -84,24 +88,28 @@ def uniRecomb(rDown,params):
     l= len(pop[0].gene)
     s = len(pop)
     for i in xrange(params['num']['value']):
-        y = pop[0].duplicate()
+        y = solution(pop[0])
+        g = y.gene
         for j in xrange(l):
-            """val = random()
-            cur = 0.0
-            k = 0
-            while cur<val and k<s:
-                if 'normFitness' in pop[k].aux:
-                    cur+=pop[k].aux['normFitness']
-                if cur>=val:
-                    break
-                k+=1
-            if cur==0.0:
-                return pop
-            if k==s:
-                k = s-1
-            """
-            y.gene[j] = choice(pop).gene[j]
-        y.fitness = 0.0
+            #"""val = random()
+            #cur = 0.0
+            #k = 0
+            #while cur<val and k<s:
+            #    if 'normFitness' in pop[k].aux:
+            #        cur+=pop[k].aux['normFitness']
+            #    if cur>=val:
+            #        break
+            #    k+=1
+            #if cur==0.0:
+            #    return pop
+            #if k==s:
+            #    k = s-1
+            #"""
+            
+            #y.gene[j] = pop[randint(0,2)].gene[j]
+            
+            g[j] = pop[randint(0,s)].gene[j]
+            #y.gene[j] = choice(pop).gene[j]
         ret.append(y)
     
     return ret 
@@ -128,7 +136,7 @@ def uniRecomb2(rDown,params):
     y = right.duplicate()
     x = left.duplicate()
     for j in xrange(l):
-        if choice([0,1]):
+        if randint(0,2):
             y.gene[j] = right.gene[j]
             x.gene[j] = left.gene[j]
         else:
@@ -238,7 +246,7 @@ def kTourn(rDown, params):
     for n in xrange(params['count']['value']):
         best = None
         for i in xrange(k):
-            obj = pop[randrange(0,p)]
+            obj = pop[randint(0,p)]
             if not best or obj>best:
                 best = obj
         sel.append(best)
@@ -254,10 +262,13 @@ def trunc(rDown, params):
     pop.sort(reverse = True)
     return pop[:params['count']['value']]
 
-def union(rDown, params={}):
-   right = set(rDown[0])
-   left = set(rDown[1])
-   return list(right.union(left))
+def union(rDown, params):
+   right = rDown[0]
+   right.extend(rDown[1])
+   return right
+   #right = set(rDown[0])
+   #left = set(rDown[1])
+   #return list(right.union(left))
     
 def randSubset(rDown,params):
     cdef int i,p
@@ -267,7 +278,7 @@ def randSubset(rDown,params):
     ret = []
     p = len(down)
     for i in xrange(params['count']['value']):
-        ret.append(down[randrange(0,p)])
+        ret.append(down[randint(0,p)])
     return ret
     
 
