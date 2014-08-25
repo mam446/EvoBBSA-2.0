@@ -18,7 +18,7 @@ class runSettings:
         
         self.probConf = []
 
-
+        self.bbsaSettings['time'] = 20
         self.bbsaSettings['maxStartNodes'] = 15            
         self.bbsaSettings['maxEvals'] = 50000
         self.bbsaSettings['maxOps'] = 5000000

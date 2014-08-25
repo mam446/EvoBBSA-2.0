@@ -173,9 +173,10 @@ def diagonal(rDown,params):
     pop = rDown[0]
     if not pop:
         return []
-    childs = [d.duplicate() for d in pop]
+    childs = [solution(d) for d in pop]
     l = len(pop[0].gene)
-    pnts = [randrange(1,l) for i in xrange(params['n']['value'])]
+    pnts = randint(1,l,(1,params['n']['value'])).tolist()[0]
+    #pnts = [randint(1,l) for i in xrange(params['n']['value'])]
     pnts.sort()
 
 
@@ -192,8 +193,7 @@ def diagonal(rDown,params):
             nex = pnts[i]
             
         g[last:] = pop[p%po].gene[last:]
-        d = pop[0]
-        pop = pop[1:]
+        d = pop.pop(0)
         pop.append(d)
     return childs
 
@@ -236,16 +236,16 @@ def fitProp(rDown,params):
 
 
 def kTourn(rDown, params):
-    cdef int n,i,p,k
+    cdef int p,k
     sel = []
     pop = rDown[0]
     p = len(pop)
     k = params['k']['value']
     if not pop:
         return []
-    for n in xrange(params['count']['value']):
+    for n in repeat(None,params['count']['value']):
         best = None
-        for i in xrange(k):
+        for i in repeat(None,k):
             obj = pop[randint(0,p)]
             if not best or obj>best:
                 best = obj
@@ -263,7 +263,7 @@ def trunc(rDown, params):
     return pop[:params['count']['value']]
 
 def union(rDown, params):
-   right = rDown[0]
+   right = list(rDown[0])
    right.extend(rDown[1])
    return right
    #right = set(rDown[0])

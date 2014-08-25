@@ -19,6 +19,8 @@ class logger:
         self.ops = []
         self.name = name
         
+
+
         self.converge = converge
         self.allMax = None        
         self.curCon = 0
@@ -56,12 +58,15 @@ class logger:
         gMax = None
         Sum = 0.0
         num = 0
+        popSize = 0
         for d in state.pers:
+            popSize+= len(state.pers[d])
             for ind in state.pers[d]:
                 if not gMax or ind.fitness>gMax.fitness:
                     gMax = ind
                 Sum+=ind.fitness
                 num+=1
+        popSize+=len(state.last)
         for ind in state.last:
             if not gMax or ind.fitness>gMax.fitness:
                 gMax = ind
@@ -78,9 +83,14 @@ class logger:
             if gMax:
                 self.allMax = gMax
         if gMax:
-            self.curRun.append({'evals':state.curEval,'max':gMax.fitness,'ave':ave})
+            self.curRun.append({'evals':state.curEval,'max':gMax.fitness,'ave':ave,'popSize':popSize})
         else:
-            self.curRun.append({'evals':state.curEval,'max':0,'ave':ave})
+            self.curRun.append({'evals':state.curEval,'max':0,'ave':ave,'popSize':popSize})
+
+       
+       
+       
+        
         self.ops.append(state.curOp)
 
     def hasConverged(self):
@@ -199,23 +209,30 @@ class logger:
 
         x = []
         y = []
+        
+        psy = []
+        
         for prob in self.probConf:
-            xi = []
-            yi = []
-            ci = []
+            psyi = [0.0]
+
+            xi = [0.0]
+            yi = [0.0]
+            ci = [1]
             first = True
             for run in prob:
                 for it in xrange(len(run)):
                     if first:
+                        psyi.append(run[it]['popSize'])
                         xi.append(run[it]['evals'])
-                    if first:
                         yi.append(run[it]['max'])
                         ci.append(1)
                     else:
                         try:
                             yi[it]+=run[it]['max']
+                            psyi[it]+=run[it]['popSize']
                             ci[it]+=1
                         except:
+                            psyi.append(run[it]['popSize'])
                             xi.append(run[it]['evals'])
                             yi.append(run[it]['max'])
                             ci.append(1)
@@ -223,16 +240,19 @@ class logger:
                 first = False
             for d in xrange(len(yi)):
                 yi[d]/=ci[d]
-
+            for d in xrange(len(psyi)):
+                psyi[d]/=ci[d]
+            psy.append(psyi)
             x.append(xi)
             y.append(yi)
         cm = plt.get_cmap('gist_rainbow')
-        ax =  plt.subplot(1,1,1)
-        ax.set_position([.1,.1,.7,.8])
+        ax =  plt.subplot(1,2,1)
+        #ax.set_position([.1,.1,.7,.8])
         color = [cm(1.*i/len(y)) for i in xrange(len(y))]
         ax.set_color_cycle(color)
         ax.set_ylim([.2,1.0])
-        ax.set_xlim([0,x[0][-1]])
+        if x:
+            ax.set_xlim([0,x[0][-1]])
         for d in xrange(len(x)):
             #print len(x[d]),len(y[d])
             if labels:
@@ -240,7 +260,21 @@ class logger:
             else:
                 ax.plot(x[d],y[d],label = str(d))
         
-        ax.legend(bbox_to_anchor=(1.05,.5), loc='center left',borderaxespad=0)
+        ax.legend(bbox_to_anchor=(-0.5,1.05), loc='center left',borderaxespad=200)
+        ax2 = plt.subplot(1,2,2)
+        color = [cm(1.*i/len(y)) for i in xrange(len(y))]
+        ax2.set_color_cycle(color)
+        if x:
+            ax2.set_xlim([0,x[0][-1]])
+        for d in xrange(len(x)):
+            #print len(x[d]),len(y[d])
+            if labels:
+                ax2.plot(x[d],psy[d],label = labels[d])
+            else:
+                ax2.plot(x[d],psy[d],label = str(d))
+        
+
+
         plt.savefig(self.name+'-plot.png')
         plt.clf()
         return

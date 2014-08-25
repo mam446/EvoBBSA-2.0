@@ -43,18 +43,17 @@ class node(object):
         self.ret = numerocity
     
     def evaluate(self):
-        if self.state.curOp>=self.state.maxOp:
-            return []
-        if self.state.curEval>=self.state.maxEval:
+        if self.state.curEval>=self.state.maxEval or self.state.curOp>=self.state.maxOp:
             return []
         rDown = []
         f  = rDown.append  
         for d in self.down:
             f(d.evaluate())
-            if isinstance(self.opWeight,int)or isinstance(self.opWeight,float):
-                self.state.curOp+=len(rDown[-1])*self.opWeight
-            else:
-                self.state.curOp+=self.opWeight(len(rDown[-1]))
+            c = len(rDown[-1])
+            #if isinstance(self.opWeight,int)or isinstance(self.opWeight,float):
+            self.state.curOp+=c*self.opWeight
+            #else:
+            #    self.state.curOp+=self.opWeight(c)
         return self.function(rDown,self.params)
     
     def update(self,depth,state):

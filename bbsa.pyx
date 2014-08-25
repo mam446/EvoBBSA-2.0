@@ -105,7 +105,7 @@ class bbsa:
         return True
     
     def __init__(self,settings):
-
+        self.time = 0
         self.root = None
 
         self.depth = 0
@@ -114,7 +114,7 @@ class bbsa:
         global id
         self.name="bbsa-"+str(id)
         id+=1
-
+        self.grow = False
 
         self.aveOps = 0.0
         self.aveBest = 0.0
@@ -196,6 +196,10 @@ class bbsa:
         for prob in self.settings.probConf:
             for run in xrange(self.settings.bbsaSettings['runs']):
                 self.run()
+                check = time.time()
+                if check-start>self.settings.bbsaSettings['time'] or self.grow:
+                    self.fitness = 0
+                    return
                 self.logger.nextRun()
                 s = len(self.state.last)
                 for d in self.state.pers:
@@ -211,24 +215,45 @@ class bbsa:
         end = time.time()
         st = ""
         self.time = end-start
-        v = self.vectorize()
-        for item in v:
-            st+=str(item)+", "
         
-        """print str(end-start)+", "+str(s)+", "+st         
-        if end-start>30:
+        #v = self.vectorize()
+        #for item in v:
+        #    st+=str(item)+", "
+        
+        if end-start>self.settings.bbsaSettings['time']:
+            t = self.name
             self.name +="-long"+str(int(end-start))
-            self.makeGraph()"""
-
+            self.makeGraph()
+            self.plot()
+            self.name = t
 
     def run(self):
         self.state.last = [solution.solution(self.settings.solSettings) for i in xrange(self.initPop)]
-
+        prev = -1
         for it in xrange(self.settings.bbsaSettings['maxIterations']):
             self.state.last = self.root.evaluate()
             self.logger.nextIter(self.state)
+            size = 0
+            size+=len(self.state.last)
+            pre = size
+            #print "\t\tpopSize:",size
+            for s in self.state.pers:
+                size+=len(self.state.pers[s])
+            #print "\t\ttotSize:",size
             if self.state.done() or self.logger.hasConverged():
                 break
+            if prev>=0:
+                if size>prev:
+                    if self.name[0]!='g':
+                        self.name = "grow/"+self.name    
+                        self.logger.name = self.name
+                        self.grow = True
+                else:
+                    if self.name[0]=='g':
+                        self.name = self.name[5:]
+                        self.logger.name = self.name
+                        self.grow = False
+            prev = size
         self.state.lastEval()
         self.logger.nextIter(self.state)
  
@@ -410,8 +435,8 @@ class bbsa:
         return x,y        
 
     def __gt__(self,other):
-        s = self.fitness - self.settings.bbsaSettings['penalty']*self.size
-        o = other.fitness - self.settings.bbsaSettings['penalty']*other.size
+        s = self.fitness - self.settings.bbsaSettings['penalty']*(self.time)
+        o = other.fitness - self.settings.bbsaSettings['penalty']*(other.time)
 
         return s>o
 
@@ -422,14 +447,16 @@ class bbsa:
             return True
         if self.fitness>=other.fitness and self.size<=other.size and self.aveEval<other.aveEval:
             return True"""
-        if self.fitness>=other.fitness and self.aveEval<other.aveEval:
+        if self.fitness>=other.fitness and self.time<other.time:
             return True
-        if self.fitness>other.fitness and self.aveEval<=other.aveEval:
+        if self.fitness>other.fitness and self.time<=other.time:
             return True
-        
-        
-        
         return False
+
+
+    def calcDistance(self,other):
+        return ((self.fitness-other.fitness)**2+(self.time-other.time)**2)**.5
+
 
     def plot(self):
         labels = []

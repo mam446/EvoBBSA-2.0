@@ -82,7 +82,7 @@ class fitProp(genNode.node):
             self.params['count']['value'] = 1
 
     def toDict(self):
-        return {"fitProp":[self.down[0].toDict()]}
+        return {"fitProp(count="+str(self.params['count']['value'])+")":[self.down[0].toDict()]}
 
 
 
@@ -94,8 +94,8 @@ class fitProp(genNode.node):
 
 nodes = [kTourn,trunc,randSubset]
 
-single = {'bitString':[kTourn,trunc,randSubset,fitProp],'realValued':[kTourn,trunc,randSubset,fitProp]}
-multi = {'bitString':[kTourn,trunc,randSubset,fitProp],'realValued':[kTourn,trunc,randSubset,fitProp]}
+single = {'bitString':[kTourn,trunc,randSubset],'realValued':[kTourn,trunc,randSubset]}
+multi = {'bitString':[kTourn,trunc,randSubset],'realValued':[kTourn,trunc,randSubset]}
 
 
 

@@ -26,15 +26,15 @@ class forLoop(genNode.node):
 
     def evaluate(self):
         cdef int i
-        if self.state.curOp>=self.state.maxOp:
-            return []
-        if self.state.curEval>=self.state.maxEval:
-            return []
              
         ret = []
         f = ret.extend
         d = self.down[0]
         for i in xrange(self.params['count']['value']):
+            if self.state.curOp>=self.state.maxOp:
+                return []
+            if self.state.curEval>=self.state.maxEval:
+                return []
             f(d.evaluate())
         return ret
 
