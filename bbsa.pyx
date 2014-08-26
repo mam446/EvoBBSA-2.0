@@ -16,9 +16,9 @@ import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
 
-nodes = {'bitString':[],'realValued':[]}
-single = {'bitString':[],'realValued':[]}
-multi = {'bitString':[],'realValued':[]}
+nodes = {'bitString':{},'realValued':[]}
+single = {'bitString':{},'realValued':{}}
+multi = {'bitString':{},'realValued':{}}
 global id
 id = 0
 
@@ -27,29 +27,34 @@ id = 0
 #nodes.extend(evalNodes.nodes)
 #nodes.extend(setNodes.nodes)
 
-single['bitString'].extend(variationNodes.single['bitString'])
-single['bitString'].extend(selectNodes.single['bitString'])
-single['bitString'].extend(evalNodes.single['bitString'])
-single['bitString'].extend(setNodes.single['bitString'])
-single['bitString'].extend(auxNodes.single['bitString'])
+terms = termNodes.multi
 
-single['realValued'].extend(variationNodes.single['realValued'])
-single['realValued'].extend(selectNodes.single['realValued'])
-single['realValued'].extend(evalNodes.single['realValued'])
-single['realValued'].extend(setNodes.single['realValued'])
-single['realValued'].extend(auxNodes.single['realValued'])
 
-multi['bitString'].extend(variationNodes.multi['bitString'])
-multi['bitString'].extend(selectNodes.multi['bitString'])
-multi['bitString'].extend(evalNodes.multi['bitString'])
-multi['bitString'].extend(setNodes.multi['bitString'])
-multi['bitString'].extend(auxNodes.multi['bitString'])
 
-multi['realValued'].extend(variationNodes.multi['realValued'])
-multi['realValued'].extend(selectNodes.multi['realValued'])
-multi['realValued'].extend(evalNodes.multi['realValued'])
-multi['realValued'].extend(setNodes.multi['realValued'])
-multi['realValued'].extend(auxNodes.multi['realValued'])
+single['bitString'].update(variationNodes.single['bitString'])
+single['bitString'].update(selectNodes.single['bitString'])
+single['bitString'].update(evalNodes.single['bitString'])
+single['bitString'].update(setNodes.single['bitString'])
+single['bitString'].update(auxNodes.single['bitString'])
+
+single['realValued'].update(variationNodes.single['realValued'])
+single['realValued'].update(selectNodes.single['realValued'])
+single['realValued'].update(evalNodes.single['realValued'])
+single['realValued'].update(setNodes.single['realValued'])
+single['realValued'].update(auxNodes.single['realValued'])
+
+multi['bitString'].update(variationNodes.multi['bitString'])
+multi['bitString'].update(selectNodes.multi['bitString'])
+multi['bitString'].update(evalNodes.multi['bitString'])
+multi['bitString'].update(setNodes.multi['bitString'])
+multi['bitString'].update(auxNodes.multi['bitString'])
+
+multi['realValued'].update(variationNodes.multi['realValued'])
+multi['realValued'].update(selectNodes.multi['realValued'])
+multi['realValued'].update(evalNodes.multi['realValued'])
+multi['realValued'].update(setNodes.multi['realValued'])
+multi['realValued'].update(auxNodes.multi['realValued'])
+
 
 def popNodes(node,a):
     a.append(node)
@@ -110,6 +115,7 @@ class bbsa:
 
         self.depth = 0
         self.size = 0
+        
 
         global id
         self.name="bbsa-"+str(id)
@@ -129,6 +135,9 @@ class bbsa:
         self.initPop = random.randint(1,settings.bbsaSettings['initPopMax'])
         
         self.logger = logger.logger(self.name,settings.bbsaSettings['converge'])
+        
+        self.useMulti = multi[self.settings.bbsaSettings['probType']].keys()
+        self.useSingle = single[self.settings.bbsaSettings['probType']].keys()
 
         self.createRandom()
 
@@ -145,7 +154,7 @@ class bbsa:
                 start.down[s] = None
         for i in xrange(size):
             if not start:
-                node = random.choice(multi[self.settings.bbsaSettings['probType']])
+                node = multi[self.settings.bbsaSettings['probType']][random.choice(self.useMulti)]
                 start = node(None,self.settings)
                 start.setTake(max(start.canTake))
                 start.randomize(self.state)
@@ -164,13 +173,13 @@ class bbsa:
             if n <0 or n>1:
                 raw_input("fail")
             if cur.take[n]==2:
-                node = random.choice(multi[self.settings.bbsaSettings['probType']])
+                node = multi[self.settings.bbsaSettings['probType']][random.choice(self.useMulti)]
                 cur.down[n] = node(cur,self.settings)
                 
                 cur.down[n].setTake(max(cur.down[n].canTake))
                 cur.down[n].randomize(self.state)
             else:
-                node = random.choice(single[self.settings.bbsaSettings['probType']])
+                node = single[self.settings.bbsaSettings['probType']][random.choice(self.useSingle)]
                 cur.down[n] = node(cur,self.settings)
                 cur.down[n].setTake(1)
                 cur.down[n].randomize(self.state)

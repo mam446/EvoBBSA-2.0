@@ -12,8 +12,6 @@ class evaluate(genNode.node):
         self.canReturn =[1,2]
 
 
-    def toDict(self):
-        return {"Evaluate":[self.down[0].toDict()]}
 
     def makeProg(self,numTab,var):
         #prog = super(evaluate,self).makeProg(numTab,var)
@@ -34,7 +32,7 @@ class evaluate(genNode.node):
 
 nodes = [evaluate]
 
-single = {'bitString':[evaluate],'realValued':[evaluate]}
-multi = {'bitString':[evaluate],'realValued':[evaluate]}
+single = {'bitString':{'evaluate':evaluate},'realValued':{'evaluate':evaluate}}
+multi = {'bitString':{'evaluate':evaluate},'realValued':{'evaluate':evaluate}}
 
 

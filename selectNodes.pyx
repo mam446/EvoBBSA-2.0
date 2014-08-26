@@ -21,8 +21,6 @@ class kTourn(genNode.node):
         if self.ret==1:
             self.params['count']['value'] = 1
 
-    def toDict(self):
-        return {"kTourn(k="+str(self.params['k']['value'])+",count="+str(self.params['count']['value']):[self.down[0].toDict()]}
 
 class trunc(genNode.node):
     def __init__(self,parent,settings):
@@ -40,8 +38,6 @@ class trunc(genNode.node):
         if self.ret==1:
             self.params['count']['value'] = 1
 
-    def toDict(self):
-        return {"trunc(count="+str(self.params['count']['value']):[self.down[0].toDict()]}
 
 
 class randSubset(genNode.node):
@@ -60,8 +56,6 @@ class randSubset(genNode.node):
         if self.ret==1:
             self.params['count']['value'] = 1
 
-    def toDict(self):
-        return {"randSubset(count="+str(self.params['count']['value']):[self.down[0].toDict()]}
 
 
 
@@ -81,8 +75,6 @@ class fitProp(genNode.node):
         if self.ret==1:
             self.params['count']['value'] = 1
 
-    def toDict(self):
-        return {"fitProp(count="+str(self.params['count']['value'])+")":[self.down[0].toDict()]}
 
 
 
@@ -92,10 +84,9 @@ class fitProp(genNode.node):
 
 
 
-nodes = [kTourn,trunc,randSubset]
 
-single = {'bitString':[kTourn,trunc,randSubset],'realValued':[kTourn,trunc,randSubset]}
-multi = {'bitString':[kTourn,trunc,randSubset],'realValued':[kTourn,trunc,randSubset]}
+single = {'bitString':{'kTourn':kTourn,'trunc':trunc,'randSubset':randSubset},'realValued':{'kTourn':kTourn,'trunc':trunc,'randSubset':randSubset}}
+multi = {'bitString':{'kTourn':kTourn,'trunc':trunc,'randSubset':randSubset},'realValued':{'kTourn':kTourn,'trunc':trunc,'randSubset':randSubset}}
 
 
 

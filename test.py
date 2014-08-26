@@ -12,13 +12,5 @@ import fitness
 s = settings.runSettings()
 
 x = bbsa.bbsa(s)
-
-print x.toDict()
 x.makeGraph()
-
-x.evaluate()
-
-x.plot()
-#f = open('asdfasdf.py','w')
-#f.write(x.makeProg())
-#f.close()
+print x.toDict()

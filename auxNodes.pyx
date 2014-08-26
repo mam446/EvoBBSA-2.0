@@ -9,15 +9,11 @@ import funcs
 class forLoop(genNode.node):
     def __init__(self,parent,settings):
         p = copy.deepcopy(settings.nodeSettings['forLoop'])
-        super(forLoop,self).__init__(parent,settings,None,'for',1,p)
+        super(forLoop,self).__init__(parent,settings,None,'forLoop',1,p)
         self.canTake = [1]
         self.canReturn = [2]
         self.take = [1]
         self.ret = 2
-
-
-    def toDict(self):
-        return {"For:"+str(self.params['count']['value']):[self.down[0].toDict()]}
 
 
     def setTake(self,numerocity):
@@ -56,8 +52,6 @@ class clearAux(genNode.node):
         self.canReturn = [1,2]
 
 
-    def toDict(self):
-        return {"clearAux":[self.down[0].toDict()]}
 
 class normFitness(genNode.node):
     def __init__(self,parent,settings):
@@ -66,8 +60,6 @@ class normFitness(genNode.node):
         self.canReturn = [1,2]
 
 
-    def toDict(self):
-        return {"normFitness":[self.down[0].toDict()]}
 
 
 
@@ -76,8 +68,8 @@ class normFitness(genNode.node):
 
 
 
-single = {'bitString':[],'realValued':[clearAux,normFitness]}
-multi = {'bitString':[forLoop],'realValued':[forLoop,clearAux,normFitness]}
+single = {'bitString':{},'realValued':{'clearAux':clearAux,'normFitness':normFitness}}
+multi = {'bitString':{'forLoop':forLoop},'realValued':{'forLoop':forLoop,'clearAux':clearAux,'normFitness':normFitness}}
 
 
 

@@ -103,8 +103,9 @@ while cur<maxEvals:
     ave = su/mu
     i = 0
     print cur, ave, len(fronts.fronts.keys())
+    fronts.fronts[0].sort()
     for ind in fronts.fronts[0]: 
-        print"\t",i,ind.aveBest,",",ind.aveEval,",",ind.time,",",ind.distance
+        print"\t",i,ind.aveBest,",",ind.aveEval,",",ind.time,",",ind.distance,"\t",ind.name
         i+=1
         ind.makeGraph()
         ind.plot()
@@ -114,9 +115,10 @@ while cur<maxEvals:
         f.close()
 
 
-
+i = 0
+fronts.fronts[0].sort()
 for ind in fronts.fronts[0]: 
-    print"\t",i,ind.aveBest,",",ind.aveEval,",",ind.time
+    print"\t",i,ind.aveBest,",",ind.aveEval,",",ind.time,",",ind.distance,"\t",ind.name
     i+=1
     ind.name = "finalFront/"+ind.name
     ind.logger.name = ind.name

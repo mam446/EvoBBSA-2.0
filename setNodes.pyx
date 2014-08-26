@@ -14,8 +14,6 @@ class union(genNode.node):
         super(union,self).setTake(numerocity)
         self.ret = 2
     
-    def toDict(self):
-        return {"Union":[self.down[0].toDict(),self.down[1].toDict()]}
 
 class makeSet(genNode.node):
     def __init__(self,parent,settings):
@@ -60,8 +58,6 @@ class makeSet(genNode.node):
         self.state.pers[self.params['name']['value']] = []
         return
 
-    def toDict(self):
-        return {"makeSet {"+self.params['name']['value']+"}":[self.down[0].toDict()]}
 
     def makeProg(self,numTab,var):
         tab = "    "
@@ -79,6 +75,5 @@ class makeSet(genNode.node):
 
 
 
-nodes = [union,makeSet]
-single = {'bitString':[makeSet],'realValued':[makeSet]}
-multi = {'bitString':[makeSet,union],'realValued':[makeSet,union]}
+single = {'bitString':{'makeSet':makeSet},'realValued':{'makeSet':makeSet}}
+multi = {'bitString':{'makeSet':makeSet,'union':union},'realValued':{'makeSet':makeSet,'union':union}}

@@ -39,8 +39,6 @@ class termNode(genNode.node):
         self.state = state
         return 
 
-    def toDict(self):
-        return self.name
 
 class lastNode(genNode.node):
     def __init__(self,parent,settings):
@@ -71,8 +69,6 @@ class lastNode(genNode.node):
         self.state = state
         return
 
-    def toDict(self):
-        return 'last'
 
 class randomInd(genNode.node):
     def __init__(self,parent,settings):
@@ -95,8 +91,6 @@ class randomInd(genNode.node):
         if self.ret==1:
             self.params['count']['value'] = 1
 
-    def toDict(self):
-        return 'randInd(count='+str(self.params['count']['value'])
 
     def update(self,depth,state):
         self.depth = depth
@@ -105,5 +99,5 @@ class randomInd(genNode.node):
         self.settings = state.settings
         return self.height
 
-single = [randomInd]
-multi = [lastNode,termNode,randomInd]
+single = {'randomInd':randomInd}
+multi = {'last':lastNode,'termNode':termNode,'randomInd':randomInd}

@@ -14,7 +14,7 @@ class state:
         self.terms = termNodes.multi
         self.sTerms = termNodes.single
         self.settings = settings
-        self.reducers = selectNodes.nodes
+        self.reducers = selectNodes.multi[self.settings.bbsaSettings['probType']]
         self.bestInd = None
         self.log = {}
 

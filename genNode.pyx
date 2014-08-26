@@ -84,6 +84,16 @@ class node(object):
         return s
 
 
+    def toDict(self):
+        s = ""
+        s+=self.name+"("
+        for p in self.params:
+            if p!='weight':
+                s+=p+"="+str(self.params[p]['value'])+","
+        s=s[:-1]
+        if '(' in s:
+            s+=')' 
+        return {s:[x.toDict() for x in self.down if x]}
 
     def makeProg(self,numTab,var):
         tab = "    "
@@ -117,15 +127,18 @@ class node(object):
                 self.down[i].fillTerms(state)
             else:
                 if self.take[i]==1:
-                    t = random.choice(state.reducers+state.sTerms)
+                    temp = dict(state.reducers)
+                    temp.update(state.sTerms)
+                    tName = random.choice(state.reducers.keys()+state.sTerms.keys())
+                    t = temp[tName]
                     self.down[i] = t(self,self.settings)
                     self.down[i].setTake(1)
                     self.down[i].randomize(state)
-                    if t in state.reducers:
-                        self.down[i].down[0] = random.choice(state.terms)(self.down[i],self.settings)
+                    if tName in state.reducers:
+                        self.down[i].down[0] = state.terms[random.choice(state.terms.keys())](self.down[i],self.settings)
                         self.down[i].down[0].randomize(state)
                 else:
-                    self.down[i] = random.choice(state.terms)(self,self.settings)
+                    self.down[i] = state.terms[random.choice(state.terms.keys())](self,self.settings)
                     self.down[i].setTake(2)
                     self.down[i].randomize(state)
 
