@@ -63,51 +63,6 @@ def popNodes(node,a):
 
 
 class bbsa:
-    def vectorize(self):
-        d = {}
-        v = []
-        for node in multi[self.settings.bbsaSettings['probType']]:
-            name = node(None,self.settings).name
-            d[name] = 0
-        for key in single[self.settings.bbsaSettings['probType']]:
-            name = node(None,self.settings).name
-            d[name] = 0
-
-        for node in termNodes.multi:
-            name = node(None,self.settings).name
-            d[name] = 0
-        for key in termNodes.single:
-            name = node(None,self.settings).name
-            d[name] = 0
-        a = []
-        popNodes(self.root,a)
-        for node in a:
-            if node.name in d:
-                d[node.name]+=1
-            
-        keys = d.keys()
-        keys.sort()
-        for k in keys:
-            v.append(d[k]) 
-
-        return v
-
-
-    def check(self):
-        A = []
-        popNodes(self.root,A)
-
-        for parent in A:
-            if not parent.down:
-                continue
-            for child in parent.down:
-                if child.parent != parent:
-                    print self.toDict()
-                    print parent
-                    print child
-                    raw_input("this is where I broke")
-                    return False
-        return True
     
     def __init__(self,settings):
         self.time = 0
@@ -170,8 +125,6 @@ class bbsa:
             n = random.randrange(0,len(cur.down))
             while cur.down[n]!=nex:
                 n = random.randrange(0,len(cur.down))
-            if n <0 or n>1:
-                raw_input("fail")
             if cur.take[n]==2:
                 node = multi[self.settings.bbsaSettings['probType']][random.choice(self.useMulti)]
                 cur.down[n] = node(cur,self.settings)
@@ -190,6 +143,49 @@ class bbsa:
         self.update()
         self.count()
         return
+
+
+    def load(self,b,parent=None,child= 0):
+        if b is str:
+            b = eval(b)
+        [key] = b.keys() 
+        parts = key.split("(")
+        name = parts[0]
+        if len(parts)>1:
+            params = parts[1][:-1]
+            params = params.split(",")
+        else:
+            params = []
+        node = None
+        if name in multi[self.settings.bbsaSettings['probType']]:
+            node = multi[self.settings.bbsaSettings['probType']][name](parent,self.settings)
+        elif name in single[self.settings.bbsaSettings['probType']]:
+            node = single[self.settings.bbsaSettings['probType']][name](parent,self.settings)
+        elif name in terms:
+            node = terms[name](parent,self.settings)
+        else:
+            if len(key) ==1:
+                node = terms['termNode'](parent,self.settings)
+                node.name = key
+            else:
+                print key
+                raise "Cannot load program"
+        #load parameters
+        for p in params:
+            x = p.split("=")
+
+            try:
+                node.params[x[0]]['value'] = eval(x[1])
+            except(NameError):
+                node.params[x[0]]['value'] = str(x[1])
+
+        if not parent:
+            self.root = node    
+        else:
+            parent.down[child] = node
+        for i in xrange(len(b[key])):
+            self.load(b[key][i],node,i)
+
 
     def count(self):
         self.size = self.root.count()

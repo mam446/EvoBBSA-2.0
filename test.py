@@ -14,3 +14,7 @@ s = settings.runSettings()
 x = bbsa.bbsa(s)
 x.makeGraph()
 print x.toDict()
+
+y = bbsa.bbsa(s)
+y.load(x.toDict())
+print y.toDict()

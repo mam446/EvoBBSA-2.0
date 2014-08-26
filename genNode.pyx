@@ -86,9 +86,10 @@ class node(object):
 
     def toDict(self):
         s = ""
+        
         s+=self.name+"("
         for p in self.params:
-            if p!='weight':
+            if p!='weight' and p!='state':
                 s+=p+"="+str(self.params[p]['value'])+","
         s=s[:-1]
         if '(' in s:
