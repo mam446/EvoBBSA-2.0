@@ -464,11 +464,11 @@ class bbsa:
 
 
     def plot(self):
-        labels = []
-        for l in self.settings.probConf:
+        #labels = []
+        #for l in self.settings.probConf:
             
-            labels.append(str(l['settings']['length'])+","+str(l['settings']['k']))
-        self.logger.plot(labels)
+        #    labels.append(str(l['settings']['length'])+","+str(l['settings']['k']))
+        self.logger.plot()
 
     def makeGraph(self):
         val = 'x'
