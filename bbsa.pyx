@@ -185,6 +185,9 @@ class bbsa:
             parent.down[child] = node
         for i in xrange(len(b[key])):
             self.load(b[key][i],node,i)
+        if not parent:
+            self.update()
+            self.count()
 
 
     def count(self):
