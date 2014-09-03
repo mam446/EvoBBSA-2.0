@@ -170,6 +170,12 @@ class bbsa:
             else:
                 print key
                 raise "Cannot load program"
+        if not parent:
+            node.setTake(max(node.canTake))
+        elif parent.take[child]==2:
+            node.setTake(max(node.canTake))
+        else:
+            node.setTake(1)
         #load parameters
         for p in params:
             x = p.split("=")
