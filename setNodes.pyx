@@ -40,9 +40,9 @@ class makeSet(genNode.node):
         d = self.down[0].update(depth+1,state)
         self.depth = depth
         self.height = d+1
+        self.state = state
         if self.params['name']['value'] not in self.state.pers:
             self.state.pers[self.params['name']['value']] = []
-        self.state = state
         return self.height
 
     def randomize(self,state):
