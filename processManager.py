@@ -80,7 +80,7 @@ class processManager:
             self.logLock.release()
             print "start send",i
             time.sleep(.1)
-            self.comm.send(obj = cur,dest = i+1,tag = i+1)
+            self.comm.isend(obj = cur,dest = i+1,tag = i+1)
             self.sendLock.release()
             time.sleep(.1)
             print "stop send",i

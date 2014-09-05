@@ -7,7 +7,7 @@ import bbsa
 import copy
 import pareto
 from mpi4py import MPI
-import process manager
+import processManager
 
 def ktourn(pop,k):
 

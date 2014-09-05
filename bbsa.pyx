@@ -225,7 +225,7 @@ class bbsa:
         self.aveBest = self.logger.getAveBest()
         self.aveEval = self.logger.getAveEvals()
         self.aveOps = self.logger.getAveOps()
-        self.fitness = self.aveBest
+        self.fitness = self.logger.getFitness()
         end = time.time()
         st = ""
         self.time = end-start

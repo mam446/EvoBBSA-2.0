@@ -19,7 +19,8 @@ class logger:
         self.ops = []
         self.name = name
         
-
+        self.curMax = 0
+        self.aveMax = 0
 
         self.converge = converge
         self.allMax = None        
@@ -44,6 +45,9 @@ class logger:
         self.curCon = 0
         self.conVal = 0.0
         self.allMax = None
+        self.aveMax +=self.curMax
+        self.curMax = 0
+
 
     def nextProbConf(self):
         self.probConf.append(self.runs)
@@ -53,6 +57,8 @@ class logger:
         self.curCon = 0
         self.conVal = 0.0
         self.allMax = None
+        self.aveMax +=self.curMax
+        self.curMax = 0
 
     def nextIter(self,state):
         gMax = None
@@ -86,16 +92,19 @@ class logger:
             self.curRun.append({'evals':state.curEval,'max':gMax.fitness,'ave':ave,'popSize':popSize})
         else:
             self.curRun.append({'evals':state.curEval,'max':0,'ave':ave,'popSize':popSize})
-
-       
-       
-       
+        if gMax and gMax.fitness>self.curMax:
+            self.curMax = gMax.fitness
         
         self.ops.append(state.curOp)
 
     def hasConverged(self):
+        if self.curMax==1.0:
+            return True
         return self.curCon>=self.converge
 
+    def getFitness(self):
+        self.aveMax/=len(self.probConf)*len(self.probConf[0])
+        return self.aveMax
 
     def getAveOps(self):
         Sum = 0.0
