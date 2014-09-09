@@ -70,7 +70,13 @@ class bbsa:
 
         self.depth = 0
         self.size = 0
+       
+        self.curObjectives = ['fitness','evals','time']
         
+        self.objectives = {}
+        self.objectives['fitness'] = {'value':0,'op':'max'}
+        self.objectives['evals'] = {'value':0,'op':'min'}
+        self.objectives['time'] = {'value':0,'op':'min'}
 
         global id
         self.name="bbsa-"+str(id)
@@ -90,9 +96,11 @@ class bbsa:
         self.initPop = random.randint(1,settings.bbsaSettings['initPopMax'])
         
         self.logger = logger.logger(self.name,settings.bbsaSettings['converge'])
-        
+         
         self.useMulti = multi[self.settings.bbsaSettings['probType']].keys()
         self.useSingle = single[self.settings.bbsaSettings['probType']].keys()
+
+        self.curObjectives = self.settings.hyperSettings['objectives']
 
         self.createRandom()
 
@@ -212,7 +220,7 @@ class bbsa:
                 self.run()
                 check = time.time()
                 if check-start>self.settings.bbsaSettings['time'] or self.grow:
-                    self.fitness = 0
+                    self.fitness = -1 
                     return
                 self.logger.nextRun()
                 s = len(self.state.last)
@@ -258,15 +266,9 @@ class bbsa:
                 break
             if prev>=0:
                 if size>prev:
-                    if self.name[0]!='g':
-                        self.name = "grow/"+self.name    
-                        self.logger.name = self.name
-                        self.grow = True
+                    self.grow = True
                 else:
-                    if self.name[0]=='g':
-                        self.name = self.name[5:]
-                        self.logger.name = self.name
-                        self.grow = False
+                    self.grow = False
             prev = size
         self.state.lastEval()
         self.logger.nextIter(self.state)
@@ -283,6 +285,7 @@ class bbsa:
         self.size = self.root.count()
 
     def update(self):
+        self.state.logger = self.logger
         self.depth = self.root.update(0,self.state)
 
 
@@ -383,7 +386,7 @@ class bbsa:
         x.aveOps = 0.0
         x.aveBest = 0.0
         x.aveEval = 0.0
-
+        x.fitness = 0.0
         global id
         x.name="bbsa-"+str(id)
         id+=1
@@ -449,6 +452,8 @@ class bbsa:
         return x,y        
 
     def __gt__(self,other):
+        if self.fitness==1 and other.fitness==1:
+            return self.aveEvals<other.aveEvals
         s = self.fitness - self.settings.bbsaSettings['penalty']*(self.time)
         o = other.fitness - self.settings.bbsaSettings['penalty']*(other.time)
 
@@ -473,11 +478,14 @@ class bbsa:
 
 
     def plot(self):
-        #labels = []
-        #for l in self.settings.probConf:
-            
-        #    labels.append(str(l['settings']['length'])+","+str(l['settings']['k']))
-        self.logger.plot()
+        labels = []
+        for l in self.settings.probConf:
+            s = ""
+            for key in l['settings']: 
+                s+=key+"="+str(l['settings'][key])+", "
+
+            labels.append(s)
+        self.logger.plot(labels)
 
     def makeGraph(self):
         val = 'x'

@@ -24,6 +24,6 @@ setup(
                    Extension("bitStringVariation",["bitStringVariation.pyx"],extra_compile_args=["-O3","-g0"]),
                    Extension("realValuedVariation",["realValuedVariation.pyx"],extra_compile_args=["-O3","-g0"]),
                    Extension("funcs", ["funcs.pyx"],extra_compile_args=["-O3","-g0"]),
-                   Extension("representations", ["representations.pyx"],extra_compile_args=["-O3","-g0"]),
-                   Extension("state",["state.pyx"],extra_compile_args=["-O3","-g0"])]
+                   Extension("representations", ["representations.pyx"],extra_compile_args=["-O3","-g0"])
+                   ]
 )

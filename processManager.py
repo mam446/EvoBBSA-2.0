@@ -9,19 +9,19 @@ def childProc():
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     while True:
-        print "wait receive", rank
+        #print "wait receive", rank
         try:
             cur = comm.recv(source = 0,tag = rank)
         except cPickle.UnpicklingError as e:
-            print "\t\t",e,ord(str(e)[-3])
-            print "\t\tI think it messed up",rank
+            #print "\t\t",e,ord(str(e)[-3])
+            #print "\t\tI think it messed up",rank
             comm.send(rank,dest=0)
             continue 
         except:
-            print "\t\t\t I messed up again I think",rank
+            #print "\t\t\t I messed up again I think",rank
             comm.send(rank,dest=0)
             continue 
-        print "received", rank
+        #print "received", rank
         time.sleep(.1)
         if cur =="-1":
             if rank ==1:
@@ -78,12 +78,12 @@ class processManager:
             self.logLock.acquire()
             self.log[i] = cur
             self.logLock.release()
-            print "start send",i
+            #print "start send",i
             time.sleep(.1)
             self.comm.isend(obj = cur,dest = i+1,tag = i+1)
             self.sendLock.release()
             time.sleep(.1)
-            print "stop send",i
+            #print "stop send",i
 
     def kill(self):
         for i in xrange(self.numNodes):
@@ -96,24 +96,24 @@ class processManager:
             resp = self.comm.recv(source = MPI.ANY_SOURCE,status=stat)
             time.sleep(.1)
             if type(resp) is int:
-                print "fixing it"
+                #print "fixing it"
                 self.logLock.acquire()
                 ret = self.log[resp-1]
-                print ret, "from", stat.Get_source()
-                print self.log
+                #print ret, "from", stat.Get_source()
+                #print self.log
                 self.logLock.release()
 
                 self.sendLock.acquire()
                 self.comm.send(ret,dest=resp,tag=resp)
                 self.sendLock.release()
                 continue
-            else:
-                print self.log[stat.Get_source()-1]
+            #else:
+                #print self.log[stat.Get_source()-1]
             if resp=="End":
                 return
             
             self.outChildren.put(resp)
-            print self.outChildren.qsize(),stat.Get_source()
+            #print self.outChildren.qsize(),stat.Get_source()
             if not self.inChildren.empty():
                 self.sendLock.acquire()
                 ret = self.inChildren.get()

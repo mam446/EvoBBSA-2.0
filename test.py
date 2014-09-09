@@ -12,7 +12,9 @@ import fitness
 s = settings.runSettings()
 
 x = bbsa.bbsa(s)
+x.evaluate()
 x.makeGraph()
+x.plot()
 print x.toDict()
 
 y = bbsa.bbsa(s)

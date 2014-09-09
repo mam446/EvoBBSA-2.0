@@ -18,6 +18,23 @@ class runSettings:
         
         self.probConf = []
 
+        self.hyperSettings = {}
+
+
+        #hyper Settings
+        self.hyperSettings['mu'] = 100
+        self.hyperSettings['lambda'] = 40
+        self.hyperSettings['type'] = 'SGA' 
+        self.hyperSettings['mpi'] = False
+        self.hyperSettings['procs'] = 5
+        self.hyperSettings['mateRate'] = .3
+        self.hyperSettings['mutateRate'] = .3
+        self.hyperSettings['evaluations'] = 5000
+        self.hyperSettings['objectives'] = ['evals','fitness','time']
+        self.hyperSettings['childK'] = 8
+        self.hyperSettings['seed'] = None
+
+        #bbsaSettings
         self.bbsaSettings['time'] = 20
         self.bbsaSettings['maxStartNodes'] = 15            
         self.bbsaSettings['maxEvals'] = 50000
@@ -64,6 +81,9 @@ class runSettings:
         #aux Nodes
         self.nodeSettings['forLoop'] = {'count':{'value':1,'range':(1,25),'type':'int'}}
         self.nodeSettings['forLoop']['weight'] = 2
+        
+        self.nodeSettings['ifConverge'] = {'conv':{'value':5,'range':(5,25),'type':'int'}}
+        self.nodeSettings['ifConverge']['weight'] = 2
 
         #termNodes
         self.nodeSettings['randInd'] = {'count':{'value': 1,'range':(1,25),'type':'int'}}
@@ -76,6 +96,8 @@ class runSettings:
                 self.nodeSettings[key] = d['nodeSettings'][key]
             for key in d['bbsaSettings']:            
                 self.bbsaSettings[key] = d['bbsaSettings'][key]
+            for key in d['hyperSettings']:            
+                self.hyperSettings[key] = d['hyperSettings'][key]
 
             self.probConf = d['problems']
         else:

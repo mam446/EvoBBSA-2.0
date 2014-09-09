@@ -32,7 +32,8 @@
         'runs':5,
         'converge':30,
         'initPopMax':50,
-        'probType':'bitString'
+        'probType':'bitString',
+        'time':20
     },
     
     'problems':

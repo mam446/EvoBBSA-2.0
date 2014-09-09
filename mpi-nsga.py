@@ -18,95 +18,124 @@ def ktourn(pop,k):
         if not best or obj>best:
             best = obj
     return best
-comm = MPI.COMM_WORLD
-rank = comm.Get_rank()
 
 
-if rank!=0:
-    processManager.childProc()
+def runMpiSGA(settingsFIle = None):
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
 
-else:
-    proc = processManager.processManager()
-    s = None
-    if len(sys.argv)>1:
-        s = settings.runSettings(sys.argv[1])
+
+    if rank!=0:
+        processManager.childProc()
+
     else:
-        s = settings.runSettings()
-    s.seed =time.time()
-    random.seed(s.seed)
-    mu = 100 
-    k = 8
-
-    pop = []
-    i = 0
-    while i<mu:
-        x = bbsa.bbsa(copy.deepcopy(s))
-        if not x.evalExist() or not x.lastExist():
-            continue
-        proc.add(x)
-        i+=1
-    proc.start()
-    proc.wait(mu)
-    pop = proc.getPop()
-    pop.sort()
-    for p in pop:
-        print p.aveBest
-
-    maxEvals = 5000
-    cur = mu
-    children = 40
-
-    fronts = pareto.pareto(pop)
-
-
-    while cur<maxEvals:
+        proc = processManager.processManager()
+        s = None
+        if not settingsFile:
+            if len(sys.argv)<2:
+                raise "Must suply settings file"
+            settingsFile = sys.argv[1]
+        s = settings.runSettings(settingsFile) 
         
-        c = 0
-        childs = []
-        while c<children:    
-            choice = random.choice([0,1,2])
-            rate = random.random()
-            
-            if c+1!=children and rate<.3:
-                mom = fronts.tournSelect(k)
-                dad = fronts.tournSelect(k)
-                x,y = mom.mate(dad)
-                if x.evalExist() and x.lastExist():
-                    proc.add(x)
-                    c+=1
-                if y.evalExist() and y.lastExist():
-                    proc.add(y)
-                    c+=1
-            elif rate<.6:
-                x=fronts.tournSelect(k).mutate()
-                if x.evalExist() and x.lastExist():
-                    proc.add(x)
-                    c+=1
-            else:
-                x = fronts.tournSelect(k).altMutate()
-                if x.evalExist():
-                    proc.add(x)
-                    c+=1
-        proc.start()
-        proc.wait(children)
-        childs = proc.getPop()
-        
-        pop = fronts.getPop()
-        pop.extend(childs)
-        fronts = pareto.pareto(pop)
-        fronts.keepMu(mu)
-        cur+=children
-        su = 0.0
-        ave = 0.0
-        for i in xrange(mu):
-            su+=fronts.pop[i].aveBest
-        ave = su/mu
+        if s.hyperSettings['seed']:
+            s.seed = s.hyperSEttings['seed']
+        else:
+            s.seed =time.time()
+        random.seed(s.seed)
+       
+       
+       
+        mu = s.hyperSettings['mu'
+        childK = s.hyperSettings['childK']
+        lamb = s.hyperSettings['lambda']
+        maxEvals = s.hyperSettings['evaluations']
+        mutateRate = s.hyperSettings['mutateRate'] 
+        mateRate = s.hyperSettings['mateRate']
+    
+        cur = mu
+
+        pop = []
         i = 0
-        print cur, ave, len(fronts.fronts.keys())
+        while i<mu:
+            x = bbsa.bbsa(copy.deepcopy(s))
+            if not x.evalExist() or not x.lastExist():
+                continue
+            proc.add(x)
+            i+=1
+        proc.start()
+        proc.wait(mu)
+        pop = proc.getPop()
+        pop.sort()
+        for p in pop:
+            print p.fitness
+
+
+        fronts = pareto.pareto(pop)
+
+
+        while cur<maxEvals:
+            
+            c = 0
+            childs = []
+            while c<lamb:    
+                choice = random.choice([0,1,2])
+                rate = random.random()
+                
+                if c+1!=lamb and rate<mateRate:
+                    mom = fronts.tournSelect(k)
+                    dad = fronts.tournSelect(k)
+                    x,y = mom.mate(dad)
+                    if x.evalExist() and x.lastExist():
+                        proc.add(x)
+                        c+=1
+                    if y.evalExist() and y.lastExist():
+                        proc.add(y)
+                        c+=1
+                elif rate<mateRate+mutateRate:
+                    x=fronts.tournSelect(k).mutate()
+                    if x.evalExist() and x.lastExist():
+                        proc.add(x)
+                        c+=1
+                else:
+                    x = fronts.tournSelect(k).altMutate()
+                    if x.evalExist():
+                        proc.add(x)
+                        c+=1
+            proc.start()
+            proc.wait(lamb)
+            childs = proc.getPop()
+            
+            pop = fronts.getPop()
+            pop.extend(childs)
+            fronts = pareto.pareto(pop)
+            fronts.keepMu(mu)
+            cur+=lamb
+            su = 0.0
+            ave = 0.0
+            for i in xrange(mu):
+                su+=fronts.pop[i].fitness
+            ave = su/mu
+            i = 0
+            print cur, ave, len(fronts.fronts.keys())
+            fronts.fronts[0].sort()
+            for ind in fronts.fronts[0]: 
+                print"\t",i,ind.fitness,",",ind.aveEval,",",ind.time,",",ind.distance,"\t",ind.name
+                i+=1
+                ind.makeGraph()
+                ind.plot()
+                ind.logger.log()
+                f = open(str(ind.name)+"allones.py","w")
+                f.write(ind.makeProg())
+                f.close()
+
+
+        i = 0
         fronts.fronts[0].sort()
         for ind in fronts.fronts[0]: 
-            print"\t",i,ind.aveBest,",",ind.aveEval,",",ind.time,",",ind.distance,"\t",ind.name
+            print"\t",i,ind.fitness,",",ind.aveEval,",",ind.time,",",ind.distance,"\t",ind.name
             i+=1
+            ind.name = "finalFront/"+ind.name
+            ind.logger.name = ind.name
             ind.makeGraph()
             ind.plot()
             ind.logger.log()
@@ -114,29 +143,15 @@ else:
             f.write(ind.makeProg())
             f.close()
 
-
-    i = 0
-    fronts.fronts[0].sort()
-    for ind in fronts.fronts[0]: 
-        print"\t",i,ind.aveBest,",",ind.aveEval,",",ind.time,",",ind.distance,"\t",ind.name
-        i+=1
-        ind.name = "finalFront/"+ind.name
-        ind.logger.name = ind.name
-        ind.makeGraph()
-        ind.plot()
-        ind.logger.log()
-        f = open(str(ind.name)+"allones.py","w")
-        f.write(ind.makeProg())
-        f.close()
-
-    proc.kill()
+        proc.kill()
 
 
 
 
 
 
-
+if __name__ =="__main__":
+    runMpiSGA()
 
 
 

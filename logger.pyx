@@ -26,6 +26,7 @@ class logger:
         self.allMax = None        
         self.curCon = 0
         self.conVal = 0.0
+        self.count = 0
 
     def reset(self):
         self.probConf = []
@@ -33,11 +34,12 @@ class logger:
         self.curRun = []
         self.probOps = [] 
         self.ops = []
-        
+        self.aveMax = 0    
         self.allMax = None
 
         self.curCon = 0
         self.conVal = 0.0
+        self.count = 0
 
     def nextRun(self):
         self.runs.append(self.curRun)
@@ -46,6 +48,7 @@ class logger:
         self.conVal = 0.0
         self.allMax = None
         self.aveMax +=self.curMax
+        self.count+=1
         self.curMax = 0
 
 
@@ -57,7 +60,6 @@ class logger:
         self.curCon = 0
         self.conVal = 0.0
         self.allMax = None
-        self.aveMax +=self.curMax
         self.curMax = 0
 
     def nextIter(self,state):
@@ -82,7 +84,7 @@ class logger:
             ave = Sum/num
         else:
             ave = 0
-        if gMax and self.allMax!=None and gMax<=self.allMax:
+        if gMax and self.allMax!=None and gMax.fitness<=self.allMax.fitness:
             self.curCon+=1
         else:
             self.curCon = 0
@@ -94,8 +96,12 @@ class logger:
             self.curRun.append({'evals':state.curEval,'max':0,'ave':ave,'popSize':popSize})
         if gMax and gMax.fitness>self.curMax:
             self.curMax = gMax.fitness
-        
+            self.curCon = 0 
         self.ops.append(state.curOp)
+
+    def countConverged(self):
+        return self.curCon
+
 
     def hasConverged(self):
         if self.curMax==1.0:
@@ -103,7 +109,8 @@ class logger:
         return self.curCon>=self.converge
 
     def getFitness(self):
-        self.aveMax/=len(self.probConf)*len(self.probConf[0])
+        if self.aveMax>1:
+            self.aveMax/=float(self.count)
         return self.aveMax
 
     def getAveOps(self):
@@ -236,16 +243,37 @@ class logger:
                         yi.append(run[it]['max'])
                         ci.append(1)
                     else:
-                        try:
+                        """if len(yi)>it:
+                            if len(run)>it:
+                                yi[it]+=run[it]['max']
+                                psyi[it]+=run[it]['popSize']
+                                ci[it]+=1
+                            else:
+                                yi[it]+=run[-1]['max']
+                                psyi[it]+=run[-1]['popSize']
+                                ci[it]+=1
+                        else:
+                            if len(run)>it:
+                                psyi.append(run[it]['popSize'])
+                                xi.append(run[it]['evals'])
+                                yi.append(run[it]['max'])
+                                ci.append(1)
+                            else:
+                                psyi.append(run[-1]['popSize'])
+                                xi.append(run[-1]['evals'])
+                                yi.append(run[-1]['max'])
+                                ci.append(1)
+                        """
+                        try: 
                             yi[it]+=run[it]['max']
                             psyi[it]+=run[it]['popSize']
                             ci[it]+=1
-                        except:
+                        except IndexError:
                             psyi.append(run[it]['popSize'])
                             xi.append(run[it]['evals'])
                             yi.append(run[it]['max'])
                             ci.append(1)
-                            #print it,len(yi),len(run)
+                            #print it,len(yi),len(run)"""
                 first = False
             for d in xrange(len(yi)):
                 yi[d]/=ci[d]
@@ -255,8 +283,8 @@ class logger:
             x.append(xi)
             y.append(yi)
         cm = plt.get_cmap('gist_rainbow')
-        ax =  plt.subplot(1,2,1)
-        #ax.set_position([.1,.1,.7,.8])
+        ax =  plt.subplot(1,1,1)
+        ax.set_position([.1,.1,.7,.8])
         color = [cm(1.*i/len(y)) for i in xrange(len(y))]
         ax.set_color_cycle(color)
         ax.set_ylim([.2,1.0])
@@ -269,10 +297,10 @@ class logger:
             else:
                 ax.plot(x[d],y[d],label = str(d))
         
-        ax.legend(bbox_to_anchor=(-0.5,1.05), loc='center left',borderaxespad=200)
-        ax2 = plt.subplot(1,2,2)
+        lgd = ax.legend(bbox_to_anchor=(.5,-0.1), loc='upper center',borderaxespad=0)
+        """ax2 = plt.subplot(1,2,2)
         color = [cm(1.*i/len(y)) for i in xrange(len(y))]
-        ax2.set_color_cycle(color)
+        #ax2.set_color_cycle(color)
         if x:
             ax2.set_xlim([0,x[0][-1]])
         for d in xrange(len(x)):
@@ -281,9 +309,12 @@ class logger:
                 ax2.plot(x[d],psy[d],label = labels[d])
             else:
                 ax2.plot(x[d],psy[d],label = str(d))
-        
+        """
 
-
+        try:
+            plt.savefig(self.name+'-plot-l.png',bbox_extra_artists=(lgd,),bbox_inches='tight')
+        except:
+            print "That didn't work"
         plt.savefig(self.name+'-plot.png')
         plt.clf()
         return

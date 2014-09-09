@@ -17,7 +17,7 @@ class state:
         self.reducers = selectNodes.multi[self.settings.bbsaSettings['probType']]
         self.bestInd = None
         self.log = {}
-
+        self.logger = None
 
     def reset(self):
         self.curOp = 0
@@ -30,7 +30,7 @@ class state:
         self.log = {}
 
     def done(self):
-        if self.curOp>=self.maxOp or self.curEval>=self.maxEval:
+        if  self.curEval>=self.maxEval:
             return True
         return False
 
