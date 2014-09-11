@@ -9,7 +9,7 @@
         'runNumber':0,
         'mu':100,
         'lambda':40,
-        'type':'SGA',#this can be SGA or NSGA
+        'type':'nsga',#this can be SGA or NSGA
         'mpi':True,
         'procs':5,
         'mateRate':.3,
@@ -17,7 +17,8 @@
         'evaluations':5000,
         'objectives':['evals','fitness','time'],
         'childK':8,
-        'seed':None
+        'seed':None,
+        'hosts':[]
     },
 
 
@@ -32,7 +33,8 @@
         'runs':5,
         'converge':30,
         'initPopMax':50,
-        'probType':'bitString',
+        'representation':'bitString',
+        'problem':'dTrap',
         'time':20
     },
     

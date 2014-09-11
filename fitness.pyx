@@ -83,7 +83,45 @@ class lsat:
                 num+=1
         return num
         
+    def SAWStats(self,bits,sawHistory = None):
+        eq = data[self.settings['name']]
+        cdef int i,y
+        if sawHistory==None:
+            sawHistory = [0]*len(eq)
+        for i in xrange(len(eq)):
+            check = False
+            for y in eq[i]:
+                if y>0:
+     
+                    if bits[y-1]==1:
+                        check = True
+                        break
+                else:
+                    if bits[-y-1]==0:
+                        check = True
+                        break
+            if check:
+                sawHistory[i] = 0
+            else:
+                sawHistory[i] += 1
+        return sawHistory
 
+    def SAWMutate(self,bits,sawHistory):
+        eq = data[self.settings['name']]
+        cdef int i,mx
+        mx = 0
+        oldest = 0
+        for i in xrange(len(eq)):
+            if sawHistory[i] > mx:
+                mx = sawHistory[i]
+                oldest = i
+
+        a = random.choice(eq[oldest])
+        if a>0:
+            bits[a-1] = 1
+        else:
+            bits[-a-1] = 0
+        return bits
 
 
 

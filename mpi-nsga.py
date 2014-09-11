@@ -20,7 +20,7 @@ def ktourn(pop,k):
     return best
 
 
-def runMpiSGA(settingsFIle = None):
+def runMpiSGA(settingsFile = None):
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
 
@@ -45,7 +45,7 @@ def runMpiSGA(settingsFIle = None):
        
        
        
-        mu = s.hyperSettings['mu'
+        mu = s.hyperSettings['mu']
         childK = s.hyperSettings['childK']
         lamb = s.hyperSettings['lambda']
         maxEvals = s.hyperSettings['evaluations']
@@ -82,8 +82,8 @@ def runMpiSGA(settingsFIle = None):
                 rate = random.random()
                 
                 if c+1!=lamb and rate<mateRate:
-                    mom = fronts.tournSelect(k)
-                    dad = fronts.tournSelect(k)
+                    mom = fronts.tournSelect(childK)
+                    dad = fronts.tournSelect(childK)
                     x,y = mom.mate(dad)
                     if x.evalExist() and x.lastExist():
                         proc.add(x)
@@ -92,12 +92,12 @@ def runMpiSGA(settingsFIle = None):
                         proc.add(y)
                         c+=1
                 elif rate<mateRate+mutateRate:
-                    x=fronts.tournSelect(k).mutate()
+                    x=fronts.tournSelect(childK).mutate()
                     if x.evalExist() and x.lastExist():
                         proc.add(x)
                         c+=1
                 else:
-                    x = fronts.tournSelect(k).altMutate()
+                    x = fronts.tournSelect(childK).altMutate()
                     if x.evalExist():
                         proc.add(x)
                         c+=1

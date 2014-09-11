@@ -5,10 +5,12 @@ import funcs
 import copy
 import bitStringVariation
 import realValuedVariation
+import lSatVariation
 
-single = {'bitString':bitStringVariation.single,'realValued':realValuedVariation.single}
-multi = {'bitString':bitStringVariation.multi,'realValued':realValuedVariation.multi}
+single = {'bitString':{'generic':bitStringVariation.single},'realValued':{'generic':realValuedVariation.single}}
+multi = {'bitString':{'generic':bitStringVariation.multi},'realValued':{'generic':realValuedVariation.multi}}
 
-
+single['bitString']['lSat'] = lSatVariation.single
+multi['bitString']['lSat'] = lSatVariation.multi
 
 

@@ -45,7 +45,8 @@ class runSettings:
         self.bbsaSettings['runs'] = 5
         self.bbsaSettings['converge'] = 25
         self.bbsaSettings['initPopMax'] = 50
-        self.bbsaSettings['probType'] = 'bitString'
+        self.bbsaSettings['representation'] = 'bitString'
+        self.bbsaSettings['problem'] = 'dTrap'
         self.bbsaSettings['penalty'] = .001
         #variation node
         self.nodeSettings['mutate'] = {'rate':{'value': 0.0,'range':(0.0,1.0),'type':'float'}}
@@ -102,10 +103,10 @@ class runSettings:
             self.probConf = d['problems']
         else:
 
-            self.probConf.append({'weight':1,'repr':'bitString','prob':'allOnes','settings':{'length':210,'name':'apple'}})
-            self.probConf.append({'weight':1,'repr':'bitString','prob':'allOnes','settings':{'length':100,'name':'grape'}})
-            #self.probConf.append({'weight':1,'repr':'bitString','prob':'dTrap','settings':{'length':100,'k':5}})
-            self.probConf.append({'weight':1,'repr':'bitString','prob':'nk','settings':{'length':100,'dimensions':30,'k':5,'problemSeed':0,'maximumFitness':1.0,'nkProblemFolder':'','run':0}})
+            #self.probConf.append({'weight':1,'repr':'bitString','prob':'allOnes','settings':{'length':210,'name':'apple'}})
+            #self.probConf.append({'weight':1,'repr':'bitString','prob':'allOnes','settings':{'length':100,'name':'grape'}})
+            self.probConf.append({'weight':1,'repr':'bitString','prob':'dTrap','settings':{'length':100,'k':5}})
+            #self.probConf.append({'weight':1,'repr':'bitString','prob':'nk','settings':{'length':100,'dimensions':30,'k':5,'problemSeed':0,'maximumFitness':1.0,'nkProblemFolder':'','run':0}})
 
         self.solSettings = self.probConf[0]
 
