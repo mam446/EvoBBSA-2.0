@@ -15,6 +15,8 @@ class ifConverge(genNode.node):
 
     def evaluate(self):
         if self.state.logger.countConverged()>=self.params['conv']['value']:
+            if self.params['reset']['value']:
+                self.state.logger.curCon = 0
             return self.down[1].evaluate()
         else:
             return self.down[0].evaluate()

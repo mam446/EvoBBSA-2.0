@@ -9,8 +9,8 @@
         'runNumber':0,
         'mu':100,
         'lambda':40,
-        'type':'nsga',#this can be SGA or NSGA
-        'mpi':True,
+        'type':'SGA',#this can be SGA or nsga
+        'mpi':False,
         'procs':5,
         'mateRate':.3,
         'mutateRate':.3,
@@ -31,10 +31,10 @@
         'maxDepth':5,
         'mutateMax':5,
         'runs':5,
-        'converge':30,
+        'converge':25,
         'initPopMax':50,
         'representation':'bitString',
-        'problem':'dTrap',
+        'problem':'dSTrap',
         'time':20
     },
     
@@ -172,6 +172,12 @@
                 'range':(5,25),
                 'type':'int'
             },
+            'reset':
+            {
+                'value':False,
+                'range':[True,False],
+                'type':'bool',
+            },
             'weight':2
         },
         'makeSet':
@@ -182,8 +188,18 @@
                 'type':'str'
             },
             'weight':2
-        }
-
+        },
+        'randInd':
+        {
+            'count':
+            {
+                'value':1,
+                'range':(1,25),
+                'type':'int',
+            },
+            'weight':2,
+        },
+        
     },
      
 

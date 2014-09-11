@@ -20,7 +20,7 @@ class runSettings:
 
         self.hyperSettings = {}
 
-
+        """
         #hyper Settings
         self.hyperSettings['mu'] = 100
         self.hyperSettings['lambda'] = 40
@@ -89,7 +89,7 @@ class runSettings:
         #termNodes
         self.nodeSettings['randInd'] = {'count':{'value': 1,'range':(1,25),'type':'int'}}
         self.nodeSettings['randInd']['weight'] = 2
-
+        """
         if filename:
             f = open(filename)
             d = eval(f.read())

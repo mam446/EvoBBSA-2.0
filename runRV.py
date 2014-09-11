@@ -3,6 +3,23 @@
 
 
 {
+    'hyperSettings':
+    {
+        'runName':"testRun",
+        'runNumber':0,
+        'mu':100,
+        'lambda':40,
+        'type':'SGA',#this can be SGA or nsga
+        'mpi':False,
+        'procs':5,
+        'mateRate':.3,
+        'mutateRate':.3,
+        'evaluations':5000,
+        'objectives':['evals','fitness','time'],
+        'childK':8,
+        'seed':None,
+        'hosts':[]
+    },
 
 
 
@@ -17,10 +34,36 @@
         'runs':5,
         'converge':25,
         'initPopMax':50,
-        'probType':'realValued'
+        'representation':'realValued',
+        'problem':'rosenbrock',
+        'time':20
     },
     
-    
+    'problems':
+    [
+        {
+            'weight':1,
+            'repr':'realValued',
+            'prob':'rosenbrock',
+            'settings':
+            {
+                'vars':5
+            }
+        },
+        {
+            'weight':1,
+            'repr':'realValued',
+            'prob':'rosenbrock',
+            'settings':
+            {
+                'vars':10
+            }
+        }
+        
+
+
+    ],
+     
     'nodeSettings':
     {
         'mutate':
@@ -131,30 +174,7 @@
 
     },
      
-    'problems':
-    [
-        {
-            'weight':1,
-            'repr':'realValued',
-            'prob':'rosenbrock',
-            'settings':
-            {
-                'vars':5
-            }
-        },
-        {
-            'weight':1,
-            'repr':'realValued',
-            'prob':'rosenbrock',
-            'settings':
-            {
-                'vars':10
-            }
-        }
-        
 
-
-    ]
 
 }
 

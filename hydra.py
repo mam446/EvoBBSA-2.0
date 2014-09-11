@@ -64,7 +64,14 @@ def runHydra(settingsFile = None):
     if lsProc.returncode!=0:
         cpProc = Popen(['cp',settingsFile,runDir],stdout=PIPE,stderr=PIPE)
         cpProc.communicate()
-
+    
+    for r in s.probConf:
+        if 'name' in r['settings']:
+            cpProc = Popen(['cp',r['settings']['name'],runDir],stdout=PIPE,stderr=PIPE)
+            cpProc.communicate()
+            if cpProc.returncode!=0:
+                print "Cannot find file",r['settings']['name']
+                return 
 
     settingsFile = settingsFile.split("/")[-1]
 

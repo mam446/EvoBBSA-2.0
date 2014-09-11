@@ -3,6 +3,23 @@
 
 
 {
+    'hyperSettings':
+    {
+        'runName':"testRun",
+        'runNumber':0,
+        'mu':100,
+        'lambda':40,
+        'type':'SGA',#this can be SGA or nsga
+        'mpi':False,
+        'procs':5,
+        'mateRate':.3,
+        'mutateRate':.3,
+        'evaluations':5000,
+        'objectives':['evals','fitness','time'],
+        'childK':8,
+        'seed':None,
+        'hosts':[]
+    },
 
 
 
@@ -17,13 +34,68 @@
         'runs':5,
         'converge':25,
         'initPopMax':100,
-        'probType':'bitString',
-        'penalty':.00001
+        'representation':'bitString',
+        'problem':'dTrap',
+        'penalty':.001,
+        'time':20
     },
     
     
+        'problems':
+    [
+        {
+            'weight':1,
+            'repr':'bitString',
+            'prob':'lSat',
+            'settings':
+            {
+                'name':'test4.cnf',
+                'length':216,
+            }
+        },
+        {
+            'weight':1,
+            'repr':'bitString',
+            'prob':'lSat',
+            'settings':
+            {
+                'name':'test5.cnf',
+                'length':343,
+            }
+        },
+
+
+
+    ],
+    
     'nodeSettings':
     {
+        'randInd':
+        {
+            'count':
+            {
+                'value':1,
+                'range':(1,25),
+                'type':'int',
+            },
+            'weight':2,
+        },
+        'ifConverge':
+        {
+            'conv':
+            {
+                'value':5,
+                'range':(5,25),
+                'type':'int'
+            },
+            'reset':
+            {
+                'value':False,
+                'range':[True,False],
+                'type':'bool',
+            },
+            'weight':2
+        },
         'mutate':
         {
             'rate':
@@ -132,32 +204,7 @@
 
     },
      
-    'problems':
-    [
-        {
-            'weight':1,
-            'repr':'bitString',
-            'prob':'lSat',
-            'settings':
-            {
-                'name':'test4.cnf',
-                'length':216,
-            }
-        },
-        {
-            'weight':1,
-            'repr':'bitString',
-            'prob':'lSat',
-            'settings':
-            {
-                'name':'test5.cnf',
-                'length':343,
-            }
-        },
 
-
-
-    ]
 
 }
 

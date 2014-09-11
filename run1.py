@@ -3,6 +3,23 @@
 
 
 {
+    'hyperSettings':
+    {
+        'runName':"testRun",
+        'runNumber':0,
+        'mu':100,
+        'lambda':40,
+        'type':'SGA',#this can be SGA or nsga
+        'mpi':False,
+        'procs':5,
+        'mateRate':.3,
+        'mutateRate':.3,
+        'evaluations':5000,
+        'objectives':['evals','fitness','time'],
+        'childK':8,
+        'seed':None,
+        'hosts':[]
+    },
 
 
 
@@ -15,11 +32,40 @@
         'maxDepth':5,
         'mutateMax':5,
         'runs':5,
-        'converge':50,
-        'initPopMax':50,
-        'probType':'bitString'
+        'converge':30,
+        'initPopMax':50,        
+        'time':20,
+        'penalty':.001,
+        'representation':'bitString',
+        'problem':'dTrap',
+
     },
-    
+    'problems':
+    [
+        {
+            'weight':1,
+            'repr':'bitString',
+            'prob':'dTrap',
+            'settings':
+            {
+                'length':100,
+                'k':5
+            }
+        },
+
+        {
+            'weight':1,
+            'repr':'bitString',
+            'prob':'dTrap',
+            'settings':
+            {
+                'length':210,
+                'k':7
+            }
+        },
+
+
+    ],
     
     'nodeSettings':
     {
@@ -131,32 +177,7 @@
 
     },
      
-    'problems':
-    [
-        {
-            'weight':1,
-            'repr':'bitString',
-            'prob':'dTrap',
-            'settings':
-            {
-                'length':100,
-                'k':5
-            }
-        },
-
-        {
-            'weight':1,
-            'repr':'bitString',
-            'prob':'dTrap',
-            'settings':
-            {
-                'length':210,
-                'k':7
-            }
-        },
-
-
-    ]
+    
 
 }
 

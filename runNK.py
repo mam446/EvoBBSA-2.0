@@ -3,6 +3,23 @@
 
 
 {
+    'hyperSettings':
+    {
+        'runName':"testRun",
+        'runNumber':0,
+        'mu':100,
+        'lambda':40,
+        'type':'SGA',#this can be SGA or nsga
+        'mpi':False,
+        'procs':5,
+        'mateRate':.3,
+        'mutateRate':.3,
+        'evaluations':5000,
+        'objectives':['evals','fitness','time'],
+        'childK':8,
+        'seed':None,
+        'hosts':[]
+    },
 
 
 
@@ -17,9 +34,59 @@
         'runs':5,
         'converge':25,
         'initPopMax':50,
-        'probType':'bitString'
+        'representation':'bitString',
+        'problem':'nk',
+        'time':20
     },
-    
+    'problems':
+    [
+        {
+            'weight':1,
+            'repr':'bitString',
+            'prob':'nk',
+            'settings':
+            {
+                'length':100,
+                'k':5,
+                'dimensions':30,
+                'problemSeed':0,
+                'nkProblemFolder':'./',
+                'run':0
+            }
+        },
+
+        {
+            'weight':1,
+            'repr':'bitString',
+            'prob':'nk',
+            'settings':
+            {
+                'length':100,
+                'k':7,
+                'dimensions':30,
+                'problemSeed':1,
+                'nkProblemFolder':'./',
+                'run':1
+            }
+        },
+        {
+            'weight':1,
+            'repr':'bitString',
+            'prob':'nk',
+            'settings':
+            {
+                'length':100,
+                'k':5,
+                'dimensions':30,
+                'problemSeed':1,
+                'nkProblemFolder':'./',
+                'run':1
+            }
+        },
+
+
+    ],
+
     
     'nodeSettings':
     {
@@ -131,55 +198,7 @@
 
     },
      
-    'problems':
-    [
-        {
-            'weight':1,
-            'repr':'bitString',
-            'prob':'nk',
-            'settings':
-            {
-                'length':100,
-                'k':5,
-                'dimensions':30,
-                'problemSeed':0,
-                'nkProblemFolder':'./',
-                'run':0
-            }
-        },
-
-        {
-            'weight':1,
-            'repr':'bitString',
-            'prob':'nk',
-            'settings':
-            {
-                'length':100,
-                'k':7,
-                'dimensions':30,
-                'problemSeed':1,
-                'nkProblemFolder':'./',
-                'run':1
-            }
-        },
-        {
-            'weight':1,
-            'repr':'bitString',
-            'prob':'nk',
-            'settings':
-            {
-                'length':100,
-                'k':5,
-                'dimensions':30,
-                'problemSeed':1,
-                'nkProblemFolder':'./',
-                'run':1
-            }
-        },
-
-
-    ]
-
+    
 }
 
 

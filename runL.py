@@ -3,23 +3,88 @@
 
 
 {
+    'hyperSettings':
+    {
+        'runName':"testRun",
+        'runNumber':0,
+        'mu':100,
+        'lambda':40,
+        'type':'SGA',#this can be SGA or nsga
+        'mpi':False,
+        'procs':5,
+        'mateRate':.3,
+        'mutateRate':.3,
+        'evaluations':5000,
+        'objectives':['evals','fitness','time'],
+        'childK':8,
+        'seed':None,
+        'hosts':[]
+    },
 
 
 
     'bbsaSettings':
     {
         'maxStartNodes':15,
-        'maxEvals':50000,
+        'maxEvals':100000,
         'maxOps':5000000,
         'maxIterations':10000,
         'maxDepth':5,
         'mutateMax':5,
         'runs':5,
-        'converge':25,
-        'initPopMax':50,
-        'probType':'bitString'
+        'converge':30,
+        'initPopMax':50,        
+        'time':20,
+        'penalty':.001,
+        'representation':'bitString',
+        'problem':'lSat'
     },
     
+    'problems':
+    [
+        {
+            'weight':1,
+            'repr':'bitString',
+            'prob':'lSat',
+            'settings':
+            {
+                'name':1,
+                'L':3,
+                'terms':10,
+                'length':10,
+                'clauses':1000
+            }
+        },
+
+        {
+            'weight':1,
+            'repr':'bitString',
+            'prob':'lSat',
+            'settings':
+            {
+                'name':2,
+                'L':3,
+                'terms':10,
+                'length':10,
+                'clauses':1000
+            }
+        },
+        {
+            'weight':1,
+            'repr':'bitString',
+            'prob':'lSat',
+            'settings':
+            {
+                'name':3,
+                'L':3,
+                'terms':10,
+                'length':10,
+                'clauses':1000
+            }
+        },
+
+
+    ],
     
     'nodeSettings':
     {
@@ -131,51 +196,7 @@
 
     },
      
-    'problems':
-    [
-        {
-            'weight':1,
-            'repr':'bitString',
-            'prob':'lSat',
-            'settings':
-            {
-                'name':1,
-                'L':3,
-                'terms':10,
-                'length':10,
-                'clauses':1000
-            }
-        },
-
-        {
-            'weight':1,
-            'repr':'bitString',
-            'prob':'lSat',
-            'settings':
-            {
-                'name':2,
-                'L':3,
-                'terms':10,
-                'length':10,
-                'clauses':1000
-            }
-        },
-        {
-            'weight':1,
-            'repr':'bitString',
-            'prob':'lSat',
-            'settings':
-            {
-                'name':3,
-                'L':3,
-                'terms':10,
-                'length':10,
-                'clauses':1000
-            }
-        },
-
-
-    ]
+    
 
 }
 

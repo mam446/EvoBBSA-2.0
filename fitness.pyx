@@ -1,3 +1,4 @@
+import re
 import math
 import FitnessFunction
 import random
@@ -44,7 +45,9 @@ class lsat:
             if cur[0] != 'c':
                 break
         if cur[0]=='p':
-            data = cur.split(' ')
+            data = re.split('\W+',cur)
+            print data
+            #data = cur.split(' ')
             probType = data[1]
             variables = int(data[2])
             clauses = int(data[3])
@@ -53,7 +56,7 @@ class lsat:
 
         for i in xrange(clauses):
             cur = f.readline()
-            eq.append(map(int,cur.split(' ')[:-1]))
+            eq.append(map(int,re.split('\W+',cur)[:-1]))
         
         return eq 
     
