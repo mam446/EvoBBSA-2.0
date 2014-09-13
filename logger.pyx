@@ -28,6 +28,11 @@ class logger:
         self.conVal = 0.0
         self.count = 0
 
+        self.probExec = []
+        self.runsExec = []
+        self.curExec = []
+
+
     def reset(self):
         self.probConf = []
         self.runs = []
@@ -43,6 +48,8 @@ class logger:
 
     def nextRun(self):
         self.runs.append(self.curRun)
+        self.runsExec.append(self.curExec)
+        self.curExec = []
         self.curRun = []
         self.curCon = 0
         self.conVal = 0.0
@@ -54,6 +61,8 @@ class logger:
 
     def nextProbConf(self):
         self.probConf.append(self.runs)
+        self.probExec.append(self.runsExec)
+        self.runsExec = []
         self.runs = []
         self.probOps.append(self.ops)
         self.ops = []
@@ -84,7 +93,7 @@ class logger:
             ave = Sum/num
         else:
             ave = 0
-        if gMax and self.allMax!=None and gMax.fitness<=self.allMax.fitness:
+        if gMax and self.allMax!=None and gMax.fitness<=self.allMax.fitness or popSize==0:
             self.curCon+=1
         else:
             self.curCon = 0
@@ -102,6 +111,9 @@ class logger:
     def countConverged(self):
         return self.curCon
 
+    def changedExec(self,state):
+        self.curExec.append(state.curEval)
+        
 
     def hasConverged(self):
         if self.curMax==1.0:
@@ -288,6 +300,13 @@ class logger:
         color = [cm(1.*i/len(y)) for i in xrange(len(y))]
         ax.set_color_cycle(color)
         ax.set_ylim([.2,1.0])
+        d = 0
+        for pc in self.probExec:
+           
+            for r in pc:
+                for e in r:
+                    ax.axvline(x=e,linewidth=.5,c = color[d])
+            d+=1
         if x:
             ax.set_xlim([0,x[0][-1]])
         for d in xrange(len(x)):
@@ -296,7 +315,7 @@ class logger:
                 ax.plot(x[d],y[d],label = labels[d])
             else:
                 ax.plot(x[d],y[d],label = str(d))
-        
+                         
         lgd = ax.legend(bbox_to_anchor=(.5,-0.1), loc='upper center',borderaxespad=0)
         """ax2 = plt.subplot(1,2,2)
         color = [cm(1.*i/len(y)) for i in xrange(len(y))]

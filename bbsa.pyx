@@ -35,6 +35,8 @@ probSpecMulti = {'bitString':{},'realValued':{}}
 probSpecSingle['bitString']['lSat'] = variationNodes.single['bitString']['lSat']
 probSpecMulti['bitString']['lSat'] = variationNodes.multi['bitString']['lSat']
 
+
+
 single['bitString'].update(variationNodes.single['bitString']['generic'])
 single['bitString'].update(selectNodes.single['bitString'])
 single['bitString'].update(evalNodes.single['bitString'])
@@ -75,12 +77,13 @@ class bbsa:
         self.depth = 0
         self.size = 0
        
-        self.curObjectives = ['fitness','evals','time']
+        self.curObjectives = ['fitness','time']#evals, size
         
         self.objectives = {}
         self.objectives['fitness'] = {'value':0,'op':'max'}
         self.objectives['evals'] = {'value':0,'op':'min'}
         self.objectives['time'] = {'value':0,'op':'min'}
+        self.objectives['size'] = {'value':0,'op':'min'}
 
         global id
         self.name="bbsa-"+str(id)
@@ -104,11 +107,12 @@ class bbsa:
         self.useMulti = multi[self.settings.bbsaSettings['representation']].keys()
         self.useSingle = single[self.settings.bbsaSettings['representation']].keys()
         if self.settings.bbsaSettings['problem'] in probSpecMulti[self.settings.bbsaSettings['representation']]:
-            self.useMulti.extend(probSpecMulti[self.settings.bbsaSettings['representation']][self.settings.bbsaSettings['problem']])
-            self.useSingle.extend(probSpecSingle[self.settings.bbsaSettings['representation']][self.settings.bbsaSettings['problem']])
-
-
-        self.curObjectives = self.settings.hyperSettings['objectives']
+            self.useMulti.extend(probSpecMulti[self.settings.bbsaSettings['representation']][self.settings.bbsaSettings['problem']].keys())
+            self.useSingle.extend(probSpecSingle[self.settings.bbsaSettings['representation']][self.settings.bbsaSettings['problem']].keys())
+            
+            multi.update(probSpecMulti[self.settings.bbsaSettings['representation']][self.settings.bbsaSettings['problem']])
+            single.update(probSpecSingle[self.settings.bbsaSettings['representation']][self.settings.bbsaSettings['problem']])
+        #self.curObjectives = self.settings.hyperSettings['objectives']
 
         self.createRandom()
 
@@ -238,13 +242,19 @@ class bbsa:
             self.settings.nextProbConf()
             #self.update()
             self.logger.nextProbConf()
+        end = time.time()
+        st = ""
+        self.time = end-start
+        
         self.aveBest = self.logger.getAveBest()
         self.aveEval = self.logger.getAveEvals()
         self.aveOps = self.logger.getAveOps()
         self.fitness = self.logger.getFitness()
-        end = time.time()
-        st = ""
-        self.time = end-start
+        self.objectives['fitness']['value'] = self.fitness
+        self.objectives['evals']['value'] = self.aveEval
+        self.objectives['time']['value'] = self.time
+        self.objectives['size']['value'] = self.size
+        
         
         #v = self.vectorize()
         #for item in v:
@@ -461,25 +471,52 @@ class bbsa:
 
     def __gt__(self,other):
         if self.fitness==1 and other.fitness==1:
-            return self.aveEvals<other.aveEvals
+            return self.aveEval<other.aveEval
         s = self.fitness - self.settings.bbsaSettings['penalty']*(self.time)
         o = other.fitness - self.settings.bbsaSettings['penalty']*(other.time)
 
         return s>o
 
     def dominate(self,other):
+        if self.fitness==-1:
+            return False
+        if other.fitness==-1:
+            return True
         """if self.fitness>=other.fitness and self.size<=other.size and self.aveEval<other.aveEval:
             return True
         if self.fitness>=other.fitness and self.size<other.size and self.aveEval<=other.aveEval:
             return True
         if self.fitness>=other.fitness and self.size<=other.size and self.aveEval<other.aveEval:
-            return True"""
+            return True
+
+
         if self.fitness>=other.fitness and self.time<other.time:
             return True
         if self.fitness>other.fitness and self.time<=other.time:
             return True
-        return False
+        return False"""
 
+        for i in xrange(len(self.curObjectives)):
+            cur = True
+            for j in xrange(len(self.curObjectives)):
+                op = self.objectives[self.curObjectives[j]]['op']
+                if j==i:
+                    if op=='max':
+                        if self.objectives[self.curObjectives[j]]['value']<=other.objectives[self.curObjectives[j]]['value']:
+                            cur = False
+                    else:
+                        if self.objectives[self.curObjectives[j]]['value']>=other.objectives[self.curObjectives[j]]['value']:
+                            cur = False
+                else:
+                    if op=='max':
+                        if self.objectives[self.curObjectives[j]]['value']<other.objectives[self.curObjectives[j]]['value']:
+                            cur = False
+                    else:
+                        if self.objectives[self.curObjectives[j]]['value']>other.objectives[self.curObjectives[j]]['value']:
+                            cur = False
+            if cur:
+                return cur
+        return False
 
     def calcDistance(self,other):
         return ((self.fitness-other.fitness)**2+(self.time-other.time)**2)**.5

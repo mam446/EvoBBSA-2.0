@@ -5,7 +5,6 @@ import funcs
 import copy
 
 
-
 class SAWStats(genNode.node):
     def __init__(self,parent,settings):
         super(SAWStats,self).__init__(parent,settings,funcs.SAWStats,'SAWStats',1,{})
@@ -18,13 +17,12 @@ class SAWMutate(genNode.node):
         self.canTake = [1,2]
         self.canReturn =[1,2]
 
+class SAW(genNode.node):
+    def __init__(self,parent,settings):
+        super(SAW,self).__init__(parent,settings,funcs.SAW,"SAW",1,{})
+        self.canTake = [1,2]
+        self.canReturn = [1,2]
 
 
-
-single = {'SAWStats':SAWStats,'SAWMutate':SAWMutate}        
-multi = {'SAWStats':SAWStats,'SAWMutate':SAWMutate}        
-
-
-
-
-
+single = {'SAWStats':SAWStats,'SAWMutate':SAWMutate,'SAW':SAW}        
+multi = {'SAWStats':SAWStats,'SAWMutate':SAWMutate,'SAW':SAW}        

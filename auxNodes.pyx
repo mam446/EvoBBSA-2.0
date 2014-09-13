@@ -12,13 +12,20 @@ class ifConverge(genNode.node):
         super(ifConverge,self).__init__(parent,settings,None,'ifConverge',2,p)
         self.canTake = [1,2]
         self.canReturn = [2]
-
+        self.lastExec = 0
+    
     def evaluate(self):
         if self.state.logger.countConverged()>=self.params['conv']['value']:
             if self.params['reset']['value']:
                 self.state.logger.curCon = 0
+            if self.lastExec!=1:
+                self.state.logger.changedExec(self.state)
+            self.lastExec=1
             return self.down[1].evaluate()
         else:
+            if self.lastExec!=0:
+                self.state.logger.changedExec(self.state)
+            self.lastExec=0
             return self.down[0].evaluate()
    
    
@@ -28,7 +35,8 @@ class ifConverge(genNode.node):
         prog= 'x'+var+" =  []\n"+indent
         prog+="if log.countConverged() >= "+str(self.params['conv']['value'])+":\n"+indent+tab
         prog+=self.down[1].makeProg(numTab+1,var+str(1))
-        prog+='x'+var +" = x"+var+"1\n"+indent
+        prog+='x'+var +" = x"+var+"1\n"+indent+tab
+        prog+='log.curCon = 0'+indent
         #remove extra indent
         prog+="else:\n"+indent+tab
         prog+=self.down[0].makeProg(numTab+1,var+str(1))

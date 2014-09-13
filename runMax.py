@@ -9,8 +9,8 @@
         'runNumber':0,
         'mu':100,
         'lambda':40,
-        'type':'SGA',#this can be SGA or nsga
-        'mpi':False,
+        'type':'nsga',#this can be SGA or nsga
+        'mpi':True,
         'procs':5,
         'mateRate':.3,
         'mutateRate':.3,

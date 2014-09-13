@@ -11,8 +11,6 @@ class allOnes:
     def __init__(self,settings):
         self.settings = settings
         #this is how you store auxiliarly data that everyone can use 
-        if settings['name'] not in data:
-            data[settings['name']] = [1,2,3,4,5]
     def evaluate(self,gene):
         fit = 0.0
         for bit in gene:
@@ -32,7 +30,7 @@ class lsat:
         return self.evalEquation(data[self.settings['name']],gene)/float(len(data[self.settings['name']]))
 
     def loadEquation(self,filename):
-        f = open(filename)
+        f = open(filename.split('/')[-1])
         
         probType =None
         variables = None
@@ -45,8 +43,7 @@ class lsat:
             if cur[0] != 'c':
                 break
         if cur[0]=='p':
-            data = re.split('\W+',cur)
-            print data
+            data = re.split('\s+',cur)
             #data = cur.split(' ')
             probType = data[1]
             variables = int(data[2])
@@ -56,8 +53,16 @@ class lsat:
 
         for i in xrange(clauses):
             cur = f.readline()
-            eq.append(map(int,re.split('\W+',cur)[:-1]))
-        
+            cur = re.split('\s+',cur)[:-1]
+            nex  = []
+            for item in cur:
+                try:
+                    check = int(item)
+                    if check!=0:
+                        nex.append(int(item))
+                except:
+                    continue
+            eq.append(nex)
         return eq 
     
     

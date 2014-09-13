@@ -280,7 +280,7 @@ def randSubset(rDown,params):
     for i in xrange(params['count']['value']):
         ret.append(down[randint(0,p)])
     return ret
-    
+
 def SAWStats(rDown,params):
     pop = rDown[0]
     for ind in pop:
@@ -296,7 +296,14 @@ def SAWMutate(rDown,params):
             ind.gene = ind.fitFunc.SAWMutate(ind.gene,ind.aux['saw']) 
     return pop
 
-
+def SAW(rDown,params):
+    pop = rDown[0]
+    for ind in pop:
+        if 'saw' not in  ind.aux:
+            ind.aux['saw'] = None
+        ind.aux['saw'] = ind.fitFunc.SAWStats(ind.gene,ind.aux['saw'])
+        ind.gene = ind.fitFunc.SAWMutate(ind.gene,ind.aux['saw']) 
+    return pop
 
 
 
