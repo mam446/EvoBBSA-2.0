@@ -51,11 +51,29 @@ class onePoint(genNode.node):
         super(onePoint,self).setTake(numerocity)
         self.ret = 2
 
+class genNeighborhood(genNode.node):
+    def __init__(self,parent,settings):
+        super(genNeighborhood,self).__init__(parent,settings,funcs.genNeighborhood,"genNeighborhood",1,{})
+        self.canTake = [1]
+        self.canReturn = [2]
 
+    def setTake(self,numerocity):
+        super(genNeighborhood,self).setTake(numerocity)
+        self.ret = 2
+
+class greedyFlip(genNode.node):
+    def __init__(self,parent,settings):
+        super(greedyFlip,self).__init__(parent,settings,funcs.greedyFlip,"greedyFlip",1,{})
+        self.canTake = [1]
+        self.canReturn = [1]
+
+    def setTake(self,numerocity):
+        super(greedyFlip,self).setTake(numerocity)
+        self.ret = 2
 
 
 
 single = {'mutate':mutate}        
-multi = {'mutate':mutate,'uniRecomb':uniRecomb,'diagonal':diagonal,'uniRecomb2':uniRecomb2}
+multi = {'mutate':mutate,'uniRecomb':uniRecomb,'diagonal':diagonal,'uniRecomb2':uniRecomb2,'genNeighborhood':genNeighborhood,'greedyFlip':greedyFlip}
 
 

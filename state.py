@@ -14,7 +14,8 @@ class state:
         self.terms = termNodes.multi
         self.sTerms = termNodes.single
         self.settings = settings
-        self.reducers = selectNodes.multi[self.settings.bbsaSettings['representation']]
+        if settings:
+            self.reducers = selectNodes.multi[self.settings.bbsaSettings['representation']]
         self.bestInd = None
         self.log = {}
         self.logger = None

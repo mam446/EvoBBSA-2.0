@@ -36,10 +36,10 @@ class ifConverge(genNode.node):
         prog+="if log.countConverged() >= "+str(self.params['conv']['value'])+":\n"+indent+tab
         prog+=self.down[1].makeProg(numTab+1,var+str(1))
         prog+='x'+var +" = x"+var+"1\n"+indent+tab
-        prog+='log.curCon = 0'+indent
+        prog+='log.curCon = 0\n'+indent
         #remove extra indent
         prog+="else:\n"+indent+tab
-        prog+=self.down[0].makeProg(numTab+1,var+str(1))
+        prog+=self.down[0].makeProg(numTab+1,var+str(0))
         prog+='x'+var +" = x"+var+"0\n"+indent
 
         return prog

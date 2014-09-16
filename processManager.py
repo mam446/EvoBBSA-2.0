@@ -27,7 +27,11 @@ def childProc():
             if rank ==1:
                 comm.send("End",dest=0)
             break
-        cur.evaluate()
+        try:
+            cur.evaluate()
+        except AttributeError as e:
+            print e
+            comm.send(rank,dest=0)
         comm.send(cur,dest = 0)
         time.sleep(.1)
 
@@ -98,7 +102,11 @@ class processManager:
             if type(resp) is int:
                 #print "fixing it"
                 self.logLock.acquire()
-                ret = self.log[resp-1]
+                try:
+                    ret = self.log[resp-1]
+                except IndexError as e:
+                    print e
+                    print resp
                 #print ret, "from", stat.Get_source()
                 #print self.log
                 self.logLock.release()

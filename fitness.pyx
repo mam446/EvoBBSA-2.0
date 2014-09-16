@@ -1,3 +1,4 @@
+# cython: profile=True
 import re
 import math
 import FitnessFunction
@@ -76,19 +77,16 @@ class lsat:
         num = 0
         cdef int i,y
         for i in xrange(len(eq)):
-            check = False
             for y in eq[i]:
                 if y>0:
                     
-                    if bits[y-1]==1:
-                        check = True
+                    if bits[y-1]:
+                        num+=1
                         break
                 else:
-                    if bits[-y-1]==0:
-                        check = True
+                    if not bits[-y-1]:
+                        num+=1
                         break
-            if check:
-                num+=1
         return num
         
     def SAWStats(self,bits,sawHistory = None):
@@ -101,16 +99,16 @@ class lsat:
             for y in eq[i]:
                 if y>0:
      
-                    if bits[y-1]==1:
+                    if bits[y-1]:
+                        sawHistory[i] = 0
                         check = True
                         break
                 else:
-                    if bits[-y-1]==0:
+                    if not bits[-y-1]:
+                        sawHistory[i] = 0
                         check = True
                         break
-            if check:
-                sawHistory[i] = 0
-            else:
+            if not check:
                 sawHistory[i] += 1
         return sawHistory
 

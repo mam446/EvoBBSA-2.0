@@ -1,57 +1,43 @@
+import settings
 import logger
 import sys
 
-
-plug = __import__(sys.argv[1]) 
-log = logger.logger(sys.argv[3],0)
-solSettings = []
-j = 0
-
-solSettings.append({'settings': {'length': 100, 'k': 5}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
-solSettings.append({'settings': {'length': 105, 'k': 7}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
-solSettings.append({'settings': {'length': 200, 'k': 5}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
+def externalRun(settingsFile =None):
 
 
-solSettings.append({'settings': {'length': 210, 'k': 7}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
+    plugName = sys.argv[1]
+    name = plugName[:-3]
+    if not settingsFile:
+        if len(sys.argv)<2:
+            raise "Must supply settings file"
+        settingsFile = sys.argv[2]
+    s = settings.runSettings(settingsFile)
 
-solSettings.append({'settings': {'length': 300, 'k': 5}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
-solSettings.append({'settings': {'length': 99, 'k': 9}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
-
-solSettings.append({'settings': {'length': 198, 'k': 9}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
-
-solSettings.append({'settings': {'length': 150, 'k': 5}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
-
-solSettings.append({'settings': {'length': 250, 'k': 5}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
-
-solSettings.append({'settings': {'length': 147, 'k': 7}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
-solSettings.append({'settings': {'length': 252, 'k': 7}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
-#solSettings.append({'settings': {'nkProblemFolder': './', 'run': 0, 'dimensions': 30, 'k': 5, 'length': 100, 'problemSeed': 0}, 'repr': 'bitString', 'weight': 1, 'prob': 'nk'})
-#solSettings.append({'settings': {'nkProblemFolder': './', 'run': 0, 'dimensions': 30, 'k': 7, 'length': 100, 'problemSeed': 0}, 'repr': 'bitString', 'weight': 1, 'prob': 'nk'})
-#solSettings.append({'settings': {'length': 216, 'name': 'test4.cnf'}, 'prob': 'lSat', 'weight': 1, 'repr': 'bitString'})
-#solSettings.append({'settings': {'length': 343, 'name': 'test5.cnf'}, 'prob': 'lSat', 'weight': 1, 'repr': 'bitString'})
-
-labels = []
-for l in solSettings:
-    labels.append(str(l['settings']['length'])+","+str(l['settings']['k']))
-
-for s in solSettings:
-    log = plug.run(int(sys.argv[2]),log,s,sys.argv[3],j)
-    j+=1
+    solSettings = s.probConf
 
 
-log.log()
-log.plot(labels)
-print 
-print "Average",log.getAveBest()
-print "Span:",log.getSpan()
-print "Full Span",log.getFullSpan()
+    plug = __import__(plugName) 
+    log = logger.logger(name,0)
+    j = 0
 
-solSettings.append({'settings': {'length': 100, 'k': 5}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
 
-solSettings.append({'settings': {'length': 400, 'k': 5}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
-solSettings.append({'settings': {'length': 800, 'k': 5}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
-solSettings.append({'settings': {'length': 1000, 'k': 5}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
-solSettings.append({'settings': {'length': 420, 'k': 7}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
-solSettings.append({'settings': {'length': 840, 'k': 7}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
-solSettings.append({'settings': {'length': 1050, 'k': 7}, 'repr': 'bitString', 'weight': 1, 'prob': 'dTrap'})
+    labels = []
+    for l in s.probConf:
+        k = ""
+        for key in l['settings']: 
+            k+=key+"="+str(l['settings'][key])+", "
+
+        labels.append(k)
+
+    for d in solSettings:
+        log = plug.run(int(sys.argv[3]),log,d,name,j)
+        j+=1
+
+
+    log.log()
+    log.plot(labels)
+
+
+if __name__ =="__main__":
+    externalRun()
 

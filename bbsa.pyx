@@ -110,8 +110,8 @@ class bbsa:
             self.useMulti.extend(probSpecMulti[self.settings.bbsaSettings['representation']][self.settings.bbsaSettings['problem']].keys())
             self.useSingle.extend(probSpecSingle[self.settings.bbsaSettings['representation']][self.settings.bbsaSettings['problem']].keys())
             
-            multi.update(probSpecMulti[self.settings.bbsaSettings['representation']][self.settings.bbsaSettings['problem']])
-            single.update(probSpecSingle[self.settings.bbsaSettings['representation']][self.settings.bbsaSettings['problem']])
+            multi[self.settings.bbsaSettings['representation']].update(probSpecMulti[self.settings.bbsaSettings['representation']][self.settings.bbsaSettings['problem']])
+            single[self.settings.bbsaSettings['representation']].update(probSpecSingle[self.settings.bbsaSettings['representation']][self.settings.bbsaSettings['problem']])
         #self.curObjectives = self.settings.hyperSettings['objectives']
 
         self.createRandom()
@@ -312,7 +312,7 @@ class bbsa:
 
     def makeProg(self):
         tab = "    "
-        prog = "import random\nfrom funcs import *\nimport state\n"
+        prog = "import random\nfrom funcs import *\nimport state\nimport solution\n"
 
         prog+="\n\n"+str(self.toDict())+"\n"
         prog+="\n\ntime = "+str(self.time)

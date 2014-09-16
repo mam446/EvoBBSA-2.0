@@ -121,7 +121,7 @@ class node(object):
             pList = pList[:-1]+"}"
             prog+="x"+var+" = "+self.name+"("+dList+","+pList+")\n"+indent
         else:
-            prog+="x"+var+" = "+self.name+"("+dList+")\n"+indent
+            prog+="x"+var+" = "+self.name+"("+dList+",{})\n"+indent
         return prog
 
     def fillTerms(self,state):

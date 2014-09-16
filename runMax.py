@@ -35,7 +35,7 @@
         'converge':25,
         'initPopMax':100,
         'representation':'bitString',
-        'problem':'dTrap',
+        'problem':'lSat',
         'penalty':.001,
         'time':20
     },
@@ -49,8 +49,8 @@
             'prob':'lSat',
             'settings':
             {
-                'name':'test4.cnf',
-                'length':216,
+                'name':'uf250-01.cnf',
+                'length':250,
             }
         },
         {
@@ -59,10 +59,31 @@
             'prob':'lSat',
             'settings':
             {
-                'name':'test5.cnf',
-                'length':343,
+                'name':'uf250-02.cnf',
+                'length':250,
             }
         },
+        {
+            'weight':1,
+            'repr':'bitString',
+            'prob':'lSat',
+            'settings':
+            {
+                'name':'uf250-03.cnf',
+                'length':250,
+            }
+        },
+        {
+            'weight':1,
+            'repr':'bitString',
+            'prob':'lSat',
+            'settings':
+            {
+                'name':'uf250-04.cnf',
+                'length':250,
+            }
+        },
+
 
 
 

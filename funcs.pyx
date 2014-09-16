@@ -307,6 +307,39 @@ def SAW(rDown,params):
 
 
 
+def genNeighborhood(rDown,params):
+    pop = rDown[0]
+    pop = pop[:1]
+    if pop:
+        length = len(pop[0].gene)
+    else:
+        return []
+    father = pop[0]
+    for i in xrange(length):
+        son = solution(father)
+        son.gene[i] = abs(son.gene[i] - 1)
+        pop.append(son)
+    
+    return pop
+
+def greedyFlip(rDown,params):
+    cdef int i
+    pop = rDown[0]
+    pop = pop[:1]
+    if pop:
+        length = len(pop[0].gene)
+    else:
+        return []
+    father = pop[0]
+    for i in xrange(length):
+        son = solution(father)
+        son.gene[i] = abs(son.gene[i] - 1)
+        pop.append(son)
+    for i in xrange(len(pop)):
+        pop[i].evaluate()
+
+    pop.sort(reverse = True)
+    return pop[:1]
 
 
 

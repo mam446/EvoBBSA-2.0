@@ -75,20 +75,37 @@ def runHydra(settingsFile = None):
 
     settingsFile = settingsFile.split("/")[-1]
 
+    #hostfile stuff
+    multiComp = False
+    hsf = ""
+    f = ""
+    if s.hyperSettings['hosts']:
+        multiComp =True
+        for host in s.hyperSettings['hosts']:
+            if 'user' in host:
+                hsf+=host['user']
+            else:
+                hsf+="sitaware"
+            hsf+="@"+host['name']
+            if 'slots' in host:
+                hsf+=" slots="+host['slots']
+            hsf+="\n"
+        hostProc = Popen(['echo',hsf,">","host_file"],stdout=PIPE,stderr=PIPE,cwd=runDir)
+        f = "--hostfile host_file"
 
     if mpi:
         #do MPI
         if t=='SGA':
             #SGA
             print "SGA"
-            runProc = Popen(['mpiexec','-n',str(procs),'python','../../../mpi-SGA.py',settingsFile],cwd=runDir)
+            runProc = Popen(['mpiexec',f,'-n',str(procs),'python','../../../mpi-SGA.py',settingsFile],cwd=runDir)
             stdout,stderr = runProc.communicate()
         elif t=='nsga':
             #NSGA
             print "nsga"
             mkProc = Popen(['mkdir',runDir+'/finalFront'],stdout=PIPE,stderr=PIPE)
             stdout,stderr = mkProc.communicate()
-            runProc = Popen(['mpiexec','-n',str(procs),'python','../../../mpi-nsga.py',settingsFile],cwd=runDir)
+            runProc = Popen(['mpiexec',f,'-n',str(procs),'python','../../../mpi-nsga.py',settingsFile],cwd=runDir)
             stdout,stderr = runProc.communicate()
         else:
             raise "Not valid Evolution Type" 
