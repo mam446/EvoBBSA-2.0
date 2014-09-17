@@ -22,10 +22,10 @@ def runSGA(settingsFile = None):
         if len(sys.argv)<2:
             raise "Must supply settings file"
         settingsFile = sys.argv[1] 
-    s = settings.runSettings(settingsFile)
+    s = settings.runSettings(settingsFile,sys.argv[2])
 
     if s.hyperSettings['seed']:
-        s.seed = s.hyperSEttings['seed']
+        s.seed = s.hyperSettings['seed']
     else:
         s.seed =time.time()
     random.seed(s.seed)
@@ -107,14 +107,14 @@ def runSGA(settingsFile = None):
         pop[0].makeGraph()
         pop[0].plot()
         pop[0].logger.log()
-        f = open(str(pop[0].name)+"allones.py","w")
-        f.write(pop[0].makeProg())
+        
+        pop[0].makeProg()
         f.close()
     print
     print pop[0].fitness,pop[0].aveEval
     print pop[0].toDict()
     f = open(str(pop[0].name)+"-Dumb.py","w")
-    f.write(pop[0].makeProg())
+    pop[0].makeProg()
     f.close()
 
 

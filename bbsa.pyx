@@ -98,11 +98,13 @@ class bbsa:
 
         self.settings = settings
 
+        self.directory = settings.directory
+
         self.state = state.state(settings)
 
         self.initPop = random.randint(1,settings.bbsaSettings['initPopMax'])
         
-        self.logger = logger.logger(self.name,settings.bbsaSettings['converge'])
+        self.logger = logger.logger(self.name,settings.bbsaSettings['converge'],self.directory)
          
         self.useMulti = multi[self.settings.bbsaSettings['representation']].keys()
         self.useSingle = single[self.settings.bbsaSettings['representation']].keys()
@@ -356,7 +358,11 @@ class bbsa:
         prog+="bestLog.reset()\n"+tab
         prog+="log.nextProbConf()\n"+tab
         prog+="return log" 
-        return prog
+        
+        f = open(self.directory+"source-"+self.name+".py",'w')
+        f.write(prog)
+        f.close()
+        
 
     def valid(self):
         return self.logger.valid() and self.evalExist() and self.lastExist()
@@ -409,7 +415,7 @@ class bbsa:
         x.name="bbsa-"+str(id)
         id+=1
         
-        x.logger = logger.logger(x.name,self.settings.bbsaSettings['converge'])
+        x.logger = logger.logger(x.name,self.settings.bbsaSettings['converge'],self.directory)
 
         x.state.reset()
         x.state.settings = x.settings
@@ -537,10 +543,10 @@ class bbsa:
         s = 'strict digraph {\nordering=out;\n  node[label=\"\\N\"];\n '
         s += getEdge(self.root,val)
         s+="\n}"
-        f = open(self.name+'.dot','w')
+        f = open(self.directory+self.name+'.dot','w')
         f.write(s)
         f.close()
-        subprocess.call(['dot','-Tpng',self.name+'.dot','-o',self.name+'.png']) 
+        subprocess.call(['dot','-Tpng',self.directory+self.name+'.dot','-o',self.directory+self.name+'.png']) 
         
         return
 

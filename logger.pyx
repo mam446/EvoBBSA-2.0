@@ -10,7 +10,10 @@ import random
 
 
 class logger:
-    def __init__(self,name,converge):
+    def __init__(self,name,converge,directory):
+       
+       
+        self.directory = directory
         
         self.probConf = []
         self.runs = []
@@ -204,7 +207,7 @@ class logger:
      
     def log(self):
         for i in xrange(len(self.probConf)):
-            f = open(self.name+"-"+str(i),'w')
+            f = open(self.directory+self.name+"-"+str(i),'w')
             r = ""
             for x in xrange(len(self.probConf[i])):
                 r+=str(x)+"\t"
@@ -331,10 +334,9 @@ class logger:
         """
 
         try:
-            plt.savefig(self.name+'-plot-l.png',bbox_extra_artists=(lgd,),bbox_inches='tight')
+            plt.savefig(self.directory+self.name+'-plot-l.png',bbox_extra_artists=(lgd,),bbox_inches='tight')
         except:
             print "That didn't work"
-        plt.savefig(self.name+'-plot.png')
         plt.clf()
         return
 

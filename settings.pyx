@@ -6,7 +6,7 @@
 
 
 class runSettings:
-    def __init__(self,filename = None):
+    def __init__(self,filename,directory=""):
 
         self.bbsaSettings = {}
 
@@ -19,6 +19,8 @@ class runSettings:
         self.probConf = []
 
         self.hyperSettings = {}
+
+        self.directory = directory
 
         """
         #hyper Settings

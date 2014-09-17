@@ -24,7 +24,7 @@ def runHydra(settingsFile = None):
     
     if len(sys.argv)>2:
         runNum = int(sys.argv[2])
-    runDir = 'experiments/'+runName+"/"+str(runNum)
+    runDir = 'experiments/'+runName+"/"+str(runNum)+"/"
 
     
 
@@ -90,22 +90,30 @@ def runHydra(settingsFile = None):
             if 'slots' in host:
                 hsf+=" slots="+host['slots']
             hsf+="\n"
-        hostProc = Popen(['echo',hsf,">","host_file"],stdout=PIPE,stderr=PIPE,cwd=runDir)
-        f = "--hostfile host_file"
-
+        fl =open(runDir+'host_file','w')
+        fl.write(hsf)
+        fl.close()
+        print hsf
     if mpi:
         #do MPI
         if t=='SGA':
             #SGA
             print "SGA"
-            runProc = Popen(['mpiexec',f,'-n',str(procs),'python','../../../mpi-SGA.py',settingsFile],cwd=runDir)
+            if multiComp:
+                runProc = Popen(['mpiexec','--hostfile','host_file','-wd','~/EvoBBSA','-n',str(procs),'python','mpi-SGA.py',settingsFile,runDir])
+            else:
+                runProc = Popen(['mpiexec','-n',str(procs),'python','mpi-SGA.py',settingsFile,runDir])
             stdout,stderr = runProc.communicate()
         elif t=='nsga':
             #NSGA
             print "nsga"
             mkProc = Popen(['mkdir',runDir+'/finalFront'],stdout=PIPE,stderr=PIPE)
             stdout,stderr = mkProc.communicate()
-            runProc = Popen(['mpiexec',f,'-n',str(procs),'python','../../../mpi-nsga.py',settingsFile],cwd=runDir)
+            if multiComp:
+                runProc = Popen(['mpiexec','--hostfile','host_file','-wd','~/EvoBBSA','-n',str(procs),'python','mpi-nsga.py',settingsFile,runDir])
+            else:
+                runProc = Popen(['mpiexec','-n',str(procs),'python','mpi-nsga.py',settingsFile,runDir])
+
             stdout,stderr = runProc.communicate()
         else:
             raise "Not valid Evolution Type" 
@@ -115,14 +123,14 @@ def runHydra(settingsFile = None):
         if t=='SGA':
             #SGA
             print "SGA"
-            runProc = Popen(['python','../../../SGA.py',settingsFile],cwd=runDir)
+            runProc = Popen(['python','SGA.py',settingsFile,runDir])
             stdout,stderr = runProc.communicate()
         elif t=='nsga':
             #NSGA
             print "nsga"
-            mkProc = Popen(['mkdir',runDir+'/finalFront'],stdout=PIPE,stderr=PIPE)
+            mkProc = Popen(['mkdir',runDir+'finalFront'],stdout=PIPE,stderr=PIPE)
             stdout,stderr = mkProc.communicate()
-            runProc = Popen(['python','../../../nsga.py',settingsFile],cwd=runDir)
+            runProc = Popen(['python','nsga.py',settingsFile,runDir])
             stdout,stderr = runProc.communicate()
         else:
             raise "Not valid Evolution Type" 

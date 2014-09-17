@@ -35,10 +35,10 @@ def runMpiSGA(settingsFile = None):
             if len(sys.argv)<2:
                 raise "Must suply settings file"
             settingsFile = sys.argv[1]
-        s = settings.runSettings(settingsFile) 
+        s = settings.runSettings(settingsFile,sys.argv[2])
         
         if s.hyperSettings['seed']:
-            s.seed = s.hyperSEttings['seed']
+            s.seed = s.hyperSettings['seed']
         else:
             s.seed =time.time()
         random.seed(s.seed)
@@ -124,9 +124,7 @@ def runMpiSGA(settingsFile = None):
                 ind.makeGraph()
                 ind.plot()
                 ind.logger.log()
-                f = open(str(ind.name)+"allones.py","w")
-                f.write(ind.makeProg())
-                f.close()
+                ind.makeProg()
 
 
         i = 0
@@ -139,9 +137,7 @@ def runMpiSGA(settingsFile = None):
             ind.makeGraph()
             ind.plot()
             ind.logger.log()
-            f = open(str(ind.name)+"allones.py","w")
-            f.write(ind.makeProg())
-            f.close()
+            ind.makeProg()
 
         proc.kill()
 

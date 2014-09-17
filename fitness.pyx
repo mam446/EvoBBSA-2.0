@@ -76,15 +76,17 @@ class lsat:
     def evalEquation(self,eq,bits):
         num = 0
         cdef int i,y
+        #This is so we don't have to subtract one ever time
+        temp = [0]+bits
         for i in xrange(len(eq)):
             for y in eq[i]:
                 if y>0:
                     
-                    if bits[y-1]:
+                    if temp[y]:
                         num+=1
                         break
                 else:
-                    if not bits[-y-1]:
+                    if not temp[-y]:
                         num+=1
                         break
         return num
@@ -94,17 +96,19 @@ class lsat:
         cdef int i,y
         if sawHistory==None:
             sawHistory = [0]*len(eq)
+        #This is so we don't have to subtract one ever time
+        temp = [0]+bits
         for i in xrange(len(eq)):
             check = False
             for y in eq[i]:
                 if y>0:
      
-                    if bits[y-1]:
+                    if temp[y]:
                         sawHistory[i] = 0
                         check = True
                         break
                 else:
-                    if not bits[-y-1]:
+                    if not temp[-y]:
                         sawHistory[i] = 0
                         check = True
                         break
