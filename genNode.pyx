@@ -116,6 +116,8 @@ class node(object):
         for p in self.params:
             if p=='weight':
                 continue
+            if p=='state':
+                pList+="\'"+p+"\':{'value':bestLog},"
             pList+="\'"+p+"\':{'value':"+str(self.params[p]['value'])+"},"
         if pList!="{":
             pList = pList[:-1]+"}"
