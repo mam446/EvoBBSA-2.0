@@ -20,6 +20,9 @@ class state:
         self.log = {}
         self.logger = None
 
+        self.environment = {}
+
+
     def reset(self):
         self.curOp = 0
         self.curEval = 0

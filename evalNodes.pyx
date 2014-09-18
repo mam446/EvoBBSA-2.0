@@ -5,9 +5,8 @@ import genNode
 
 class evaluate(genNode.node):
     def __init__(self,parent,settings):
-        p = copy.deepcopy(settings.solSettings)
         super(evaluate,self).__init__(parent,settings,funcs.evaluate,"evaluate",1,{})
-        self.parents = {'state':self.state}
+        self.params.update({'state':self.state})
         self.canTake = [1,2]
         self.canReturn =[1,2]
 
@@ -25,7 +24,7 @@ class evaluate(genNode.node):
 
 
     def evaluate(self):
-        self.params['state'] = self.state
+        #self.params['state'] = self.state
         ret =  super(evaluate,self).evaluate()
         self.state.curEval+=len(ret)
         return ret
