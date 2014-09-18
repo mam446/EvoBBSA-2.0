@@ -132,7 +132,7 @@ def runMpiSGA(settingsFile = None):
         for ind in fronts.fronts[0]: 
             print"\t",i,ind.fitness,",",ind.aveEval,",",ind.time,",",ind.distance,"\t",ind.name
             i+=1
-            ind.name = "finalFront/"+ind.name
+            ind.directory += "finalFront/"
             ind.logger.name = ind.name
             ind.makeGraph()
             ind.plot()
