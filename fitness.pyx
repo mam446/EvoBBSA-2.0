@@ -31,7 +31,7 @@ class lsat:
         return self.evalEquation(data[self.settings['name']],gene)/float(len(data[self.settings['name']]))
 
     def loadEquation(self,filename):
-        f = open(filename.split('/')[-1])
+        f = open(filename)
         
         probType =None
         variables = None
